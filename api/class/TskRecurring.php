@@ -40,18 +40,16 @@ class TskRecurring extends General {
                 }
                 $taskId = DbMysql::insert('tsk_task', array('taskName'=>$taskName, 'folderId'=>$recurring['recurringFolder'], 'taskDescription'=>$recurring['recurringDescription'], 'taskTags'=>$recurring['recurringTags'],
                     'taskYear'=>$recurringYear, 'taskMonth'=>$recurringMonth, 'taskAssignee'=>1, 'taskDateDue'=>$dueDate->format('Y-m-d'), 'taskPriority'=>$recurring['recurringPriority'], 'recurringId'=>$recurring['recurringId'],
-                    'taskTimeEstimate'=>$recurring['recurringTimeEstimate']));
+                    'taskTimeEstimate'=>$recurring['recurringTimeEstimate'], 'taskAmount'=>$recurring['recurringAmount']));
                 DbMysql::update($this::$tableName, array('recurringYear'=>$recurringYear, 'recurringMonth'=>$recurringMonth, 'recurringDue'=>$dueDate->format('Y-m-d'), 'recurringTimestamp'=>'NOW()'), array('recurringId'=>$recurring['recurringId']));
             } else {
                 $recurringYear = $recurring['recurringYear'] + 1;
                 $taskName .= ' - '.($recurring['$recurringYear']-2000);
                 $dueDate->setDate((intval($dueDate->format('Y')) + 1), $dueDate->format('n'), $dueDate->format('j'));
                 $taskId = DbMysql::insert('tsk_task', array('taskName'=>$taskName, 'folderId'=>$recurring['recurringFolder'], 'taskDescription'=>$recurring['recurringDescription'], 'taskTags'=>$recurring['recurringTags'],
-                    'taskYear'=>$recurringYear, 'taskAssignee'=>1, 'taskDateDue'=>$dueDate->format('Y-m-d'), 'taskPriority'=>$recurring['recurringPriority'], 'recurringId'=>$recurring['recurringId'], 'taskTimeEstimate'=>$recurring['recurringTimeEstimate']));
+                    'taskYear'=>$recurringYear, 'taskAssignee'=>1, 'taskDateDue'=>$dueDate->format('Y-m-d'), 'taskPriority'=>$recurring['recurringPriority'], 'recurringId'=>$recurring['recurringId'],
+                    'taskTimeEstimate'=>$recurring['recurringTimeEstimate'], 'taskAmount'=>$recurring['recurringAmount']));
                 DbMysql::update($this::$tableName, array('recurringYear'=>$recurringYear, 'recurringDue'=>$dueDate->format('Y-m-d'), 'recurringTimestamp'=>'NOW()'), array('recurringId'=>$recurring['recurringId']));
-            }
-            if (!empty($recurring['recurringAmount'])) {
-                DbMysql::insert('tsk_task_amount', array('taskId'=>$taskId, 'taskAmountTotal'=>$recurring['recurringAmount']));
             }
             DbMysql::commit();
         } catch (Exception|Throwable $ex) {
