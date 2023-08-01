@@ -1,10 +1,11 @@
 <?php
 
 class Constant {
-    public static $dbUserName = 'root';
-    public static $dbUserPassword = 'password';
+    public static $dbUserName = 'zaid';
+    public static $dbUserPassword = 'Amlyda@1982';
     public static $dbName = 'task_management';
-    public static $dbHost = 'localhost';
+    public static $dbHost = 'metadatasystem.my';
+    //public static $dbHost = 'localhost';
     //public static $redisHost = '127.0.0.1';
     //public static $redisPort = 6379;
     public static $isLogged = true;
