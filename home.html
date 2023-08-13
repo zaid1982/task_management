@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Task Management System</title>
+    <link rel="stylesheet" href="css/fontawesome-free-6.4.2-web/css/all.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/mdb.min.css">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+    </style>
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+</head>
+<body class="fixed-sn mdb-skin">
+<header>
+    <div class="includeHtml" id="h-b-nav_left"></div>
+    <div class="includeHtml" id="h-b-nav_top"></div>
+</header>
+<main>
+    <div class="container-fluid" id="divPageWidth">
+        <section class="sectionHmeMain mb-3">
+            <div class="row">
+                <div class="col-12 p-2">
+                    <nav class="navbar mdb-color darken-1 z-depth-3 rounded mb-2">
+                        <h4 class="navbar-text white-text font-weight-bold ml-3 pb-0">
+                            <i class="fas fa-home mr-2"></i> Home
+                        </h4>
+                    </nav>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script type="text/javascript" src="js/include.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/mdb.js"></script>
+<script type="text/javascript" src="js/addons/crypto.js"></script>
+<script type="text/javascript">
+    document.write('<scr' + 'ipt src="js/common.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
+
+    let mainClass;
+    document.addEventListener('DOMContentLoaded', function () {
+        ShowLoader();
+        setTimeout(function () {
+            try {
+                initiatePages();
+                mainClass = new Home();
+
+
+                mainClass.init();
+            } catch (e) {
+                toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);
+            }
+            HideLoader();
+        }, 200);
+    });
+    document.write('<scr' + 'ipt src="js/pages/Home.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
+</script>
+</body>
+</html>

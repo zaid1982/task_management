@@ -8,13 +8,13 @@ use \Firebase\JWT\JWT;
 
 class General {
 
-    public $userId = 0;
-    public $isLogged = false;
-    public $pdfPageWidth = 180;
-    public $pdfLineSize = 0.1;
-    public $pdfLineBoldSize = 0.6;
-    public $auditRemark;
-    public $errMsg;
+    public int $userId;
+    public bool $isLogged = false;
+    public int $pdfPageWidth = 180;
+    public float $pdfLineSize = 0.1;
+    public float $pdfLineBoldSize = 0.6;
+    public string $auditRemark;
+    public string $errMsg;
 
     /**
      * @param $class
@@ -22,7 +22,8 @@ class General {
      * @param $line
      * @param $msg
      */
-    public function logDebug ($class, $function, $line, $msg) {
+    public function logDebug ($class, $function, $line, $msg): void
+    {
         if ($this->isLogged) {
             $debugMsg = date("Y/m/d h:i:sa")." (".$this->userId.") [".$class.":".$function.":".$line."] - ".$msg."\r\n";
             error_log($debugMsg, 3, Constant::$folderDebug.'debug_'.date("Ymd").'.log');
@@ -35,7 +36,8 @@ class General {
      * @param $line
      * @param $msg
      */
-    public function logError ($class, $function, $line, $msg) {
+    public function logError ($class, $function, $line, $msg): void
+    {
         if ($this->isLogged) {
             $debugMsg = date("Y/m/d h:i:sa") . " (" . $this->userId . ") [" . $class . ":" . $function . ":" . $line . "] - (ERROR) " . $msg . "\r\n";
             error_log($debugMsg, 3, Constant::$folderDebug . 'debug_' . date("Ymd") . '.log');
@@ -45,12 +47,66 @@ class General {
     }
 
     /**
-     * @param  $string
+     * @return string
+     * @throws Exception
+     */
+    public function createJwt ($userId, $userName): string {
+        try {
+            $this->logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
+            $this->checkEmptyInteger($userId, 'userId');
+            $this->checkEmptyString($userName, 'userName');
+            $key = "task_management";
+            $token = array('iss'=>'task_management/jwt', 'userId'=>$userId, 'username'=>$userName, 'iat'=>time(), 'exp'=>time()+20);
+            DbMysql::$userId = $userId;
+            return JWT::encode($token, $key);
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param array $headers
+     * @return void
+     * @throws Exception
+     */
+    public function checkJwt (array $headers): void {
+        try {
+            $this->checkEmptyArray($headers, 'headers');
+            if (isset($headers['Authorization'])) {
+                $jwt = $headers['Authorization'];
+            } else if (isset($headers['authorization']) && isset($headers['deviceid'])) {
+                $jwt = $headers['authorization'];
+            } else {
+                throw new Exception('Parameter Authorization empty');
+            }
+            $key = "task_management";
+            JWT::$leeway = 86400; // $leeway in seconds
+            $token = substr($jwt, 7);
+            $data = JWT::decode($token, $key, array('HS256'));
+            $this->userId = intval($data->userId);
+            $this->userFullName = DbMysql::selectColumn('sys_user', array('userId'=>$this->userId), 'userFullName', true);
+            DbMysql::$userId = $this->userId;
+            if (DbMysql::count('sys_user', array('userId'=>$this->userId, 'userToken'=>$token)) !== 1) {
+                throw new Exception('Expired token', 31);
+            }
+            if (DbMysql::count('sys_user', array('userId'=>$this->userId, 'statusId'=>1)) !== 1) {
+                throw new Exception('User not exist', 31);
+            }
+            if (isset($headers['authorization']) && DbMysql::count('sys_user', array('userId'=>$this->userId, 'userDeviceId'=>$headers['deviceid'])) !== 1) {
+                throw new Exception('Device ID invalid with this login', 31);
+            }
+        } catch(Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), 31);
+        }
+    }
+
+    /**
+     * @param string|null $string
      * @param string $stringName
      * @return bool
      * @throws Exception
      */
-    public function checkEmptyString ($string, string $stringName=''): bool {
+    public function checkEmptyString (string|null $string, string $stringName=''): bool {
         try {
             //$this->logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
             if ($string === '' || $string === null) {
@@ -63,12 +119,12 @@ class General {
     }
 
     /**
-     * @param $integer
+     * @param int|null $integer
      * @param string $integerName
      * @return bool
      * @throws Exception
      */
-    public function checkEmptyInteger ($integer, string $integerName): bool {
+    public function checkEmptyInteger (int|null $integer, string $integerName): bool {
         try {
             //$this->logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
             if (empty($integer)) {
@@ -81,12 +137,12 @@ class General {
     }
 
     /**
-     * @param $float $float
+     * @param float|null $float
      * @param string $floatName
      * @return bool
      * @throws Exception
      */
-    public function checkEmptyFloat ($float, string $floatName): bool {
+    public function checkEmptyFloat (float|null $float, string $floatName): bool {
         try {
             //$this->logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
             if (empty($float)) {
@@ -164,6 +220,35 @@ class General {
                 } else if (gettype($param) === 'integer' && $param === 0) {
                     throw new Exception('[' . __LINE__ . '] - Integer '.$index.' 0', $throwCode);
                 }
+            }
+        } catch(Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param string|int|bool|null $input
+     * @param array $optionArr
+     * @param string $inputName
+     * @param bool $isAlert
+     * @return void
+     * @throws Exception
+     */
+    public function checkMandatoryOption (string|int|bool|null $input, array $optionArr, string $inputName, bool $isAlert=false): void {
+        try {
+            //$this->logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
+            $this->checkEmptyArray($optionArr, 'optionArr');
+            $this->checkEmptyString($inputName);
+            $throwCode = $isAlert ? 31 : 30;
+            $check = false;
+            foreach ($optionArr as $option) {
+                if ($input === $option) {
+                    $check = true;
+                    break;
+                }
+            }
+            if (!$check) {
+                throw new Exception('[' . __LINE__ . '] - '.$inputName.' not in the options', $throwCode);
             }
         } catch(Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
@@ -261,41 +346,6 @@ class General {
     }
 
     /**
-     * @param array $headers
-     * @return void
-     * @throws Exception
-     */
-    public function checkJwt (array $headers) {
-        try {
-            $this->checkEmptyArray($headers, 'headers');
-            if (isset($headers['Authorization'])) {
-                $jwt = $headers['Authorization'];
-            } else if (isset($headers['authorization']) && isset($headers['deviceid'])) {
-                $jwt = $headers['authorization'];
-            } else {
-                throw new Exception('Parameter Authorization empty');
-            }
-            $key = "task_management";
-            JWT::$leeway = 86400; // $leeway in seconds
-            $token = substr($jwt, 7);
-            $data = JWT::decode($token, $key, array('HS256'));
-            $this->userId = intval($data->userId);
-            DbMysql::$userId = $this->userId;
-            //if (DbMysql::count('sys_user', array('userId'=>$this->userId, 'userToken'=>$token)) !== 1) {
-            //    throw new Exception('Expired token', 31);
-            //}
-            if (DbMysql::count('sys_user', array('userId'=>$this->userId, 'userStatus'=>1)) !== 1) {
-                throw new Exception('User not exist', 31);
-            }
-            if (isset($headers['authorization']) && DbMysql::count('sys_user', array('userId'=>$this->userId, 'userDeviceId'=>$headers['deviceid'])) !== 1) {
-                throw new Exception('Device ID invalid with this login');
-            }
-        } catch(Exception $ex) {
-            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
-        }
-    }
-
-    /**
      * @param string $requestUri
      * @param string $apiName
      * @return array
@@ -305,7 +355,8 @@ class General {
         try {
             $this->logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
             $this->checkEmptyParams(array($requestUri, $apiName));
-            $urlArr = explode('/', $_SERVER['REQUEST_URI']);
+            $requestUri = str_replace('?%22%22', '', $requestUri);
+            $urlArr = explode('/', $requestUri);
             foreach ($urlArr as $param) {
                 if ($param === $apiName) {
                     break;

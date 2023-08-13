@@ -3,5 +3,15 @@ RewriteEngine On
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 
+RewriteRule ^/?$ login.html
+RewriteRule ^p_login/?$ login.html
+RewriteRule ^p_home?$ home.html
+RewriteRule ^p_list_all?$ list_all.html
+
+RewriteRule ^login/?$ api/login.php
 RewriteRule ^recurring/?$ api/recurring.php
 RewriteRule ^recurring/(.+)/?$ api/recurring.php
+RewriteRule ^task/?$ api/task.php
+RewriteRule ^task/(.+)/?$ api/task.php
+RewriteRule ^version/?$ api/version.php
+RewriteRule ^version/external?$ api/version.php

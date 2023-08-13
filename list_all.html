@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Task Management System</title>
+    <link rel="stylesheet" href="css/fontawesome-free-6.4.2-web/css/all.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/mdb.min.css">
+    <link rel="stylesheet" type="text/css" href="js/vendor/datatables/css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" type="text/css" href="js/vendor/datatables/css/button.dataTables.min.css"/>
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+    </style>
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+</head>
+<body class="fixed-sn mdb-skin">
+<header>
+    <div class="includeHtml" id="h-b-nav_left"></div>
+    <div class="includeHtml" id="h-b-nav_top"></div>
+</header>
+<main>
+    <div class="container-fluid" id="divPageWidth">
+        <section class="sectionLllMain mb-3">
+            <div class="row">
+                <div class="col-12 p-2">
+                    <nav class="navbar mdb-color darken-1 z-depth-3 rounded mb-2">
+                        <h4 class="navbar-text white-text font-weight-bold ml-3 pb-0">
+                            <i class="fas fa-list-check mr-2"></i> All Tasks List
+                        </h4>
+                    </nav>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="col-12 p-2">
+                    <nav class="navbar navbar-expand navbar-dark mdb-color lighten-1 z-depth-3 m-0 p-2">
+                        <div class="collapse navbar-collapse">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item dropdown mdb-color lighten-3 px-2 mr-2" id="liTshYear">
+                                    <a class="nav-link dropdown-toggle" id="navTshYear" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">Year</a>
+                                    <div class="dropdown-menu dropdown-danger" aria-labelledby="navTshYear" id="divTshYear">
+                                        <a class="dropdown-item lnkTshYear" href="#" id="lnkTshYear_2022">2022</a>
+                                        <a class="dropdown-item lnkTshYear" href="#" id="lnkTshYear_2023">2023</a>
+                                        <a class="dropdown-item lnkTshYear" href="#" id="lnkTshYear_2024">2024</a>
+                                        <a class="dropdown-item lnkTshYear" href="#" id="lnkTshYear_2025">2025</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown mdb-color lighten-3 navbar-custom px-2 mr-2" id="liTshMonth">
+                                    <a class="nav-link dropdown-toggle" id="navTshMonth" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">Month</a>
+                                    <div class="dropdown-menu dropdown-danger" aria-labelledby="navTshMonth" id="divTshMonth">
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_1">January</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_2">February</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_3">March</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_4">April</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_5">May</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_6">June</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_7">July</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_8">August</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_9">September</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_10">October</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_11">November</a>
+                                        <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_12">December</a>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a class="navbar-brand font-weight-500 ml-2 float-right" href="#" id="lblTshSelected">Oktober 2022</a>  &lt;!&ndash;d-none d-md-block&ndash;&gt;
+                        </div>
+                    </nav>
+                </div>
+            </div>-->
+            <div class="row">
+                <div class="col-12 p-2">
+                    <div class="accordion md-accordion accordion-5" id="accLll" role="tablist" aria-multiselectable="true">
+                        <div class="card z-depth-3 mb-3">
+                            <div class="card-header white p-0 z-depth-1">
+                                <div class="section-header-style mdb-color lighten-1">&nbsp;</div>
+                                <a data-toggle="collapse" data-parent="#accLll" href="#divLllOverdue" aria-expanded="true"
+                                   aria-controls="divLllOverdue" id="headerLllOverdue">
+                                    <h5 class="section-header-title dark-grey-text">
+                                        Overdue Tasks <i class="fas fa-angle-down rotate-icon mr-3"></i>
+                                    </h5>
+                                </a>
+                            </div>
+                            <div class="card-body collapse show" id="divLllOverdue" data-parent="#accLll">
+                                <div class="row">
+                                    <div class="col-md-12 px-0">
+                                        <div class="table-responsive">
+                                            <table id="dtLllOverdue" class="table table-hover table-tight mb-0 display responsive">
+                                                <thead>
+                                                <tr class="th-strong">
+                                                    <th>#</th>
+                                                    <th>TASK NAME</th>
+                                                    <th>MAIN TASK</th>
+                                                    <th>SPACE</th>
+                                                    <th>FOLDER</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th style="width: 42px; max-width: 42px; padding-left: 0px; padding-right: 0px">OWNER</th>
+                                                    <th>YEAR</th>
+                                                    <th>MONTH</th>
+                                                    <th>AMOUNT</th>
+                                                    <th>PRIORITY</th>
+                                                    <th>DUE DATE</th>
+                                                    <th>START TIME</th>
+                                                    <th>END TIME</th>
+                                                    <th>COMPLETE TIME</th>
+                                                    <th>PROGRESS</th>
+                                                    <th>TIME ESTIMATE</th>
+                                                    <th>TIME RECORDED</th>
+                                                    <th>LATENESS</th>
+                                                    <th>EFFICIENCY</th>
+                                                    <th>STATUS</th>
+                                                    <th>&nbsp;</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-3">
+                            <div class="card-header white p-0 z-depth-1">
+                                <div class="section-header-style mdb-color lighten-1">&nbsp;</div>
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accLll" href="#divLllToday" aria-expanded="false"
+                                   aria-controls="divLllToday" id="headerLllToday">
+                                    <h5 class="section-header-title dark-grey-text">
+                                        Today Tasks <i class="fas fa-angle-down rotate-icon mr-3"></i>
+                                    </h5>
+                                </a>
+                            </div>
+                            <div class="card-body collapse" id="divLllToday" data-parent="#accLll">
+                                <div class="row">
+                                    <div class="col-md-12 px-0">
+                                        <div class="table-responsive">
+                                            <table id="dtLllToday" class="table table-hover table-tight mb-0 display responsive">
+                                                <thead>
+                                                <tr class="th-strong">
+                                                    <th>#</th>
+                                                    <th>TASK NAME</th>
+                                                    <th>MAIN TASK</th>
+                                                    <th>SPACE</th>
+                                                    <th>FOLDER</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th style="width: 42px; max-width: 42px; padding-left: 0px; padding-right: 0px">OWNER</th>
+                                                    <th>YEAR</th>
+                                                    <th>MONTH</th>
+                                                    <th>AMOUNT</th>
+                                                    <th>PRIORITY</th>
+                                                    <th>DUE DATE</th>
+                                                    <th>START TIME</th>
+                                                    <th>END TIME</th>
+                                                    <th>COMPLETE TIME</th>
+                                                    <th>PROGRESS</th>
+                                                    <th>TIME ESTIMATE</th>
+                                                    <th>TIME RECORDED</th>
+                                                    <th>LATENESS</th>
+                                                    <th>EFFICIENCY</th>
+                                                    <th>STATUS</th>
+                                                    <th>&nbsp;</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script type="text/javascript" src="js/include.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/mdb.js"></script>
+<script type="text/javascript" src="js/addons/crypto.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/buttons.colvis.min.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/jszip.min.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/pdfmake.min.js"></script>
+<script type="text/javascript" src="js/vendor/datatables/js/vfs_fonts.js"></script>
+
+<script type="text/javascript">
+    document.write('<scr' + 'ipt src="js/common.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
+
+    let mainClass;
+    document.addEventListener('DOMContentLoaded', function () {
+        ShowLoader();
+        setTimeout(function () {
+            try {
+                initiatePages();
+                mainClass = new ListAll();
+
+
+                mainClass.init();
+            } catch (e) {
+                toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);
+            }
+            HideLoader();
+        }, 200);
+    });
+    document.write('<scr' + 'ipt src="js/pages/ListAll.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
+</script>
+</body>
+</html>
