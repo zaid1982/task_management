@@ -108,12 +108,12 @@ class SysUser extends General {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
             parent::checkEmptyString($username, 'username');
             parent::checkEmptyString($password, 'password');
-            $user = DbMysql::select('sys_user', array('userName'=>$username));
+            $user = DbMysql::select($this::$tableName, array('userName'=>$username));
             if (empty($user)) {
                 throw new Exception(Constant::$user['errNotExist'], 31);
             }
             if ($user['userPassword'] !== md5($password)) {
-                DbMysql::update('sys_user', array('userFailAttempt'=>$user['userFailAttempt'] + 1), array('userId'=>$user['userId']));
+                DbMysql::update($this::$tableName, array('userFailAttempt'=>$user['userFailAttempt'] + 1), array('userId'=>$user['userId']));
                 DbMysql::commit();
                 throw new Exception(Constant::$user['errPassword'], 31);
             }
@@ -163,7 +163,7 @@ class SysUser extends General {
                 }
             }
             $user['menu'] = $menuReturn;
-            DbMysql::update('sys_user', array('userTimeLogin'=>'NOW()', 'userToken'=>$user['token'], 'userFailAttempt'=>'0'), array('userId'=>$this->userId));
+            DbMysql::update($this::$tableName, array('userTimeLogin'=>'NOW()', 'userToken'=>$user['token'], 'userFailAttempt'=>'0'), array('userId'=>$this->userId));
             return $user;
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());

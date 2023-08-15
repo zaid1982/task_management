@@ -3,6 +3,9 @@ function ListAll() {
     const className = 'ListAll';
     let self = this;
     let oTableLllOverdue;
+    let refStatus;
+    let refSpace;
+    let refFolder;
 
     this.init = function () {
         $('#divLllOverdue').on('shown.bs.collapse', function () {
@@ -22,8 +25,8 @@ function ListAll() {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
-                { className: 'text-center', targets: [0, 6] },
-                //{ className: 'text-right', targets: [8] },
+                { className: 'text-center', targets: [0, 6, 10, 20] },
+                { className: 'text-right', targets: [9] },
                 { className: 'noVis', targets: [0, 21] },
                 { visible: false, targets: [2, 5, 7, 8, 14, 17, 19] }
             ],
@@ -48,32 +51,48 @@ function ListAll() {
                 { mData: null},
                 { mData: 'taskName'},
                 { mData: 'mainTaskName'},
-                { mData: null},
-                { mData: 'folderId'},
-                { mData: 'taskDescription'},
+                { mData: null,
+                    mRender: function (data, type, row) {
+                        const folderId = row['folderId'];
+                        const spaceId = refFolder[folderId]['spaceId'];
+                        return refSpace[spaceId]['spaceName'];
+                    }
+                },
+                { mData: 'folderId', mRender: function (data) {
+                        return refFolder[data]['folderName'];
+                    }},
+                { mData: 'taskDescription'}, // 5
                 { mData: 'taskAssignee', mRender: function(data) {
-                        return '<img src="https://mdbootstrap.com/img/Photos/Horizontal/People/6-col/img(119).webp"\n' +
+                        return '<img src="img/sample/profile.png"\n' +
                             '     class="rounded-circle img-fluid z-depth-1" style="width:22px; height:22px;">';
                     }},
                 { mData: 'taskYear'},
                 { mData: 'taskMonth'},
-                { mData: 'taskAmount'},
-                { mData: 'taskPriority'},
+                { mData: 'taskAmount', mRender: function (data) {
+                        return mzFormatNumber(data, 2);
+                    }},
+                { mData: 'taskPriority'},   // 10
                 { mData: 'taskDateDue'},
                 { mData: 'taskDateStart'},
                 { mData: 'taskDateEnd'},
                 { mData: 'taskDateClose'},
-                { mData: 'progress'},
+                { mData: 'progress', mRender: function (data) {  // 15
+                        return mzFormatNumber(data)+'%';
+                    }},
                 { mData: 'taskTimeEstimate'},
                 { mData: 'timeSpent'},
-                { mData: 'lateness', mRender: function(data) {
-                    const days = data < 0 ? -data : data;
-                    const color = data < 0 ? 'red darken-1' : 'teal lighten-2';
-                    const dayTerm = data === 0 || data === 1 ? ' day' : ' days';
-                    return '<a class="trigger '+color+' text-white" style="font-size: 11px">'+days+' '+dayTerm+'</a>';
-                }},
+                { mData: 'lateness',
+                    mRender: function(data) {
+                        const days = data < 0 ? -data : data;
+                        const color = data < 0 ? 'red darken-1' : 'teal lighten-2';
+                        const dayTerm = data === 0 || data === 1 ? ' day' : ' days';
+                        return '<a class="trigger '+color+' text-white" style="font-size: 11px">'+days+' '+dayTerm+'</a>';
+                    }
+                },
                 { mData: 'efficiency'},
-                { mData: 'statusId'},
+                { mData: 'statusId', mRender: function (data) { // 20
+                        return refStatus[data]['statusName'];
+                    }},
                 { mData: null}
             ]
         });
@@ -86,4 +105,16 @@ function ListAll() {
         console.log(dataDb);
         oTableLllOverdue.clear().rows.add(dataDb).draw();
     };
+
+    this.setRefStatus = function (_refStatus) {
+        refStatus = _refStatus;
+    }
+
+    this.setRefSpace = function (_refSpace) {
+        refSpace = _refSpace;
+    }
+
+    this.setRefFolder = function (_refFolder) {
+        refFolder = _refFolder;
+    }
 }

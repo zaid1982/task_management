@@ -2,15 +2,15 @@
 require_once 'class/Constant.php';
 require_once 'class/General.php';
 require_once 'class/DbMysql.php';
-require_once 'class/TskTask.php';
+require_once 'class/RefStatus.php';
 
-$apiName = 'task';
+$apiName = 'status';
 $isTransaction = false;
 $formData = array('success'=>false, 'result'=>'', 'error'=>'', 'errmsg'=>'');
 $result = '';
 date_default_timezone_set("Asia/Kuala_Lumpur");
 
-$fnMain = new TskTask();
+$fnMain = new RefStatus();
 
 try {
     DbMysql::connect();
@@ -26,8 +26,8 @@ try {
         if (!isset($urlArr[1])) {
             throw new Exception('[line: ' . __LINE__ . '] - Wrong GET Request');
         }
-        if ($urlArr[1] === 'list' && isset($urlArr[2])) {
-            $result = $fnMain->getList($urlArr[2]);
+        if ($urlArr[1] === 'ref') {
+            $result = $fnMain->getRef();
         } else {
             throw new Exception('[line: ' . __LINE__ . '] - Wrong GET Request');
         }

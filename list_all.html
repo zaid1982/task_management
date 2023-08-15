@@ -202,7 +202,13 @@
                 initiatePages();
                 mainClass = new ListAll();
 
+                const refStatus_ = mzGetLocalArray('task_status', versionLocal_, 'status/ref');
+                const refSpace_ = mzGetLocalArray('task_space', versionLocal_, 'space/ref');
+                const refFolder_ = mzGetLocalArray('task_folder', versionLocal_, 'folder/ref');
 
+                mainClass.setRefStatus(refStatus_);
+                mainClass.setRefSpace(refSpace_);
+                mainClass.setRefFolder(refFolder_);
                 mainClass.init();
             } catch (e) {
                 toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);

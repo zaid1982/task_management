@@ -9,8 +9,14 @@ RewriteRule ^p_home?$ home.html
 RewriteRule ^p_list_all?$ list_all.html
 
 RewriteRule ^login/?$ api/login.php
+RewriteRule ^folder/?$ api/folder.php
+RewriteRule ^folder/(.+)/?$ api/folder.php
 RewriteRule ^recurring/?$ api/recurring.php
 RewriteRule ^recurring/(.+)/?$ api/recurring.php
+RewriteRule ^space/?$ api/space.php
+RewriteRule ^space/(.+)/?$ api/space.php
+RewriteRule ^status/?$ api/status.php
+RewriteRule ^status/(.+)/?$ api/status.php
 RewriteRule ^task/?$ api/task.php
 RewriteRule ^task/(.+)/?$ api/task.php
 RewriteRule ^version/?$ api/version.php
