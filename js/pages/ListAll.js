@@ -4,6 +4,7 @@ function ListAll() {
     let self = this;
     let oTableLllOverdue;
     let refStatus;
+    let refUser;
     let refSpace;
     let refFolder;
 
@@ -25,17 +26,18 @@ function ListAll() {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
-                { className: 'text-center', targets: [0, 6, 10, 20] },
+                { className: 'text-center', targets: [0, 6, 7, 8, 10, 11, 12, 13 ,14, 15, 16, 17, 18, 19, 20, 21] },
                 { className: 'text-right', targets: [9] },
                 { className: 'noVis', targets: [0, 21] },
-                { visible: false, targets: [2, 5, 7, 8, 14, 17, 19] }
+                { visible: false, targets: [2, 5, 7, 8, 14, 17, 19] },
+                { type: 'extract-date', targets: [11] }
             ],
             buttons: [
                 { extend: 'colvis', columns: ':not(.noVis)', fade: 400, collectionLayout: 'four-column', text:'<i class="fas fa-columns"></i>', className: 'btn btn-outline-grey btn-sm px-2 ml-0 z-depth-2', titleAttr: 'Column'},
                 { extend: 'print', className: 'btn btn-outline-blue-grey btn-sm px-2 z-depth-2', text:'<i class="fas fa-print"></i>', title:'Task Management System - All Task Overdue List', titleAttr: 'Print', exportOptions: mzExportOpt},
                 { extend: 'copy', className: 'btn btn-outline-blue btn-sm px-2 ml-0 z-depth-2', text:'<i class="fas fa-copy"></i>', title:'Task Management System - All Task Overdue List', titleAttr: 'Copy', exportOptions: mzExportOpt},
-                { extend: 'excelHtml5', className: 'btn btn-outline-green btn-sm px-2 ml-0 z-depth-2', text:'<i class="fas fa-file-excel"></i>', title:'Task Management System - All Task Overdue List', titleAttr: 'Excel', exportOptions: mzExportExcelOpt},
-                { extend: 'pdfHtml5', className: 'btn btn-outline-red btn-sm px-2 ml-0 z-depth-2', text:'<i class="fas fa-file-pdf"></i>', title:'Task Management System - All Task Overdue List', titleAttr: 'PDF', exportOptions: mzExportOpt}
+                { extend: 'excelHtml5', className: 'btn btn-outline-green btn-sm px-2 ml-0 z-depth-2', text:'<i class="fas fa-file-excel"></i>', title:'Task Management System - All Task Overdue List', titleAttr: 'Excel', exportOptions: mzExportOpt},
+                { extend: 'pdfHtml5', className: 'btn btn-outline-red btn-sm px-2 ml-0 z-depth-2', text:'<i class="fas fa-file-pdf"></i>', title:'Task Management System - All Task Overdue List', titleAttr: 'PDF', orientation: 'landscape', exportOptions: mzExportOpt}
             ],
             fnRowCallback : function(nRow, aData, iDisplayIndex){
                 const info = $(this).DataTable().page.info();
@@ -63,22 +65,37 @@ function ListAll() {
                     }},
                 { mData: 'taskDescription'}, // 5
                 { mData: 'taskAssignee', mRender: function(data) {
-                        return '<img src="img/sample/profile.png"\n' +
-                            '     class="rounded-circle img-fluid z-depth-1" style="width:22px; height:22px;">';
+                        return '<div class="chip chip-sm m-0 z-depth-1"><img src="api/'+refUser[data]['profileImage']+'">'+refUser[data]['userShortName']+'</div>';
                     }},
                 { mData: 'taskYear'},
                 { mData: 'taskMonth'},
                 { mData: 'taskAmount', mRender: function (data) {
                         return mzFormatNumber(data, 2);
                     }},
-                { mData: 'taskPriority'},   // 10
-                { mData: 'taskDateDue'},
+                { mData: 'taskPriority',
+                    mRender: function (data) {
+                        let color = 'blue-text';
+                        if (data === 'Urgent') {
+                            color = 'red-text';
+                        } else if (data === 'High') {
+                            color = 'orange-text';
+                        } else if (data === 'Low') {
+                            color = 'light-green-text';
+                        }
+                        return '<span class="'+color+'">'+data+'</span>';
+                    }
+                },   // 10
+                { mData: 'taskDateDue', mRender: function (data) {
+                        return mzDateDisplay(data);
+                    }},
                 { mData: 'taskDateStart'},
                 { mData: 'taskDateEnd'},
                 { mData: 'taskDateClose'},
-                { mData: 'progress', mRender: function (data) {  // 15
-                        return mzFormatNumber(data)+'%';
-                    }},
+                { mData: 'progress', mRender: function (data) {
+                        return '<div class="progress md-progress mb-0 grey lighten-2 z-depth-1" style="height: 18px">' +
+                            '<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: '+data+'%; height: 18px" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100">'+data+'%</div>' +
+                            '</div>';
+                    }},  // 15
                 { mData: 'taskTimeEstimate'},
                 { mData: 'timeSpent'},
                 { mData: 'lateness',
@@ -86,14 +103,19 @@ function ListAll() {
                         const days = data < 0 ? -data : data;
                         const color = data < 0 ? 'red darken-1' : 'teal lighten-2';
                         const dayTerm = data === 0 || data === 1 ? ' day' : ' days';
-                        return '<a class="trigger '+color+' text-white" style="font-size: 11px">'+days+' '+dayTerm+'</a>';
+                        return '<a class="badge badge-pill '+color+' z-depth-1-half">'+days+' '+dayTerm+'</a>';
                     }
                 },
                 { mData: 'efficiency'},
-                { mData: 'statusId', mRender: function (data) { // 20
-                        return refStatus[data]['statusName'];
-                    }},
-                { mData: null}
+                { mData: 'statusId', mRender: function (data) {
+                        return '<a class="badge '+refStatus[data]['statusColor']+' z-depth-2">'+refStatus[data]['statusName']+'</a>';
+                    }}, // 20
+                { mData: null,
+                    mRender: function (data, type, row, meta) {
+                        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg lnkLllOverduePdf mr-1" id="lnkLllOverduePdf_' + meta.row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>' +
+                            '<a><i class="fa-regular fa-circle-play fa-fade fa-lg lnkLllOverduePdf" id="lnkLllOverduePdf_' + meta.row + '" data-toggle="tooltip" data-placement="top" title="Start Record"></i></a>';
+                    }
+                }
             ]
         });
 
@@ -108,6 +130,10 @@ function ListAll() {
 
     this.setRefStatus = function (_refStatus) {
         refStatus = _refStatus;
+    }
+
+    this.setRefUser = function (_refUser) {
+        refUser = _refUser;
     }
 
     this.setRefSpace = function (_refSpace) {

@@ -76,7 +76,25 @@ class SysUser extends General {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
             return DbMysql::selectSqlAll(/** @lang text */
-                "SELECT user_id, user_full_name, user_short_name, status_id", array(), 1);
+                "SELECT user_id, user_full_name, user_short_name, status_id FROM sys_user", array(), 1);
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function getRefWithImage (): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
+            return DbMysql::selectSqlAll(
+                /** @lang text */
+                "SELECT user_id, user_full_name, user_short_name, CONCAT(upload_folder, '/', upload_filename, '.', upload_extension) AS profile_image, usr.status_id 
+                    FROM sys_user usr
+                    LEFT JOIN sys_upload upl ON upl.upload_id = usr.upload_id",
+                array(), 1);
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }

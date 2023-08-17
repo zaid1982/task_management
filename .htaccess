@@ -19,5 +19,7 @@ RewriteRule ^status/?$ api/status.php
 RewriteRule ^status/(.+)/?$ api/status.php
 RewriteRule ^task/?$ api/task.php
 RewriteRule ^task/(.+)/?$ api/task.php
+RewriteRule ^user/?$ api/user.php
+RewriteRule ^user/(.+)/?$ api/user.php
 RewriteRule ^version/?$ api/version.php
 RewriteRule ^version/external?$ api/version.php

@@ -55,14 +55,30 @@ const mzExportOpt = {
                 return '';
             } else if (data.toString().indexOf('red-text') > 0) {
                 return data.replace('<span class="red-text">', '').replace('</span>', '');
-            } else if (data.toString().indexOf('green-text') > 0) {
-                return data.replace('<span class="green-text">', '').replace('</span>', '');
-            } else if (data.toString().indexOf('mr-3') > 0) {
-                return data.replace('<span class="mr-3">', '').replace('</span>', '');
+            } else if (data.toString().indexOf('blue-text') > 0) {
+                return data.replace('<span class="blue-text">', '').replace('</span>', '');
+            } else if (data.toString().indexOf('orange-text') > 0) {
+                return data.replace('<span class="orange-text">', '').replace('</span>', '');
+            } else if (data.toString().indexOf('light-green-text') > 0) {
+                return data.replace('<span class="light-green-text">', '').replace('</span>', '');
+            } else if (data.toString().indexOf('progress md-progress') > 0) {
+                const start = data.toString().indexOf('aria-valuemax="100">') + 20;
+                const end = data.toString().indexOf('</div></div>');
+                return data.substring(start, end);
+            } else if (data.toString().indexOf('badge badge-pill') > 0) {
+                const start = data.toString().indexOf('z-depth-1-half">') + 16;
+                const end = data.toString().indexOf('</a>');
+                return data.substring(start, end);
+            } else if (data.toString().indexOf('badge') > 0) {
+                const start = data.toString().indexOf('z-depth-2">') + 11;
+                const end = data.toString().indexOf('</a>');
+                return data.substring(start, end);
+            } else if (data.toString().indexOf('chip chip-sm') > 0) {
+                const start = data.toString().indexOf('png">') + 5;
+                const end = data.toString().indexOf('</div>');
+                return data.substring(start, end);
             } else if (data.toString().indexOf('ul style') > 0) {
                 return data.replace('<ul style="padding-left: 20px; margin-bottom: 0px !important;"><li>', '').replaceAll('</li><li>', ', ').replace('</li></ul>', '');
-            } else if (data.toString().indexOf('<i class="fas fa-exclamation-circle text-danger"></i>') > 0) {
-                return data.replace(' <i class="fas fa-exclamation-circle text-danger"></i>', '');
             }
             return data;
         }
@@ -694,7 +710,7 @@ function initiatePages() {
         const strBold = navId === nav['navId'] ? 'font-weight-bold' : '';
         const navSeconds = nav['navSecond'];
         if (navSeconds.length > 0) {
-            menuHtml += '<a class="collapsible-header waves-effect arrow-r ' + strActive + '"><i class="fas fa-' + nav['navIcon'] + '"></i> ' + nav['navName'] + '<i class="fa fa-angle-down rotate-icon"></i></a>';
+            menuHtml += '<a class="collapsible-header waves-effect arrow-r ' + strActive + '"><i class="' + nav['navIcon'] + '"></i> ' + nav['navName'] + '<i class="fa fa-angle-down rotate-icon"></i></a>';
             menuHtml += '<div class="collapsible-body">';
             menuHtml += '<ul>';
             if (navId === nav['navId']) {
@@ -781,7 +797,7 @@ function setupPages(isExternal) {
     });
 
     // Data Picker Initialization
-    $('.datepicker').pickadate({
+    /*$('.datepicker').pickadate({
         monthsFull: ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 'Julai', 'Ogos', 'September', 'Oktober',
             'November', 'Disember'],
         monthsShort: ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt',
@@ -791,7 +807,7 @@ function setupPages(isExternal) {
         today: 'Hari ini',
         clear: 'Padam',
         close: 'Batal'
-    });
+    });*/
     $('.timepicker').pickatime({});
 
     // Toast Initialization
@@ -928,14 +944,30 @@ function mzConvertDate(dateInput) {
     return dateNew;
 }
 
-function mzConvertDateDisplay(dateInput) {
+function mzDateDisplay(dateInput) {
+    if (typeof dateInput === 'undefined' || dateInput === '') {
+        return '';
+    }
+    let dateNew = '';
+    const dateSplit = dateInput.split('-');
+    if (dateSplit.length === 3) {
+        let day = dateSplit[2];
+        let month = dateSplit[1];
+        let year = dateSplit[0];
+        const monthArray = mzGetMonthArray();
+        dateNew = monthArray[parseInt(month)]['monthShort'] + ' ' + parseInt(day) + ', ' + year;
+    }
+    return dateNew;
+}
+
+function mzConvertDateDisplay (dateInput) {
     if (typeof dateInput === 'undefined') {
         return '';
     }
     let fullDateStr = '';
     let timeNew = '';
-    const monthsFull = ['', 'Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 'Julai', 'Ogos', 'September', 'Oktober',
-        'November', 'Disember'];
+    const monthsFull = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+        'November', 'December'];
 
     const datePart = dateInput.substr(0, 10);
     let dateSplit = datePart.split("/");
@@ -958,7 +990,7 @@ function mzConvertDateDisplay(dateInput) {
     return fullDateStr;
 }
 
-function mzConvertTimeDisplay(timeInput) {
+function mzConvertTimeDisplay (timeInput) {
     if (typeof timeInput === 'undefined' || (timeInput.length !== 8)) {
         return '';
     }
@@ -976,29 +1008,29 @@ function mzConvertTimeDisplay(timeInput) {
 
 function mzConvertMonth(monthInput) {
     switch (monthInput) {
-        case 'Januari':
+        case 'January':
             return '01';
-        case 'Februari':
+        case 'February':
             return '02';
-        case 'Mac':
+        case 'March':
             return '03';
         case 'April':
             return '04';
-        case 'Mei':
+        case 'May':
             return '05';
-        case 'Jun':
+        case 'June':
             return '06';
-        case 'Julai':
+        case 'July':
             return '07';
-        case 'Ogos':
+        case 'August':
             return '08';
         case 'September':
             return '09';
-        case 'Oktober':
+        case 'October':
             return '10';
         case 'November':
             return '11';
-        case 'Disember':
+        case 'December':
             return '12';
         default:
             return '';
@@ -1592,18 +1624,18 @@ function mzDateSetMax(fieldId, dateStr) {
 
 function mzGetMonthArray() {
     return [
-        {monthId:1, monthName:'Januari', monthShort:'Jan'},
-        {monthId:2, monthName:'Februari', monthShort:'Feb'},
-        {monthId:3, monthName:'Mac', monthShort:'Mac'},
+        {monthId:1, monthName:'January', monthShort:'Jan'},
+        {monthId:2, monthName:'February', monthShort:'Feb'},
+        {monthId:3, monthName:'March', monthShort:'Mar'},
         {monthId:4, monthName:'April', monthShort:'Apr'},
-        {monthId:5, monthName:'Mei', monthShort:'Mei'},
-        {monthId:6, monthName:'Jun', monthShort:'Jun'},
-        {monthId:7, monthName:'Julai', monthShort:'Jul'},
-        {monthId:8, monthName:'Ogos', monthShort:'Ogos'},
+        {monthId:5, monthName:'May', monthShort:'May'},
+        {monthId:6, monthName:'June', monthShort:'Jun'},
+        {monthId:7, monthName:'July', monthShort:'Jul'},
+        {monthId:8, monthName:'August', monthShort:'Aug'},
         {monthId:9, monthName:'September', monthShort:'Sept'},
-        {monthId:10, monthName:'Oktober', monthShort:'Okt'},
+        {monthId:10, monthName:'October', monthShort:'Oct'},
         {monthId:11, monthName:'November', monthShort:'Nov'},
-        {monthId:12, monthName:'Disember', monthShort:'Dis'}
+        {monthId:12, monthName:'December', monthShort:'Dec'}
     ];
 }
 
@@ -1611,19 +1643,19 @@ function mzGetDayName(inputDate) {
     const thisDate = moment(inputDate);
     switch (thisDate.weekday()) {
         case 0:
-            return 'Ahad';
+            return 'Sunday';
         case 1:
-            return 'Isnin';
+            return 'Monday';
         case 2:
-            return 'Selasa';
+            return 'Tuesday';
         case 3:
-            return 'Rabu';
+            return 'Wednesday';
         case 4:
-            return 'Khamis';
+            return 'Thursday';
         case 5:
-            return 'Jumaat';
+            return 'Friday';
         case 6:
-            return 'Sabtu';
+            return 'Saturday';
         default:
             return '';
     }

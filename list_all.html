@@ -12,6 +12,15 @@
     <link rel="stylesheet" type="text/css" href="js/vendor/datatables/css/button.dataTables.min.css"/>
     <link href="css/style.css" rel="stylesheet">
     <style>
+        .chip.chip-sm {
+            height: 24px;
+            line-height: 24px;
+            border-radius: 12px;
+        }
+        .chip.chip-sm img {
+            height: 24px;
+            width: 24px;
+        }
     </style>
     <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
 </head>
@@ -97,22 +106,22 @@
                                                     <th>SPACE</th>
                                                     <th>FOLDER</th>
                                                     <th>DESCRIPTION</th>
-                                                    <th style="width: 42px; max-width: 42px; padding-left: 0px; padding-right: 0px">OWNER</th>
+                                                    <th style="width: 75px; min-width: 75px;">ASSIGNEE</th>
                                                     <th>YEAR</th>
                                                     <th>MONTH</th>
                                                     <th>AMOUNT</th>
                                                     <th>PRIORITY</th>
-                                                    <th>DUE DATE</th>
+                                                    <th style="width: 65px; min-width: 65px;">DUE DATE</th>
                                                     <th>START TIME</th>
                                                     <th>END TIME</th>
                                                     <th>COMPLETE TIME</th>
-                                                    <th>PROGRESS</th>
+                                                    <th style="width: 60px; min-width: 60px;">PROGRESS</th>
                                                     <th>TIME ESTIMATE</th>
                                                     <th>TIME RECORDED</th>
                                                     <th>LATENESS</th>
                                                     <th>EFFICIENCY</th>
                                                     <th>STATUS</th>
-                                                    <th>&nbsp;</th>
+                                                    <th style="width: 35px; min-width: 35px;">&nbsp;</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -154,7 +163,7 @@
                                                     <th>START TIME</th>
                                                     <th>END TIME</th>
                                                     <th>COMPLETE TIME</th>
-                                                    <th>PROGRESS</th>
+                                                    <th style="width: 60px; max-width: 60px;">PROGRESS</th>
                                                     <th>TIME ESTIMATE</th>
                                                     <th>TIME RECORDED</th>
                                                     <th>LATENESS</th>
@@ -178,6 +187,7 @@
 </main>
 
 <script type="text/javascript" src="js/include.js"></script>
+<script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/mdb.js"></script>
 <script type="text/javascript" src="js/addons/crypto.js"></script>
@@ -203,10 +213,13 @@
                 mainClass = new ListAll();
 
                 const refStatus_ = mzGetLocalArray('task_status', versionLocal_, 'status/ref');
+                const refUser_ = mzGetLocalArray('task_user', versionLocal_, 'user/refWithImage');
                 const refSpace_ = mzGetLocalArray('task_space', versionLocal_, 'space/ref');
                 const refFolder_ = mzGetLocalArray('task_folder', versionLocal_, 'folder/ref');
+                console.log(refUser_);
 
                 mainClass.setRefStatus(refStatus_);
+                mainClass.setRefUser(refUser_);
                 mainClass.setRefSpace(refSpace_);
                 mainClass.setRefFolder(refFolder_);
                 mainClass.init();

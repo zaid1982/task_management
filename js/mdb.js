@@ -27728,7 +27728,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   return bsCustomFileInput;
 
 }));
-//# sourceMappingURL=bs-custom-file-input.js.map
 
 document.addEventListener("DOMContentLoaded", function () {
 

@@ -32,7 +32,7 @@ class TskTask extends General {
                 task_main_id,
                 COUNT(*) AS main_total_task,
                 SUM(IF(status_id = 4, 1, 0)) AS main_total_done,
-                ROUND(SUM(IF(status_id = 4, 1, 0))/COUNT(*)*100, 2) AS perc_done
+                ROUND(SUM(IF(status_id = 4, 1, 0))/COUNT(*)*100) AS perc_done
             FROM tsk_task
             WHERE task_main_id IS NOT NULL
             GROUP BY task_main_id) mpc ON mpc.task_main_id = tsk.task_id";
