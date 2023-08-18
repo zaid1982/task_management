@@ -86,18 +86,109 @@
                         <div class="card z-depth-3 mb-3">
                             <div class="card-header white p-0 z-depth-1">
                                 <div class="section-header-style mdb-color lighten-1">&nbsp;</div>
-                                <a data-toggle="collapse" data-parent="#accLll" href="#divLllOverdue" aria-expanded="true"
-                                   aria-controls="divLllOverdue" id="headerLllOverdue">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accLll" href="#divLllToday" aria-expanded="false"
+                                   aria-controls="divLllToday" id="headerLllToday">
                                     <h5 class="section-header-title dark-grey-text">
-                                        Overdue Tasks <i class="fas fa-angle-down rotate-icon mr-3"></i>
+                                        Today Tasks <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
                                     </h5>
                                 </a>
                             </div>
-                            <div class="card-body collapse show" id="divLllOverdue" data-parent="#accLll">
+                            <div class="card-body collapse show" id="divLllToday" data-parent="#accLll">
+                                <div class="row">
+                                    <div class="col-md-12 px-0">
+                                        <div class="table-responsive">
+                                            <table id="dtLllToday" class="table table-hover table-tight mb-0 display responsive">
+                                                <thead>
+                                                <tr class="th-strong">
+                                                    <th>#</th>
+                                                    <th>TASK NAME</th>
+                                                    <th>MAIN TASK</th>
+                                                    <th>SPACE</th>
+                                                    <th>FOLDER</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>YEAR</th>
+                                                    <th>MONTH</th>
+                                                    <th>AMOUNT</th>
+                                                    <th>PRIORITY</th>
+                                                    <th style="width: 65px; min-width: 65px;">DUE DATE</th>
+                                                    <th style="width: auto; min-width: 60px;">START TIME</th>
+                                                    <th style="width: auto; min-width: 60px;">END TIME</th>
+                                                    <th style="width: 60px; min-width: 60px;">PROGRESS</th>
+                                                    <th>TIME ESTIMATE</th>
+                                                    <th>TIME RECORDED</th>
+                                                    <th>STATUS</th>
+                                                    <th style="width: 35px; min-width: 35px;">&nbsp;</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-3 mb-3">
+                            <div class="card-header white p-0 z-depth-1">
+                                <div class="section-header-style mdb-color lighten-1">&nbsp;</div>
+                                <a data-toggle="collapse" data-parent="#accLll" href="#divLllOverdue" aria-expanded="true"
+                                   aria-controls="divLllOverdue" id="headerLllOverdue">
+                                    <h5 class="section-header-title dark-grey-text">
+                                        Overdue Tasks <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
+                                    </h5>
+                                </a>
+                            </div>
+                            <div class="card-body collapse" id="divLllOverdue" data-parent="#accLll">
                                 <div class="row">
                                     <div class="col-md-12 px-0">
                                         <div class="table-responsive">
                                             <table id="dtLllOverdue" class="table table-hover table-tight mb-0 display responsive">
+                                                <thead>
+                                                <tr class="th-strong">
+                                                    <th>#</th>
+                                                    <th>TASK NAME</th>
+                                                    <th>MAIN TASK</th>
+                                                    <th>SPACE</th>
+                                                    <th>FOLDER</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>YEAR</th>
+                                                    <th>MONTH</th>
+                                                    <th>AMOUNT</th>
+                                                    <th>PRIORITY</th>
+                                                    <th style="width: 65px; min-width: 65px;">DUE DATE</th>
+                                                    <th style="width: auto; min-width: 60px;">START TIME</th>
+                                                    <th style="width: auto; min-width: 60px;">END TIME</th>
+                                                    <th style="width: 60px; min-width: 60px;">PROGRESS</th>
+                                                    <th>TIME ESTIMATE</th>
+                                                    <th>TIME RECORDED</th>
+                                                    <th>LATENESS</th>
+                                                    <th>STATUS</th>
+                                                    <th style="width: 35px; min-width: 35px;">&nbsp;</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-3 mb-3">
+                            <div class="card-header white p-0 z-depth-1">
+                                <div class="section-header-style mdb-color lighten-1">&nbsp;</div>
+                                <a data-toggle="collapse" data-parent="#accLll" href="#divLllFuture" aria-expanded="true"
+                                   aria-controls="divLllFuture" id="headerLllFuture">
+                                    <h5 class="section-header-title dark-grey-text">
+                                        Future Tasks <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
+                                    </h5>
+                                </a>
+                            </div>
+                            <div class="card-body collapse" id="divLllFuture" data-parent="#accLll">
+                                <div class="row">
+                                    <div class="col-md-12 px-0">
+                                        <div class="table-responsive">
+                                            <table id="dtLllFuture" class="table table-hover table-tight mb-0 display responsive">
                                                 <thead>
                                                 <tr class="th-strong">
                                                     <th>#</th>
@@ -114,62 +205,11 @@
                                                     <th style="width: 65px; min-width: 65px;">DUE DATE</th>
                                                     <th>START TIME</th>
                                                     <th>END TIME</th>
-                                                    <th>COMPLETE TIME</th>
                                                     <th style="width: 60px; min-width: 60px;">PROGRESS</th>
                                                     <th>TIME ESTIMATE</th>
                                                     <th>TIME RECORDED</th>
-                                                    <th>LATENESS</th>
-                                                    <th>EFFICIENCY</th>
                                                     <th>STATUS</th>
                                                     <th style="width: 35px; min-width: 35px;">&nbsp;</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card z-depth-3">
-                            <div class="card-header white p-0 z-depth-1">
-                                <div class="section-header-style mdb-color lighten-1">&nbsp;</div>
-                                <a class="collapsed" data-toggle="collapse" data-parent="#accLll" href="#divLllToday" aria-expanded="false"
-                                   aria-controls="divLllToday" id="headerLllToday">
-                                    <h5 class="section-header-title dark-grey-text">
-                                        Today Tasks <i class="fas fa-angle-down rotate-icon mr-3"></i>
-                                    </h5>
-                                </a>
-                            </div>
-                            <div class="card-body collapse" id="divLllToday" data-parent="#accLll">
-                                <div class="row">
-                                    <div class="col-md-12 px-0">
-                                        <div class="table-responsive">
-                                            <table id="dtLllToday" class="table table-hover table-tight mb-0 display responsive">
-                                                <thead>
-                                                <tr class="th-strong">
-                                                    <th>#</th>
-                                                    <th>TASK NAME</th>
-                                                    <th>MAIN TASK</th>
-                                                    <th>SPACE</th>
-                                                    <th>FOLDER</th>
-                                                    <th>DESCRIPTION</th>
-                                                    <th style="width: 42px; max-width: 42px; padding-left: 0px; padding-right: 0px">OWNER</th>
-                                                    <th>YEAR</th>
-                                                    <th>MONTH</th>
-                                                    <th>AMOUNT</th>
-                                                    <th>PRIORITY</th>
-                                                    <th>DUE DATE</th>
-                                                    <th>START TIME</th>
-                                                    <th>END TIME</th>
-                                                    <th>COMPLETE TIME</th>
-                                                    <th style="width: 60px; max-width: 60px;">PROGRESS</th>
-                                                    <th>TIME ESTIMATE</th>
-                                                    <th>TIME RECORDED</th>
-                                                    <th>LATENESS</th>
-                                                    <th>EFFICIENCY</th>
-                                                    <th>STATUS</th>
-                                                    <th>&nbsp;</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -216,7 +256,6 @@
                 const refUser_ = mzGetLocalArray('task_user', versionLocal_, 'user/refWithImage');
                 const refSpace_ = mzGetLocalArray('task_space', versionLocal_, 'space/ref');
                 const refFolder_ = mzGetLocalArray('task_folder', versionLocal_, 'folder/ref');
-                console.log(refUser_);
 
                 mainClass.setRefStatus(refStatus_);
                 mainClass.setRefUser(refUser_);

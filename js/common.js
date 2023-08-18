@@ -1037,23 +1037,6 @@ function mzConvertMonth(monthInput) {
     }
 }
 
-function mzGetAgeFromIc(dateInput) {
-    if (typeof dateInput === 'undefined' || dateInput.length !== 12) {
-        return '';
-    }
-    if (parseInt(dateInput.substr(0, 2)) < 25) {
-        dateInput = '20'+dateInput.substr(0, 6);
-    } else {
-        dateInput = '19'+dateInput.substr(0, 6);
-    }
-    let birthDate = moment(dateInput, 'YYYYMMMDD');
-    if (birthDate.isValid()) {
-        return moment().diff(birthDate, 'years');
-    } else {
-        return '';
-    }
-}
-
 function mzSetDate(id, dateInput) {
     const dateSplit = dateInput.split('-');
     if (dateSplit.length === 3) {
@@ -1743,5 +1726,66 @@ function mzDisplayImageFileInput(input, targetId) {
             $('#'+targetId).attr('src', e.target.result);
         }
         reader.readAsDataURL(input.files[0]); // convert to base64 string
+    }
+}
+
+function mzGetDtPriority (priority) {
+    let color = '';
+    if (priority === 'Urgent') {
+        color = 'red-text';
+    } else if (priority === 'High') {
+        color = 'orange-text';
+    } else if (priority === 'Normal') {
+        color = 'blue-text';
+    } else if (priority === 'Low') {
+        color = 'light-green-text';
+    } else {
+        return '';
+    }
+    return '<span class="'+color+'">'+priority+'</span>';
+}
+
+function mzGetDtAssignee (shortName, profileImage) {
+    if (shortName === '' || profileImage === '' || shortName === null || profileImage === null) {
+        return '';
+    }
+    return '<div class="chip chip-sm m-0 z-depth-1"><img src="api/'+profileImage+'">'+shortName+'</div>';
+}
+
+function mzGetDtStatus (statusName, statusColor) {
+    if (statusName === '' || statusColor === '' || statusName === null || statusColor === null) {
+        return '';
+    }
+    return '<a class="badge '+statusColor+' z-depth-2">'+statusName+'</a>';
+}
+
+function mzGetDtProgress (progress) {
+    if (progress === '' ||  progress === null) {
+        return '';
+    }
+    return '<div class="progress md-progress mb-0 grey lighten-2 z-depth-1" style="height: 18px">' +
+        '<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: '+progress+'%; height: 18px" aria-valuenow="'+progress+'" aria-valuemin="0" aria-valuemax="100">'+progress+'%</div>' +
+        '</div>';
+}
+
+function mzGetDtLateness (lateness) {
+    if (lateness === '' ||  lateness === null || !mzValidNumeric(lateness)) {
+        return '';
+    }
+    lateness = parseInt(lateness);
+    const days = lateness < 0 ? -lateness : lateness;
+    const color = lateness < 0 ? 'red darken-1' : 'teal lighten-2';
+    const dayTerm = lateness === 0 || lateness === 1 ? ' day' : ' days';
+    return '<a class="badge badge-pill '+color+' z-depth-1-half">'+days+' '+dayTerm+'</a>';
+}
+
+function mzGetDtAction (type, id, row) {
+    if (type === 1) {
+        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+'" id="'+id+'_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
+    } else if (type === 2) {
+        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+' mr-1" id="'+id+'_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>' +
+            '<a><i class="fa-regular fa-circle-play fa-fade fa-lg '+id+'" id="'+id+'_' + row + '" data-toggle="tooltip" data-placement="top" title="Start Record"></i></a>';
+    } else {
+        return '';
     }
 }

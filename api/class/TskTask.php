@@ -84,12 +84,17 @@ class TskTask extends General {
             $sqlWhere = array();
             $sqlOrderBy = '';
             $sqlOrderDirection = '';
+            $dateNow = new DateTime();
             if ($type === 'overdue') {
                 $sqlWhere['tsk.statusId'] = 'IN|3,5';
                 $sqlWhere['tsk.taskDateDue'] = 'IS NOT NULL';
-                $dateNow = new DateTime();
                 $sqlWhere['tsk.taskDateDue '] = '<|'.$dateNow->format('Y-m-d');
                 $sqlOrderBy = 'taskDateDue';
+            }
+            else if ($type === 'today') {
+                $sqlWhere['tsk.statusId'] = 'IN|3,5';
+                $sqlWhere['tsk.taskDateDue'] = $dateNow->format('Y-m-d');
+                $sqlOrderBy = 'taskDateStart';
             }
             return DbMysql::selectSqlAll($this::$sqlInfo, $sqlWhere, 0, false, $sqlOrderBy, $sqlOrderDirection);
         } catch (Exception|Throwable $ex) {
