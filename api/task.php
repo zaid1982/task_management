@@ -28,6 +28,8 @@ try {
         }
         if ($urlArr[1] === 'list' && isset($urlArr[2])) {
             $result = $fnMain->getList($urlArr[2]);
+        } else if ($urlArr[1] === 'summary' && $urlArr[2] === 'all') {
+            $result = $fnMain->getListSummaryAll();
         } else {
             throw new Exception('[line: ' . __LINE__ . '] - Wrong GET Request');
         }

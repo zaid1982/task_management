@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-12 p-2">
                     <nav class="navbar mdb-color darken-1 z-depth-3 rounded mb-2">
-                        <h4 class="navbar-text white-text font-weight-bold ml-3 pb-0">
+                        <h4 class="navbar-text white-text font-weight-bold ml-3 pb-0 mb-1">
                             <i class="fas fa-list-check mr-2"></i> All Tasks List
                         </h4>
                     </nav>
@@ -89,7 +89,7 @@
                                 <a class="collapsed" data-toggle="collapse" data-parent="#accLll" href="#divLllToday" aria-expanded="false"
                                    aria-controls="divLllToday" id="headerLllToday">
                                     <h5 class="section-header-title dark-grey-text">
-                                        Today Tasks <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
+                                        <i class="fa-solid fa-calendar-day fa-beat"></i> Today Tasks <span class="badge badge-pill badge-danger pt-2 ml-1 z-depth-2" id="spanLllTodayTotal">0</span> <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
                                     </h5>
                                 </a>
                             </div>
@@ -134,7 +134,7 @@
                                 <a data-toggle="collapse" data-parent="#accLll" href="#divLllOverdue" aria-expanded="true"
                                    aria-controls="divLllOverdue" id="headerLllOverdue">
                                     <h5 class="section-header-title dark-grey-text">
-                                        Overdue Tasks <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
+                                        <i class="fa-solid fa-business-time fa-beat"></i> Overdue Tasks <span class="badge badge-pill badge-danger pt-2 ml-1 z-depth-2" id="spanLllTodayOverdue">0</span> <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
                                     </h5>
                                 </a>
                             </div>
@@ -180,7 +180,7 @@
                                 <a data-toggle="collapse" data-parent="#accLll" href="#divLllFuture" aria-expanded="true"
                                    aria-controls="divLllFuture" id="headerLllFuture">
                                     <h5 class="section-header-title dark-grey-text">
-                                        Future Tasks <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
+                                        <i class="fa-solid fa-cloud-sun fa-beat"></i> Future Tasks <span class="badge badge-pill badge-danger pt-2 ml-1 z-depth-2" id="spanLllTodayFuture">0</span> <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
                                     </h5>
                                 </a>
                             </div>
@@ -203,13 +203,101 @@
                                                     <th>AMOUNT</th>
                                                     <th>PRIORITY</th>
                                                     <th style="width: 65px; min-width: 65px;">DUE DATE</th>
-                                                    <th>START TIME</th>
-                                                    <th>END TIME</th>
+                                                    <th style="width: auto; min-width: 60px;">START TIME</th>
+                                                    <th style="width: auto; min-width: 60px;">END TIME</th>
                                                     <th style="width: 60px; min-width: 60px;">PROGRESS</th>
                                                     <th>TIME ESTIMATE</th>
                                                     <th>TIME RECORDED</th>
                                                     <th>STATUS</th>
                                                     <th style="width: 35px; min-width: 35px;">&nbsp;</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-3 mb-3">
+                            <div class="card-header white p-0 z-depth-1">
+                                <div class="section-header-style mdb-color lighten-1">&nbsp;</div>
+                                <a data-toggle="collapse" data-parent="#accLll" href="#divLllUnscheduled" aria-expanded="true"
+                                   aria-controls="divLllUnscheduled" id="headerLllUnscheduled">
+                                    <h5 class="section-header-title dark-grey-text">
+                                        <i class="fa-solid fa-calendar-xmark fa-beat"></i> Unscheduled Tasks <span class="badge badge-pill badge-danger pt-2 ml-1 z-depth-2" id="spanLllTodayUnscheduled">0</span> <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
+                                    </h5>
+                                </a>
+                            </div>
+                            <div class="card-body collapse" id="divLllUnscheduled" data-parent="#accLll">
+                                <div class="row">
+                                    <div class="col-md-12 px-0">
+                                        <div class="table-responsive">
+                                            <table id="dtLllUnscheduled" class="table table-hover table-tight mb-0 display responsive">
+                                                <thead>
+                                                <tr class="th-strong">
+                                                    <th>#</th>
+                                                    <th>TASK NAME</th>
+                                                    <th>MAIN TASK</th>
+                                                    <th>SPACE</th>
+                                                    <th>FOLDER</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th style="width: 75px; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>YEAR</th>
+                                                    <th>MONTH</th>
+                                                    <th>AMOUNT</th>
+                                                    <th>PRIORITY</th>
+                                                    <th>TIME ESTIMATE</th>
+                                                    <th>STATUS</th>
+                                                    <th style="width: 28px; min-width: 28px;">&nbsp;</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-3 mb-3">
+                            <div class="card-header white p-0 z-depth-1">
+                                <div class="section-header-style mdb-color lighten-1">&nbsp;</div>
+                                <a data-toggle="collapse" data-parent="#accLll" href="#divLllDone" aria-expanded="true"
+                                   aria-controls="divLllDone" id="headerLllDone">
+                                    <h5 class="section-header-title dark-grey-text">
+                                        <i class="fa-solid fa-calendar-check fa-beat"></i> Closed Tasks <span class="badge badge-pill badge-danger pt-2 ml-1 z-depth-2" id="spanLllTodayDone">0</span> <i class="fas fa-angle-down rotate-icon float-right mr-3"></i>
+                                    </h5>
+                                </a>
+                            </div>
+                            <div class="card-body collapse" id="divLllDone" data-parent="#accLll">
+                                <div class="row">
+                                    <div class="col-md-12 px-0">
+                                        <div class="table-responsive">
+                                            <table id="dtLllDone" class="table table-hover table-tight mb-0 display responsive">
+                                                <thead>
+                                                <tr class="th-strong">
+                                                    <th>#</th>
+                                                    <th>TASK NAME</th>
+                                                    <th>MAIN TASK</th>
+                                                    <th>SPACE</th>
+                                                    <th>FOLDER</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>YEAR</th>
+                                                    <th>MONTH</th>
+                                                    <th>AMOUNT</th>
+                                                    <th>PRIORITY</th>
+                                                    <th style="width: 65px; min-width: 65px;">DUE DATE</th>
+                                                    <th style="width: 65px; min-width: 65px;">CLOSE DATE</th>
+                                                    <th style="width: auto; min-width: 60px;">START TIME</th>
+                                                    <th style="width: auto; min-width: 60px;">END TIME</th>
+                                                    <th style="width: 60px; min-width: 60px;">PROGRESS</th>
+                                                    <th>TIME ESTIMATE</th>
+                                                    <th>TIME RECORDED</th>
+                                                    <th>EFFICIENCY</th>
+                                                    <th>LATENESS</th>
+                                                    <th>STATUS</th>
+                                                    <th style="width: 28px; min-width: 28px;">&nbsp;</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>

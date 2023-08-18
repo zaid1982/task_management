@@ -25,8 +25,8 @@ class TskTask extends General {
             IF(ttm.time_spent IS NOT NULL AND tsk.task_time_estimate IS NOT NULL, ROUND(TIME_TO_SEC(ttm.time_spent)/TIME_TO_SEC(tsk.task_time_estimate), 2), NULL) AS efficiency,
             tsk.*
         FROM tsk_task tsk
-        LEFT JOIN (SELECT task_id, SEC_TO_TIME(SUM(task_time_amount)) AS time_spent FROM tsk_task_time GROUP BY task_id) ttm ON ttm.task_id = tsk.task_id
-        LEFT JOIN (SELECT	task_id, SUM(task_checklist_weightage) AS percentage_done FROM tsk_task_checklist WHERE status_id = 6 GROUP BY task_id) tcl ON tcl.task_id = tsk.task_id
+        LEFT JOIN (SELECT task_id, SEC_TO_TIME(SUM(TIME_TO_SEC(task_time_amount))) AS time_spent FROM tsk_task_time GROUP BY task_id) ttm ON ttm.task_id = tsk.task_id
+        LEFT JOIN (SELECT task_id, SUM(task_checklist_weightage) AS percentage_done FROM tsk_task_checklist WHERE status_id = 6 GROUP BY task_id) tcl ON tcl.task_id = tsk.task_id
         LEFT JOIN tsk_task tmn ON tmn.task_id = tsk.task_main_id 
         LEFT JOIN (SELECT
                 task_main_id,
@@ -94,9 +94,48 @@ class TskTask extends General {
             else if ($type === 'today') {
                 $sqlWhere['tsk.statusId'] = 'IN|3,5';
                 $sqlWhere['tsk.taskDateDue'] = $dateNow->format('Y-m-d');
-                $sqlOrderBy = 'taskDateStart';
+                $sqlOrderBy = 'isnull(tsk.taskDateStart), tsk.taskDateStart';
+            }
+            else if ($type === 'future') {
+                $sqlWhere['tsk.statusId'] = 'IN|3,5';
+                $sqlWhere['tsk.taskDateDue'] = 'IS NOT NULL';
+                $sqlWhere['tsk.taskDateDue '] = '>|'.$dateNow->format('Y-m-d');
+                $sqlOrderBy = 'taskDateDue';
+            }
+            else if ($type === 'unscheduled') {
+                $sqlWhere['tsk.statusId'] = 'IN|3,5';
+                $sqlWhere['tsk.taskDateDue'] = 'IS NULL';
+                $sqlOrderBy = 'tsk.taskId';
+            }
+            else if ($type === 'done') {
+                $sqlWhere['tsk.statusId'] = 'NOT IN|3,5';
+                $sqlOrderBy = 'taskDateClose';
+                $sqlOrderDirection = 'DESC';
             }
             return DbMysql::selectSqlAll($this::$sqlInfo, $sqlWhere, 0, false, $sqlOrderBy, $sqlOrderDirection);
+        } catch (Exception|Throwable $ex) {
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function getListSummaryAll (): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            $dateNow = new DateTime();
+            $dateStr = $dateNow->format('Y-m-d');
+            return DbMysql::selectSql(
+                /** @lang text */
+                "SELECT
+                    SUM(IF(task_date_due = '".$dateStr."' AND status_id IN (3,5), 1, 0)) AS total_today,	
+                    SUM(IF(task_date_due IS NOT NULL AND task_date_due < '".$dateStr."' AND status_id IN (3,5), 1, 0)) AS total_overdue,	
+                    SUM(IF(task_date_due IS NOT NULL AND task_date_due > '".$dateStr."' AND status_id IN (3,5), 1, 0)) AS total_future,	
+                    SUM(IF(task_date_due IS NULL AND status_id IN (3,5), 1, 0)) AS total_unscheduled,	
+                    SUM(IF(status_id NOT IN (3,5), 1, 0)) AS total_done
+                FROM tsk_task");
         } catch (Exception|Throwable $ex) {
             throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
         }

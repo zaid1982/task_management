@@ -51,7 +51,7 @@ const mzExportOpt = {
             }
             if (column === 0 && typeof data === 'object') {
                 return mzCnt++;
-            } else if (data.length > 3 && data.substr(0, 3) === '<a>') {
+            } else if (data.length > 3 && data.substring(0, 3) === '<a>') {
                 return '';
             } else if (data.toString().indexOf('red-text') > 0) {
                 return data.replace('<span class="red-text">', '').replace('</span>', '');
@@ -59,8 +59,10 @@ const mzExportOpt = {
                 return data.replace('<span class="blue-text">', '').replace('</span>', '');
             } else if (data.toString().indexOf('orange-text') > 0) {
                 return data.replace('<span class="orange-text">', '').replace('</span>', '');
-            } else if (data.toString().indexOf('light-green-text') > 0) {
-                return data.replace('<span class="light-green-text">', '').replace('</span>', '');
+            } else if (data.toString().indexOf('green-text') > 0) {
+                return data.replace('<span class="green-text">', '').replace('</span>', '');
+            } else if (data.toString().indexOf('fa-folder-tree') > 0) {
+                return data.replace('<i class="fa-solid fa-folder-tree"></i> ', '');
             } else if (data.toString().indexOf('progress md-progress') > 0) {
                 const start = data.toString().indexOf('aria-valuemax="100">') + 20;
                 const end = data.toString().indexOf('</div></div>');
@@ -78,7 +80,7 @@ const mzExportOpt = {
                 const end = data.toString().indexOf('</div>');
                 return data.substring(start, end);
             } else if (data.toString().indexOf('ul style') > 0) {
-                return data.replace('<ul style="padding-left: 20px; margin-bottom: 0px !important;"><li>', '').replaceAll('</li><li>', ', ').replace('</li></ul>', '');
+                return data.replace('<ul style="padding-left: 20px; margin-bottom: 0 !important;"><li>', '').replaceAll('</li><li>', ', ').replace('</li></ul>', '');
             }
             return data;
         }
@@ -92,7 +94,7 @@ const mzExportExcelOpt = {
             }
             if (column === 0 && typeof data === 'object') {
                 return mzCnt++;
-            } else if (data.length > 3 && data.substr(0, 3) === '<a>') {
+            } else if (data.length > 3 && data.substring(0, 3) === '<a>') {
                 return '';
             } else if (data.toString().indexOf('red-text') > 0) {
                 return data.replace('<span class="red-text">', '').replace('</span>', '');
@@ -101,21 +103,23 @@ const mzExportExcelOpt = {
             } else if (data.toString().indexOf('mr-3') > 0) {
                 return data.replace('<span class="mr-3">', '').replace('</span>', '');
             } else if (data.toString().indexOf('ul style') > 0) {
-                return data.replace('<ul style="padding-left: 20px; margin-bottom: 0px !important;"><li>', '').replaceAll('</li><li>', ', ').replace('</li></ul>', '');
+                return data.replace('<ul style="padding-left: 20px; margin-bottom: 0 !important;"><li>', '').replaceAll('</li><li>', ', ').replace('</li></ul>', '');
             }
             return data;
         }
     }
 };
 
-$('.modal').on('show.bs.modal', function (event) {
+let modalClass = $('.modal');
+modalClass.on('show.bs.modal', function () {
     const idx = $('.modal:visible').length;
     $(this).css('z-index', 1040 + (10 * idx));
 });
-$('.modal').on('shown.bs.modal', function (event) {
+modalClass.on('shown.bs.modal', function () {
     const idx = ($('.modal:visible').length) - 1; // raise backdrop after animation.
-    $('.modal-backdrop').not('.stacked').css('z-index', 1039 + (10 * idx));
-    $('.modal-backdrop').not('.stacked').addClass('stacked');
+    let modalBackdrop = $('.modal-backdrop');
+    modalBackdrop.not('.stacked').css('z-index', 1039 + (10 * idx));
+    modalBackdrop.not('.stacked').addClass('stacked');
 });
 
 function ShowLoader() {
@@ -137,8 +141,8 @@ function mzFormatNumber(num, fix) {
         const pos = orig.length - i - 1;
         return  num + (pos && !(pos % 3) ? "," : "") + acc;
     }, "") + (p[1] ? "." + p[1] : "");
-    if (result.substr(0, 2) === '-,') {
-        result = '-' + result.substr(2);
+    if (result.substring(0, 2) === '-,') {
+        result = '-' + result.substring(2);
     }
     return result;
 }
@@ -167,6 +171,7 @@ function MzValidate(isEnglish) {
     const checkField = function (field_id, type, val) {
         const fieldSelector = type === 'notEmptyCheck' || type === 'notEmptyRadio' || type === 'notEmptyCheckSingle' || type === 'notSimilarRadio' ? $("input[name='"+field_id+"']:checked") : $('#' + field_id);
         const fieldVal = type !== 'notEmptyCheck' && type !== 'notEmptyRadio' && type !== 'notEmptyCheckSingle' ? fieldSelector.val() : '';
+        const idVal = $('#' + val.id).val();
         switch (type) {
             case 'notEmpty':
                 if (val === true && (fieldVal === '' || fieldVal === null))
@@ -201,7 +206,7 @@ function MzValidate(isEnglish) {
                     return false;
                 break;
             case 'similar':
-                if (val !== '' && fieldVal !== $('#' + val.id).val() && fieldVal !== '')
+                if (val !== '' && fieldVal !== idVal && fieldVal !== '')
                     return false;
                 break;
             case 'notSimilar':
@@ -257,11 +262,11 @@ function MzValidate(isEnglish) {
                 }
                 break;
             case 'lower':
-                if (val !== '' && fieldVal !== '' && $('#' + val.id).val() !== '' && fieldVal > $('#' + val.id).val())
+                if (val !== '' && fieldVal !== '' && idVal !== '' && fieldVal > idVal)
                     return false;
                 break;
             case 'higher':
-                if (val !== '' && fieldVal !== '' && $('#' + val.id).val() !== '' && fieldVal < $('#' + val.id).val())
+                if (val !== '' && fieldVal !== '' && idVal !== '' && fieldVal < idVal)
                     return false;
                 break;
         }
@@ -274,7 +279,7 @@ function MzValidate(isEnglish) {
         let fieldErrSelector;
         if (type === 'check') {
             fieldSelector = $("input[name='"+field_id+"']:checkbox");
-            fieldErrSelector = $('#' + field_id.substr(0, field_id.length-2) + 'Err');
+            fieldErrSelector = $('#' + field_id.substring(0, field_id.length-2) + 'Err');
         }
         else if (type === 'radio') {
             fieldSelector = $("input[name='"+field_id+"']:radio");
@@ -411,7 +416,7 @@ function MzValidate(isEnglish) {
             let fieldErrSelector;
             if (u.type === 'check') {
                 fieldSelector = $("input[name='" + u.field_id + "']:checkbox");
-                fieldErrSelector = $('#' + (u.field_id).substr(0, (u.field_id).length - 2) + 'Err');
+                fieldErrSelector = $('#' + (u.field_id).substring(0, (u.field_id).length - 2) + 'Err');
             }
             else if (u.type === 'radio') {
                 fieldSelector = $("input[name='"+u.field_id+"']:radio");
@@ -476,7 +481,7 @@ function MzValidate(isEnglish) {
             const fieldId = u.field_id;
             if (u.type === 'check') {
                 fieldSelector = $("input[name='"+fieldId+"']:checkbox");
-                fieldErrSelector = $('#' + fieldId.substr(0, fieldId.length-2) + 'Err');
+                fieldErrSelector = $('#' + fieldId.substring(0, fieldId.length-2) + 'Err');
             }
             else if (u.type === 'radio') {
                 fieldSelector = $("input[name='"+fieldId+"']:radio");
@@ -551,7 +556,7 @@ function MzValidate(isEnglish) {
                 let fieldErrSelector;
                 if (u.type === 'check') {
                     fieldSelector = $("input[name='"+fieldId+"']:checkbox");
-                    fieldErrSelector = $('#' + fieldId.substr(0, fieldId.length-2) + 'Err');
+                    fieldErrSelector = $('#' + fieldId.substring(0, fieldId.length-2) + 'Err');
                 }
                 else if (u.type === 'radio') {
                     fieldSelector = $("input[name='"+fieldId+"']:radio");
@@ -770,7 +775,7 @@ function setupPages(isExternal) {
     versionLocal_ = mzGetDataVersion(isExternal);
     $(".button-collapse").sideNav();
 
-    let container = document.querySelector('.custom-scrollbar');
+    //let container = document.querySelector('.custom-scrollbar');
     /*Ps.initialize(container, {
         wheelSpeed: 2,
         wheelPropagation: true,
@@ -945,7 +950,7 @@ function mzConvertDate(dateInput) {
 }
 
 function mzDateDisplay(dateInput) {
-    if (typeof dateInput === 'undefined' || dateInput === '') {
+    if (dateInput === null || dateInput === '') {
         return '';
     }
     let dateNew = '';
@@ -955,7 +960,7 @@ function mzDateDisplay(dateInput) {
         let month = dateSplit[1];
         let year = dateSplit[0];
         const monthArray = mzGetMonthArray();
-        dateNew = monthArray[parseInt(month)]['monthShort'] + ' ' + parseInt(day) + ', ' + year;
+        dateNew = monthArray[parseInt(month)-1]['monthShort'] + ' ' + parseInt(day) + ', ' + year;
     }
     return dateNew;
 }
@@ -969,7 +974,7 @@ function mzConvertDateDisplay (dateInput) {
     const monthsFull = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
         'November', 'December'];
 
-    const datePart = dateInput.substr(0, 10);
+    const datePart = dateInput.substring(0, 10);
     let dateSplit = datePart.split("/");
     if (dateSplit.length !== 3) {
         dateSplit = datePart.split("-");
@@ -982,7 +987,7 @@ function mzConvertDateDisplay (dateInput) {
     const year = dateSplit[0];
     let dateNew = parseInt(day) + ' ' + monthsFull[parseInt(month)] + ', ' + year;
     if (dateInput.length === 19) {
-        timeNew = dateInput.substr(11);
+        timeNew = dateInput.substring(11);
         fullDateStr = dateNew + ', ' + timeNew;
     } else {
         fullDateStr = dateNew;
@@ -1230,7 +1235,9 @@ function mzCmp(a, b) {
 }
 
 function mzOptionStopClear(name, defaultText, type) {
-    $('#'+name).materialSelect('destroy');
+    let selectorName = $('#'+name);
+    let selectorLabel = $('#lbl' + name.substring(3));
+    selectorName.materialSelect('destroy');
     if (name === '' || typeof name === 'undefined') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
     }
@@ -1239,19 +1246,20 @@ function mzOptionStopClear(name, defaultText, type) {
     if (typeof type !== 'undefined' && type === 'required') {
         document.getElementById(name).options[0].disabled = true;
     }
-    $('#'+name).val(null);
-    $('#'+name).materialSelect();
-    $('#'+name).removeClass('invalid');
+    selectorName.val(null);
+    selectorName.materialSelect();
+    selectorName.removeClass('invalid');
     $('#'+name+'Err').html('');
-    $('#lbl' + name.substr(3)).removeClass('active');
-    $('#lbl' + name.substr(3)).addClass('active');
+    selectorLabel.removeClass('active');
+    selectorLabel.addClass('active');
 }
 
 function mzOptionStop(name, data, defaultText, valIndex, filters, type, isSort, sortIndex) {
-    $('#'+name).materialSelect({'destroy': true});
+    let selectorName = $('#'+name);
+    selectorName.materialSelect({'destroy': true});
     mzOption(name, data, defaultText, valIndex, filters, type, isSort, sortIndex);
-    $('#'+name).materialSelect();
-    $('#'+name).removeClass('invalid');
+    selectorName.materialSelect();
+    selectorName.removeClass('invalid');
     $('#'+name+'Err').html('');
 }
 
@@ -1307,7 +1315,7 @@ function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sort
                         const dataValue = u[filterKey];
                         if (dataValue === filterVal) {
                             filterCnt++;
-                        } else if (filterVal !== null && typeof filterVal === 'string' && filterVal.substr(0,1) === '#') {
+                        } else if (filterVal !== null && typeof filterVal === 'string' && filterVal.substring(0,1) === '#') {
                             const filterSplit = dataValue.split(',');
                             for (let j=0; j<filterSplit.length; j++) {
                                 if (filterSplit[j] === filterVal.substr(1)) {
@@ -1315,11 +1323,11 @@ function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sort
                                     break;
                                 }
                             }
-                        } else if (filterVal !== null && typeof filterVal === 'string' && filterVal.substr(0,1) === '(') {
-                            let filterVal2 = filterVal.substr(1,filterVal.length-2);
+                        } else if (filterVal !== null && typeof filterVal === 'string' && filterVal.substring(0,1) === '(') {
+                            let filterVal2 = filterVal.substring(1,filterVal.length-1);
                             const filterSplit2 = filterVal2.split(',');
                             for (let j=0; j<filterSplit2.length; j++) {
-                                if (filterSplit2[j] == dataValue) {
+                                if (filterSplit2[j] === dataValue) {
                                     filterCnt++;
                                     break;
                                 }
@@ -1339,8 +1347,8 @@ function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sort
     });
 
     $('#' + name).val(null);
-    $('#lbl' + name.substr(3)).removeClass('active');
-    $('#lbl' + name.substr(3)).addClass('active');
+    //$('#lbl' + name.substring(3)).removeClass('active');
+    //$('#lbl' + name.substring(3)).addClass('active');
 }
 
 function removeOptions(selectbox) {
@@ -1352,7 +1360,8 @@ function removeOptions(selectbox) {
 }
 
 function mzOptionArr(name, data, defaultText, keyIndex, valIndex, type, isSort, sortIndex) {
-    $('#'+name).materialSelect({'destroy': true});
+    const fieldSelector = $('#' + name);
+    fieldSelector.materialSelect({'destroy': true});
     if (typeof name === 'undefined' || typeof data === 'undefined' || typeof defaultText === 'undefined') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
     }
@@ -1363,7 +1372,6 @@ function mzOptionArr(name, data, defaultText, keyIndex, valIndex, type, isSort, 
         isSort = true;
     }
 
-    const fieldSelector = $('#' + name);
     let optionIndex = 0;
 
     removeOptions(document.getElementById(name));
@@ -1398,7 +1406,7 @@ function mzOptionArr(name, data, defaultText, keyIndex, valIndex, type, isSort, 
         }
     });
     fieldSelector.val(null);
-    $('#'+name).materialSelect();
+    fieldSelector.materialSelect();
 }
 
 function mzChartOption() {
@@ -1420,6 +1428,7 @@ function mzChartOption() {
 }
 
 function mzSetFieldValue(name, value, type, label) {
+    let selectorOption = $('#opt'+name);
     if (type === 'text') {
         $('#txt'+name).val('');
         $('#lbl'+name).removeClass('active');
@@ -1429,9 +1438,9 @@ function mzSetFieldValue(name, value, type, label) {
         $('#lbl'+name).removeClass('active');
     }
     else if (type === 'select') {
-        $('#opt'+name).materialSelect('destroy');
-        $('#opt'+name).val('');
-        $('#opt'+name).materialSelect();
+        selectorOption.materialSelect('destroy');
+        selectorOption.val('');
+        selectorOption.materialSelect();
     }
     else if (type === 'summernote') {
         $('#txa'+name).summernote('code', '');
@@ -1443,11 +1452,11 @@ function mzSetFieldValue(name, value, type, label) {
             $('#lbl'+name).addClass('active');
         }
         else if (type === 'select') {
-            $('#opt'+name).materialSelect('destroy');
-            $('#opt'+name).val(value);
+            selectorOption.materialSelect('destroy');
+            selectorOption.val(value);
             //$('#opt' + name).prevAll('.select-dropdown').children('li:contains('+value+')').trigger('click');
             //$('#lbl'+name).html(label).addClass('active');
-            $('#opt'+name).materialSelect();
+            selectorOption.materialSelect();
         }
         else if (type === 'textarea') {
             $('#txa'+name).val(value);
@@ -1646,12 +1655,10 @@ function mzGetDayName(inputDate) {
 
 function mzGetYearArray() {
     const yearArr = [];
-
     let dateEarliest = new Date();
     dateEarliest.setFullYear(2012, 8, 1);
     const earliestYear = dateEarliest.getFullYear();
     let dateCurrent = new Date();
-    const currentMonth = dateCurrent.getMonth();
     const currentYear = dateCurrent.getFullYear();
     for (let i = earliestYear; i <= currentYear; i++) {
         yearArr.push({yearId:i, yearName:i})
@@ -1662,7 +1669,7 @@ function mzGetYearArray() {
 function mzIsValidDate(s) {  // 31/9/2011
     const bits = s.split('/');
     const d = new Date(bits[2] + '/' + bits[1] + '/' + bits[0]);
-    return !!(d && (d.getMonth() + 1) == bits[1] && d.getDate() == Number(bits[0]));
+    return !!(d && (d.getMonth() + 1) === parseInt(bits[1]) && d.getDate() === Number(bits[0]));
 }
 
 function mzIsObject ( obj ) {
@@ -1738,7 +1745,7 @@ function mzGetDtPriority (priority) {
     } else if (priority === 'Normal') {
         color = 'blue-text';
     } else if (priority === 'Low') {
-        color = 'light-green-text';
+        color = 'green-text';
     } else {
         return '';
     }
@@ -1749,7 +1756,7 @@ function mzGetDtAssignee (shortName, profileImage) {
     if (shortName === '' || profileImage === '' || shortName === null || profileImage === null) {
         return '';
     }
-    return '<div class="chip chip-sm m-0 z-depth-1"><img src="api/'+profileImage+'">'+shortName+'</div>';
+    return '<div class="chip chip-sm m-0 z-depth-1"><img src="api/'+profileImage+'" alt="image">'+shortName+'</div>';
 }
 
 function mzGetDtStatus (statusName, statusColor) {
@@ -1781,11 +1788,69 @@ function mzGetDtLateness (lateness) {
 
 function mzGetDtAction (type, id, row) {
     if (type === 1) {
-        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+'" id="'+id+'_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
+        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+'Edit" id="'+id+'Edit_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
     } else if (type === 2) {
-        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+' mr-1" id="'+id+'_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>' +
-            '<a><i class="fa-regular fa-circle-play fa-fade fa-lg '+id+'" id="'+id+'_' + row + '" data-toggle="tooltip" data-placement="top" title="Start Record"></i></a>';
+        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+'Edit mr-1" id="'+id+'Edit_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>' +
+            '<a><i class="fa-regular fa-circle-play fa-fade fa-lg '+id+'Record" id="'+id+'Record_' + row + '" data-toggle="tooltip" data-placement="top" title="Start Record"></i></a>';
     } else {
         return '';
     }
+}
+
+function mzGetDtTaskName (taskName, taskMainId) {
+    if (taskName === '' ||  taskName === null) {
+        return '';
+    }
+    if (taskMainId === '' ||  taskMainId === null) {
+        return taskName;
+    }
+    return '<i class="fa-solid fa-folder-tree"></i> ' + taskName;
+}
+
+function mzGetDtRecordedTime (recordedTime, estimateTime) {
+    if (recordedTime === '' ||  recordedTime === null) {
+        return '';
+    }
+    let color = '';
+    if (estimateTime === '' ||  estimateTime === null) {
+        color = 'green-text';
+    } else if (recordedTime <= estimateTime) {
+        color = 'green-text';
+    } else {
+        color = 'red-text';
+    }
+    return '<span class="'+color+'">'+recordedTime+'</span>';
+}
+
+function mzGetDtEfficiency (data) {
+    if (data === '' ||  data === null) {
+        return '';
+    }
+    let color = '';
+    if (data <= 0.2) {
+        color = 'teal darken-4';
+    } else if (data <= 0.4) {
+        color = 'teal darken-3';
+    } else if (data <= 0.6) {
+        color = 'teal darken-2';
+    } else if (data <= 0.8) {
+        color = 'teal darken-1';
+    } else if (data <= 1) {
+        color = 'teal';
+    } else if (data <= 1.2) {
+        color = 'pink lighten-2';
+    } else if (data <= 1.4) {
+        color = 'pink lighten-1';
+    } else if (data <= 1.6) {
+        color = 'pink';
+    } else if (data <= 1.8) {
+        color = 'pink darken-1';
+    } else if (data <= 2) {
+        color = 'pink darken-2';
+    } else if (data <= 3) {
+        color = 'pink darken-3';
+    } else {
+        color = 'pink darken-4';
+    }
+    return '<a class="badge '+color+' z-depth-2">'+data+'</a>';
 }
