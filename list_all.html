@@ -7,22 +7,14 @@
     <title>Task Management System</title>
     <link rel="stylesheet" href="css/fontawesome-free-6.4.2-web/css/all.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/mdb.min.css">
+    <link rel="stylesheet" href="css/mdb.css">
     <link rel="stylesheet" type="text/css" href="js/vendor/datatables/css/dataTables.bootstrap4.min.css"/>
     <link rel="stylesheet" type="text/css" href="js/vendor/datatables/css/button.dataTables.min.css"/>
     <link href="css/style.css" rel="stylesheet">
     <style>
-        .chip.chip-sm {
-            height: 24px;
-            line-height: 24px;
-            border-radius: 12px;
-        }
-        .chip.chip-sm img {
-            height: 24px;
-            width: 24px;
-        }
     </style>
-    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.7.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-migrate-3.4.0.min.js"></script>
 </head>
 <body class="fixed-sn mdb-skin">
 <header>
@@ -33,22 +25,23 @@
     <div class="container-fluid" id="divPageWidth">
         <section class="sectionLllMain mb-3">
             <div class="row">
-                <div class="col-12 p-2">
-                    <nav class="navbar mdb-color darken-1 z-depth-3 rounded mb-2">
+                <div class="col-12 p-1 pb-2">
+                    <nav class="navbar mdb-color darken-1 z-depth-3 rounded mb-1">
                         <h4 class="navbar-text white-text font-weight-bold ml-3 pb-0 mb-1">
                             <i class="fas fa-list-check mr-2"></i> All Tasks List
                         </h4>
                     </nav>
                 </div>
             </div>
-            <!--<div class="row">
-                <div class="col-12 p-2">
+            <div class="row">
+                <div class="col-12 p-1 pb-2">
                     <nav class="navbar navbar-expand navbar-dark mdb-color lighten-1 z-depth-3 m-0 p-2">
                         <div class="collapse navbar-collapse">
                             <ul class="navbar-nav mr-auto">
-                                <li class="nav-item dropdown mdb-color lighten-3 px-2 mr-2" id="liTshYear">
+                                <!--<
+                                <li class="nav-item dropdown btn-outline-white px-2 mr-2" id="liTshYear">
                                     <a class="nav-link dropdown-toggle" id="navTshYear" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">Year</a>
+                                       aria-haspopup="true" aria-expanded="false">YEAR</a>
                                     <div class="dropdown-menu dropdown-danger" aria-labelledby="navTshYear" id="divTshYear">
                                         <a class="dropdown-item lnkTshYear" href="#" id="lnkTshYear_2022">2022</a>
                                         <a class="dropdown-item lnkTshYear" href="#" id="lnkTshYear_2023">2023</a>
@@ -56,9 +49,9 @@
                                         <a class="dropdown-item lnkTshYear" href="#" id="lnkTshYear_2025">2025</a>
                                     </div>
                                 </li>
-                                <li class="nav-item dropdown mdb-color lighten-3 navbar-custom px-2 mr-2" id="liTshMonth">
+                                <li class="nav-item dropdown btn-outline-white px-2 mr-2" id="liTshMonth">
                                     <a class="nav-link dropdown-toggle" id="navTshMonth" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">Month</a>
+                                       aria-haspopup="true" aria-expanded="false">MONTH</a>
                                     <div class="dropdown-menu dropdown-danger" aria-labelledby="navTshMonth" id="divTshMonth">
                                         <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_1">January</a>
                                         <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_2">February</a>
@@ -73,15 +66,16 @@
                                         <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_11">November</a>
                                         <a class="dropdown-item lnkTshMonth" href="#" id="lnkTshMonth_12">December</a>
                                     </div>
-                                </li>
+                                </li>-->
+                                <a class="btn btn-sm btn-outline-white my-2 my-sm-0 ml-0 px-3" id="btnLllAddTask"><i class="fa-solid fa-calendar-plus mr-1"></i>Add New Task</a>
                             </ul>
-                            <a class="navbar-brand font-weight-500 ml-2 float-right" href="#" id="lblTshSelected">Oktober 2022</a>  &lt;!&ndash;d-none d-md-block&ndash;&gt;
+<!--                            <a class="navbar-brand font-weight-500 ml-2 py-0 float-right" href="#" id="lblTshSelected">Oktober 2022</a>-->
                         </div>
                     </nav>
                 </div>
-            </div>-->
+            </div>
             <div class="row">
-                <div class="col-12 p-2">
+                <div class="col-12 p-1">
                     <div class="accordion md-accordion accordion-5" id="accLll" role="tablist" aria-multiselectable="true">
                         <div class="card z-depth-3 mb-3">
                             <div class="card-header white p-0 z-depth-1">
@@ -107,6 +101,7 @@
                                                     <th>FOLDER</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>TAGS</th>
                                                     <th>YEAR</th>
                                                     <th>MONTH</th>
                                                     <th>AMOUNT</th>
@@ -152,6 +147,7 @@
                                                     <th>FOLDER</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>TAGS</th>
                                                     <th>YEAR</th>
                                                     <th>MONTH</th>
                                                     <th>AMOUNT</th>
@@ -198,6 +194,7 @@
                                                     <th>FOLDER</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: 75px; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>TAGS</th>
                                                     <th>YEAR</th>
                                                     <th>MONTH</th>
                                                     <th>AMOUNT</th>
@@ -243,6 +240,7 @@
                                                     <th>FOLDER</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: 75px; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>TAGS</th>
                                                     <th>YEAR</th>
                                                     <th>MONTH</th>
                                                     <th>AMOUNT</th>
@@ -283,6 +281,7 @@
                                                     <th>FOLDER</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
+                                                    <th>TAGS</th>
                                                     <th>YEAR</th>
                                                     <th>MONTH</th>
                                                     <th>AMOUNT</th>
@@ -312,13 +311,15 @@
             </div>
         </section>
     </div>
+    <div class="includeHtml" id="h-m-modal_task_edit"></div>
 </main>
 
 <script type="text/javascript" src="js/include.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
-<script type="text/javascript" src="js/mdb.js"></script>
+<script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="js/addons/crypto.js"></script>
+<script type="text/javascript" src="js/addons/moment.min.js"></script>
 <script type="text/javascript" src="js/vendor/datatables/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/vendor/datatables/js/dataTables.bootstrap4.min.js"></script>
 <script type="text/javascript" src="js/vendor/datatables/js/dataTables.buttons.min.js"></script>
@@ -328,16 +329,20 @@
 <script type="text/javascript" src="js/vendor/datatables/js/jszip.min.js"></script>
 <script type="text/javascript" src="js/vendor/datatables/js/pdfmake.min.js"></script>
 <script type="text/javascript" src="js/vendor/datatables/js/vfs_fonts.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/global/DtTaskDisplay.js"></script>
 
 <script type="text/javascript">
-    document.write('<scr' + 'ipt src="js/common.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
-
+    let dtTaskDisplay;
+    let modalTaskEdit;
     let mainClass;
     document.addEventListener('DOMContentLoaded', function () {
         ShowLoader();
         setTimeout(function () {
             try {
                 initiatePages();
+                dtTaskDisplay = new DtTaskDisplay();
+                modalTaskEdit = new ModalTaskEdit();
                 mainClass = new ListAll();
 
                 const refStatus_ = mzGetLocalArray('task_status', versionLocal_, 'status/ref');
@@ -345,10 +350,18 @@
                 const refSpace_ = mzGetLocalArray('task_space', versionLocal_, 'space/ref');
                 const refFolder_ = mzGetLocalArray('task_folder', versionLocal_, 'folder/ref');
 
+                modalTaskEdit.setRefStatus(refStatus_);
+                modalTaskEdit.setRefSpace(refSpace_);
+                modalTaskEdit.setRefFolder(refFolder_);
+                modalTaskEdit.setClassFrom(mainClass);
+                modalTaskEdit.init();
+
                 mainClass.setRefStatus(refStatus_);
                 mainClass.setRefUser(refUser_);
                 mainClass.setRefSpace(refSpace_);
                 mainClass.setRefFolder(refFolder_);
+                mainClass.setDtDisplay(dtTaskDisplay);
+                mainClass.setModalTaskEdit(modalTaskEdit);
                 mainClass.init();
             } catch (e) {
                 toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);
@@ -356,6 +369,7 @@
             HideLoader();
         }, 200);
     });
+    document.write('<scr' + 'ipt src="js/pages/modal/ModalTaskEdit.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
     document.write('<scr' + 'ipt src="js/pages/ListAll.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
 </script>
 </body>

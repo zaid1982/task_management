@@ -1,0 +1,204 @@
+<div class="modal fade right" id="modalTaskEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-content">
+            <div class="modal-header pb-2">
+                <h4 class="modal-title w-100 white-text" id="myModalLabel"><i class="fa-solid fa-calendar-plus mr-2"></i>Add New Task</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-fade pt-2 pb-0">
+                <form id="formMte" autocomplete="off">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="md-form md-outline mb-0">
+                                <input type="text" id="txtMteTaskName" class="form-control">
+                                <label for="txtMteTaskName" id="lblMteTaskName">Task Name *</label>
+                                <p class="font-small text-danger" id="txtMteTaskNameErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-12 select-outline" id="optMteSpace_">
+                            <select id="optMteSpace" class="mdb-select md-form md-outline colorful-select my-0"></select>
+                            <label for="optMteSpace" id="lblMteSpace">Space *</label>
+                            <p class="font-small text-danger" id="optMteSpaceErr"></p>
+                        </div>
+                        <div class="col-12 select-outline" id="optMteFolder_">
+                            <select id="optMteFolder" class="mdb-select md-form md-outline colorful-select my-0"></select>
+                            <label for="optMteFolder" id="lblMteFolder">Folder *</label>
+                            <p class="font-small text-danger" id="optMteFolderErr"></p>
+                        </div>
+                        <div class="col-12 select-outline" id="optMteAssignee_">
+                            <select id="optMteAssignee" class="mdb-select md-form md-outline colorful-select my-0"></select>
+                            <label for="optMteAssignee" id="lblMteAssignee">Assignee *</label>
+                            <p class="font-small text-danger" id="optMteAssigneeErr"></p>
+                        </div>
+                        <div class="col-12 mb-0" id="divMteTags">
+                            <p class="mb-0 font-small font-weight-500">Tags * :</p>
+                            <div class="mt-0 ml-1 pt-1">
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags1" value="personal">
+                                    <label class="form-check-label" for="chkMteTags1">personal</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags2" value="vm">
+                                    <label class="form-check-label" for="chkMteTags2">vm</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags3" value="sales">
+                                    <label class="form-check-label" for="chkMteTags3">sales</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags4" value="hr">
+                                    <label class="form-check-label" for="chkMteTags4">hr</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags5" value="meeting">
+                                    <label class="form-check-label" for="chkMteTags5">meeting</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags6" value="payment">
+                                    <label class="form-check-label" for="chkMteTags6">payment</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags7" value="doc">
+                                    <label class="form-check-label" for="chkMteTags7">doc</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags8" value="coding">
+                                    <label class="form-check-label" for="chkMteTags8">coding</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags9" value="cr">
+                                    <label class="form-check-label" for="chkMteTags9">cr</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags10" value="bugs">
+                                    <label class="form-check-label" for="chkMteTags10">bugs</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags11" value="config">
+                                    <label class="form-check-label" for="chkMteTags11">config</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="chkMteTags[]" id="chkMteTags12" value="support">
+                                    <label class="form-check-label" for="chkMteTags12">support</label>
+                                </div>
+                            </div>
+                            <p class="font-small text-danger mt-0" id="chkMteTagsErr"></p>
+                        </div>
+                        <div class="col-12 mb-0" id="divMtePriority">
+                            <p class="mb-0 font-small font-weight-500">Priority * :</p>
+                            <div class="mt-0 ml-1 pt-1">
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="radMtePriority" id="radMtePriority1" value="Urgent">
+                                    <label class="form-check-label" for="radMtePriority1">Urgent</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="radMtePriority" id="radMtePriority2" value="High">
+                                    <label class="form-check-label" for="radMtePriority2">High</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="radMtePriority" id="radMtePriority3" value="Normal">
+                                    <label class="form-check-label" for="radMtePriority3">Normal</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="radMtePriority" id="radMtePriority4" value="Low">
+                                    <label class="form-check-label" for="radMtePriority4">Low</label>
+                                </div>
+                            </div>
+                            <p class="font-small text-danger mt-0" id="radMtePriorityErr"></p>
+                        </div>
+                        <div class="col-12 mb-0" id="divMteIsMain">
+                            <p class="mb-0 font-small font-weight-500">Task Type * :</p>
+                            <div class="mt-0 ml-1 pt-1">
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="radMteIsMain" id="radMteIsMain1" value="Normal">
+                                    <label class="form-check-label" for="radMteIsMain1">Normal</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="radMteIsMain" id="radMteIsMain2" value="Main">
+                                    <label class="form-check-label" for="radMteIsMain2">Main</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="radMteIsMain" id="radMteIsMain3" value="Sub">
+                                    <label class="form-check-label" for="radMteIsMain3">Sub</label>
+                                </div>
+                            </div>
+                            <p class="font-small text-danger mt-0" id="radMteIsMainErr"></p>
+                        </div>
+                        <div class="col-12 select-outline" id="optMteMainTask_">
+                            <select id="optMteMainTask" class="mdb-select md-form md-outline colorful-select my-0"></select>
+                            <label for="optMteMainTask" id="lblMteMainTask">Main Task *</label>
+                            <p class="font-small text-danger" id="optMteMainTaskErr"></p>
+                        </div>
+                        <div class="col-12">
+                            <div class="md-form md-outline my-0">
+                                <input type="text" id="txtMteDueDate" class="form-control datepicker" readonly>
+                                <label for="txtMteDueDate" id="lblMteDueDate">Due Date *</label>
+                                <p class="font-small text-danger" id="txtMteDueDateErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form md-outline my-0">
+                                <input type="text" id="txtMteStartDate" class="form-control datepicker" readonly>
+                                <label for="txtMteStartDate" id="lblMteStartDate">Start Date</label>
+                                <p class="font-small text-danger" id="txtMteStartDateErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form md-outline my-0">
+                                <input type="text" id="txtMteStartTime" class="form-control timepicker" readonly>
+                                <label for="txtMteStartTime" id="lblMteStartTime">Start Time</label>
+                                <p class="font-small text-danger" id="txtMteStartTimeErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form md-outline my-0">
+                                <input type="text" id="txtMteEndDate" class="form-control datepicker" readonly>
+                                <label for="txtMteEndDate" id="lblMteEndDate">End Date</label>
+                                <p class="font-small text-danger" id="txtMteEndDateErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form md-outline my-0">
+                                <input type="text" id="txtMteEndTime" class="form-control timepicker" readonly>
+                                <label for="txtMteEndTime" id="lblMteEndTime">End Time</label>
+                                <p class="font-small text-danger" id="txtMteEndTimeErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form md-outline my-0">
+                                <input type="text" id="txtMteTimeEstimate" class="form-control timepicker" readonly>
+                                <label for="txtMteTimeEstimate" id="lblMteTimeEstimate">Time Estimate</label>
+                                <p class="font-small text-danger" id="txtMteTimeEstimateErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="md-form md-outline my-0">
+                                <input type="text" id="txtMteAmount" class="form-control">
+                                <label for="txtMteAmount" id="lblMteAmount">Amount (RM)</label>
+                                <p class="font-small text-danger" id="txtMteAmountErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-12 select-outline" id="optMteStatus_">
+                            <select id="optMteStatus" class="mdb-select md-form md-outline colorful-select my-0"></select>
+                            <label for="optMteStatus" id="lblMteStatus">Status *</label>
+                            <p class="font-small text-danger" id="optMteStatusErr"></p>
+                        </div>
+                        <div class="col-12">
+                            <div class="md-form md-outline my-0">
+                                <textarea id="txaMteRemark" class="md-textarea form-control" rows="3"></textarea>
+                                <label for="txaMteRemark" id="lblMteRemark" class="text-muted">Remark</label>
+                                <p class="font-small text-danger" id="txaMteRemarkErr"></p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer p-0">
+                <button type="button" class="btn btn-outline-primary waves-effect z-depth-2" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary waves-effect z-depth-2" id="btnMteSave"><i class="fa-regular fa-floppy-disk mr-2"></i>Save</button>
+            </div>
+        </div>
+    </div>
+</div>

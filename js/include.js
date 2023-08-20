@@ -1,6 +1,6 @@
 $('.includeHtml').each(function () {
     const divId = $(this).attr('id');
-    const typeId = divId.substr(2, 1);
+    const typeId = divId.substring(2, 3);
     let type = '';
     if (typeId === 's') {
         type = 'section/';
@@ -9,5 +9,5 @@ $('.includeHtml').each(function () {
     } else if (typeId === 'b') {
         type = 'base/';
     }
-    $('#'+divId).load('html/'+type+divId.substr(4)+'.html?' + new Date().valueOf());
+    $('#'+divId).load('html/'+type+divId.substring(4)+'.html?' + new Date().valueOf());
 });

@@ -166,7 +166,7 @@ function mzValidPassword(n) {
 function MzValidate(isEnglish) {
     let obj = {};
     obj.fields = [];
-    isEnglish = typeof isEnglish === 'undefined' ? false : isEnglish;
+    isEnglish = typeof isEnglish === 'undefined' ? true : isEnglish;
 
     const checkField = function (field_id, type, val) {
         const fieldSelector = type === 'notEmptyCheck' || type === 'notEmptyRadio' || type === 'notEmptyCheckSingle' || type === 'notSimilarRadio' ? $("input[name='"+field_id+"']:checked") : $('#' + field_id);
@@ -373,10 +373,10 @@ function MzValidate(isEnglish) {
                         msg += isEnglish ? '<br>Please make sure the uploaded file is in PDF, JPG, JPEG, PNG type' : '<br>Sila pastikan format dokumen muatnaik adalah PDF, JPG, JPEG, PNG';
                         return false;
                     case 'lower':
-                        msg += isEnglish ?  '<br>' + name + ' must not higher than ' + u2.label : '<br>' + name + ' mestilah melebihi ' + u2.label;
+                        msg += isEnglish ?  '<br>' + name + ' must lower than ' + u2.label : '<br>' + name + ' mestilah melebihi ' + u2.label;
                         break;
                     case 'higher':
-                        msg += isEnglish ?  '<br>' + name + ' must not less than ' + u2.label : '<br>' + name + ' mestilah kurang dari ' + u2.label;
+                        msg += isEnglish ?  '<br>' + name + ' must higher than ' + u2.label : '<br>' + name + ' mestilah kurang dari ' + u2.label;
                         break;
                 }
             } else {
@@ -410,6 +410,7 @@ function MzValidate(isEnglish) {
     };
 
     this.registerFields = function (data) {
+        this.fields = [];
         let arrFields = [];
         $.each(data, function (n, u) {
             let fieldSelector;
@@ -802,17 +803,17 @@ function setupPages(isExternal) {
     });
 
     // Data Picker Initialization
-    /*$('.datepicker').pickadate({
-        monthsFull: ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 'Julai', 'Ogos', 'September', 'Oktober',
-            'November', 'Disember'],
+    $('.datepicker').pickadate(
+        /*{monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+            'November', 'December'],
         monthsShort: ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt',
             'Nov', 'Dis'],
         weekdaysShort: ['Ahd', 'Isn', 'Sel', 'Rab', 'Kha', 'Jum', 'Sab'],
         weekdaysFull: ['Ahad', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu'],
         today: 'Hari ini',
         clear: 'Padam',
-        close: 'Batal'
-    });*/
+        close: 'Batal'}*/
+    );
     $('.timepicker').pickatime({});
 
     // Toast Initialization
@@ -1059,8 +1060,8 @@ function mzEmailShort(emailInput, shortLength) {
     shortLength = typeof shortLength === 'undefined' ? 20 : shortLength;
     if (emailInput !== null && emailInput.length > shortLength) {
         for (let u = shortLength; u < emailInput.length; u++) {
-            if (emailInput.substr(u, 1) === '@' || emailInput.substr(u, 1) === '.') {
-                emailNew = emailInput.substr(0, u) + '<br>' + emailInput.substr(u);
+            if (emailInput.substring(u, u+1) === '@' || emailInput.substring(u, u+1) === '.') {
+                emailNew = emailInput.substring(0, u) + '<br>' + emailInput.substring(u);
                 break;
             }
         }
@@ -1318,7 +1319,7 @@ function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sort
                         } else if (filterVal !== null && typeof filterVal === 'string' && filterVal.substring(0,1) === '#') {
                             const filterSplit = dataValue.split(',');
                             for (let j=0; j<filterSplit.length; j++) {
-                                if (filterSplit[j] === filterVal.substr(1)) {
+                                if (filterSplit[j] === filterVal.substring(1)) {
                                     filterCnt++;
                                     break;
                                 }
@@ -1327,7 +1328,7 @@ function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sort
                             let filterVal2 = filterVal.substring(1,filterVal.length-1);
                             const filterSplit2 = filterVal2.split(',');
                             for (let j=0; j<filterSplit2.length; j++) {
-                                if (filterSplit2[j] === dataValue) {
+                                if (filterSplit2[j] == dataValue) {
                                     filterCnt++;
                                     break;
                                 }
@@ -1337,11 +1338,9 @@ function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sort
                 }
                 if (filterCnt === keysFilter.length) {
                     document.getElementById(name).options[optionIndex++] = new Option(u[valIndex], u['id']);
-                    //htmlStr.push('<option value="'+u[keyIndex]+'">'+u[valIndex]+'</option>');
                 }
             } else {
                 document.getElementById(name).options[optionIndex++] = new Option(u[valIndex], u['id']);
-                //htmlStr.push('<option value="'+u[keyIndex]+'">'+u[valIndex]+'</option>');
             }
         }
     });
@@ -1734,123 +1733,4 @@ function mzDisplayImageFileInput(input, targetId) {
         }
         reader.readAsDataURL(input.files[0]); // convert to base64 string
     }
-}
-
-function mzGetDtPriority (priority) {
-    let color = '';
-    if (priority === 'Urgent') {
-        color = 'red-text';
-    } else if (priority === 'High') {
-        color = 'orange-text';
-    } else if (priority === 'Normal') {
-        color = 'blue-text';
-    } else if (priority === 'Low') {
-        color = 'green-text';
-    } else {
-        return '';
-    }
-    return '<span class="'+color+'">'+priority+'</span>';
-}
-
-function mzGetDtAssignee (shortName, profileImage) {
-    if (shortName === '' || profileImage === '' || shortName === null || profileImage === null) {
-        return '';
-    }
-    return '<div class="chip chip-sm m-0 z-depth-1"><img src="api/'+profileImage+'" alt="image">'+shortName+'</div>';
-}
-
-function mzGetDtStatus (statusName, statusColor) {
-    if (statusName === '' || statusColor === '' || statusName === null || statusColor === null) {
-        return '';
-    }
-    return '<a class="badge '+statusColor+' z-depth-2">'+statusName+'</a>';
-}
-
-function mzGetDtProgress (progress) {
-    if (progress === '' ||  progress === null) {
-        return '';
-    }
-    return '<div class="progress md-progress mb-0 grey lighten-2 z-depth-1" style="height: 18px">' +
-        '<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: '+progress+'%; height: 18px" aria-valuenow="'+progress+'" aria-valuemin="0" aria-valuemax="100">'+progress+'%</div>' +
-        '</div>';
-}
-
-function mzGetDtLateness (lateness) {
-    if (lateness === '' ||  lateness === null || !mzValidNumeric(lateness)) {
-        return '';
-    }
-    lateness = parseInt(lateness);
-    const days = lateness < 0 ? -lateness : lateness;
-    const color = lateness < 0 ? 'red darken-1' : 'teal lighten-2';
-    const dayTerm = lateness === 0 || lateness === 1 ? ' day' : ' days';
-    return '<a class="badge badge-pill '+color+' z-depth-1-half">'+days+' '+dayTerm+'</a>';
-}
-
-function mzGetDtAction (type, id, row) {
-    if (type === 1) {
-        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+'Edit" id="'+id+'Edit_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
-    } else if (type === 2) {
-        return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+'Edit mr-1" id="'+id+'Edit_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>' +
-            '<a><i class="fa-regular fa-circle-play fa-fade fa-lg '+id+'Record" id="'+id+'Record_' + row + '" data-toggle="tooltip" data-placement="top" title="Start Record"></i></a>';
-    } else {
-        return '';
-    }
-}
-
-function mzGetDtTaskName (taskName, taskMainId) {
-    if (taskName === '' ||  taskName === null) {
-        return '';
-    }
-    if (taskMainId === '' ||  taskMainId === null) {
-        return taskName;
-    }
-    return '<i class="fa-solid fa-folder-tree"></i> ' + taskName;
-}
-
-function mzGetDtRecordedTime (recordedTime, estimateTime) {
-    if (recordedTime === '' ||  recordedTime === null) {
-        return '';
-    }
-    let color = '';
-    if (estimateTime === '' ||  estimateTime === null) {
-        color = 'green-text';
-    } else if (recordedTime <= estimateTime) {
-        color = 'green-text';
-    } else {
-        color = 'red-text';
-    }
-    return '<span class="'+color+'">'+recordedTime+'</span>';
-}
-
-function mzGetDtEfficiency (data) {
-    if (data === '' ||  data === null) {
-        return '';
-    }
-    let color = '';
-    if (data <= 0.2) {
-        color = 'teal darken-4';
-    } else if (data <= 0.4) {
-        color = 'teal darken-3';
-    } else if (data <= 0.6) {
-        color = 'teal darken-2';
-    } else if (data <= 0.8) {
-        color = 'teal darken-1';
-    } else if (data <= 1) {
-        color = 'teal';
-    } else if (data <= 1.2) {
-        color = 'pink lighten-2';
-    } else if (data <= 1.4) {
-        color = 'pink lighten-1';
-    } else if (data <= 1.6) {
-        color = 'pink';
-    } else if (data <= 1.8) {
-        color = 'pink darken-1';
-    } else if (data <= 2) {
-        color = 'pink darken-2';
-    } else if (data <= 3) {
-        color = 'pink darken-3';
-    } else {
-        color = 'pink darken-4';
-    }
-    return '<a class="badge '+color+' z-depth-2">'+data+'</a>';
 }
