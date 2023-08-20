@@ -164,14 +164,13 @@ function ModalTaskEdit () {
         mzOption('optMteMainTask', refStatus, 'Choose your option', 'statusName', {}, 'required');
         mzOption('optMteStatus', refStatus, 'Choose your option', 'statusName', {id: '(3,4,5,7)'}, 'required');
         mzDateFromTo('txtMteStartDate', 'txtMteEndDate');
-        $('#lblMteAssignee').removeClass('active');
         formValidate = new MzValidate();
 
         $('#optMteSpace').on('change', function () {
             const spaceId = parseInt($(this).val());
             try {
                 $('#optMteFolder_').show();
-                mzOption('optMteFolder', refFolder, 'Choose your option', 'folderName', {spaceId: spaceId, statusId: 1}, 'required');
+                mzOptionStop('optMteFolder', refFolder, 'Choose your option', 'folderName', {spaceId: spaceId, statusId: 1}, 'required');
                 $('#optMteFolderErr').html('');
             } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
         });

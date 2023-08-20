@@ -786,10 +786,10 @@ function setupPages(isExternal) {
     // Material Select Initialization
     $(document).ready(function () {
         $('.mdb-select').materialSelect();
-        $('.select-wrapper.md-form.md-outline input.select-dropdown').bind('focus blur', function () {
+        /*$('.select-wrapper.md-form.md-outline input.select-dropdown').bind('focus blur', function () {
             $(this).closest('.select-outline').find('label').toggleClass('active');
             $(this).closest('.select-outline').find('.caret').toggleClass('active');
-        });
+        });*/
         $(".mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
     });
 
