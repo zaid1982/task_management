@@ -587,6 +587,9 @@ function MzValidate(isEnglish) {
                     fieldSelector = $('#' + fieldId);
                     fieldErrSelector = $('#' + fieldId + 'Err');
                 }
+                if (u.type === 'select') {
+                    fieldSelector.materialSelect();
+                }
                 fieldSelector.removeClass('invalid');
                 fieldErrSelector.html('');
                 return false;
@@ -1132,15 +1135,15 @@ function mzCmp(a, b) {
     return a[1].localeCompare(b[1]);
 }
 
-function mzOptionStopClear(name, defaultText, required) {
+function mzOptionStopClear(name, required) {
     let selectorName = $('#'+name);
-    let selectorLabel = $('#lbl' + name.substring(3));
+    //let selectorLabel = $('#lbl' + name.substring(3));
     selectorName.materialSelect('destroy');
     if (name === '' || typeof name === 'undefined') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
     }
     removeOptions(document.getElementById(name));
-    document.getElementById(name).options[0] = new Option(defaultText, "", true, true);
+    document.getElementById(name).options[0] = new Option('Choose option', "", true, true);
     if (typeof required !== 'undefined' && required === true) {
         document.getElementById(name).options[0].disabled = true;
     }
@@ -1148,8 +1151,6 @@ function mzOptionStopClear(name, defaultText, required) {
     selectorName.materialSelect();
     selectorName.removeClass('invalid');
     $('#'+name+'Err').html('');
-    selectorLabel.removeClass('active');
-    selectorLabel.addClass('active');
 }
 
 function mzOptionStop(name, data, valIndex, filters, required, defaultText, isSort, sortIndex) {
@@ -1585,4 +1586,12 @@ function mzDisplayImageFileInput(input, targetId) {
         }
         reader.readAsDataURL(input.files[0]); // convert to base64 string
     }
+}
+
+function mzIntNull (data) {
+    const returnVal = parseInt(data);
+    if (isNaN(returnVal)) {
+        return null;
+    }
+    return returnVal;
 }

@@ -11,23 +11,23 @@
                 <form id="formMte" autocomplete="off">
                     <div class="row">
                         <div class="col-12">
-                            <div class="md-form md-outline mb-0">
+                            <div class="md-form md-outline">
                                 <input type="text" id="txtMteTaskName" class="form-control">
                                 <label for="txtMteTaskName" id="lblMteTaskName">Task Name *</label>
                                 <p class="font-small text-danger" id="txtMteTaskNameErr"></p>
                             </div>
                         </div>
-                        <div class="col-12 select-outline" id="optMteSpace_">
+                        <div class="col-12 select-outline mb-2" id="optMteSpace_">
                             <select id="optMteSpace" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteSpace" id="lblMteSpace">Space *</label>
                             <p class="font-small text-danger" id="optMteSpaceErr"></p>
                         </div>
-                        <div class="col-12 select-outline" id="optMteFolder_">
+                        <div class="col-12 select-outline mb-2" id="optMteFolder_">
                             <select id="optMteFolder" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteFolder" id="lblMteFolder">Folder *</label>
                             <p class="font-small text-danger" id="optMteFolderErr"></p>
                         </div>
-                        <div class="col-12 select-outline" id="optMteAssignee_">
+                        <div class="col-12 select-outline mb-1" id="optMteAssignee_">
                             <select id="optMteAssignee" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteAssignee" id="lblMteAssignee">Assignee *</label>
                             <p class="font-small text-danger" id="optMteAssigneeErr"></p>
@@ -108,7 +108,7 @@
                             </div>
                             <p class="font-small text-danger mt-0" id="radMtePriorityErr"></p>
                         </div>
-                        <div class="col-12 mb-0" id="divMteIsMain">
+                        <div class="col-12 mb-2" id="divMteIsMain">
                             <p class="mb-0 font-small font-weight-500">Task Type * :</p>
                             <div class="mt-0 ml-1 pt-1">
                                 <div class="form-check form-check-inline">
@@ -126,61 +126,43 @@
                             </div>
                             <p class="font-small text-danger mt-0" id="radMteIsMainErr"></p>
                         </div>
-                        <div class="col-12 select-outline" id="optMteMainTask_">
+                        <div class="col-12 select-outline mb-2" id="optMteMainTask_">
                             <select id="optMteMainTask" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteMainTask" id="lblMteMainTask">Main Task *</label>
                             <p class="font-small text-danger" id="optMteMainTaskErr"></p>
                         </div>
-                        <div class="col-12">
-                            <div class="md-form md-outline my-0">
+                        <div class="col-md-6">
+                            <div class="md-form md-outline mt-0">
                                 <input type="text" id="txtMteDueDate" class="form-control datepicker" readonly>
                                 <label for="txtMteDueDate" id="lblMteDueDate">Due Date *</label>
                                 <p class="font-small text-danger" id="txtMteDueDateErr"></p>
                             </div>
                         </div>
+                        <div class="col-md-6 select-outline mb-2" id="optMteTimeEstimate_">
+                            <select id="optMteTimeEstimate" class="mdb-select md-form md-outline colorful-select my-0" searchable="Search here.."></select>
+                            <label for="optMteTimeEstimate" id="lblMteTimeEstimate">Time Estimate</label>
+                            <p class="font-small text-danger" id="optMteTimeEstimateErr"></p>
+                        </div>
                         <div class="col-md-6">
-                            <div class="md-form md-outline my-0">
+                            <div class="md-form md-outline mt-0">
                                 <input type="text" id="txtMteStartDate" class="form-control datepicker" readonly>
                                 <label for="txtMteStartDate" id="lblMteStartDate">Start Date</label>
                                 <p class="font-small text-danger" id="txtMteStartDateErr"></p>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="md-form md-outline my-0">
-                                <input type="text" id="txtMteStartTime" class="form-control timepicker" readonly>
-                                <label for="txtMteStartTime" id="lblMteStartTime">Start Time</label>
-                                <p class="font-small text-danger" id="txtMteStartTimeErr"></p>
-                            </div>
+                        <div class="col-md-6 select-outline mb-2" id="optMteStartTime_">
+                            <select id="optMteStartTime" class="mdb-select md-form md-outline colorful-select my-0" searchable="Search here.."></select>
+                            <label for="optMteStartTime" id="lblMteStartTime">Start Time</label>
+                            <p class="font-small text-danger" id="optMteStartTimeErr"></p>
                         </div>
-                        <div class="col-md-6">
-                            <div class="md-form md-outline my-0">
-                                <input type="text" id="txtMteEndDate" class="form-control datepicker" readonly>
-                                <label for="txtMteEndDate" id="lblMteEndDate">End Date</label>
-                                <p class="font-small text-danger" id="txtMteEndDateErr"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="md-form md-outline my-0">
-                                <input type="text" id="txtMteEndTime" class="form-control timepicker" readonly>
-                                <label for="txtMteEndTime" id="lblMteEndTime">End Time</label>
-                                <p class="font-small text-danger" id="txtMteEndTimeErr"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="md-form md-outline my-0">
-                                <input type="text" id="txtMteTimeEstimate" class="form-control timepicker" readonly>
-                                <label for="txtMteTimeEstimate" id="lblMteTimeEstimate">Time Estimate</label>
-                                <p class="font-small text-danger" id="txtMteTimeEstimateErr"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="md-form md-outline my-0">
+                        <div class="col-12">
+                            <div class="md-form md-outline mt-0">
                                 <input type="text" id="txtMteAmount" class="form-control">
                                 <label for="txtMteAmount" id="lblMteAmount">Amount (RM)</label>
                                 <p class="font-small text-danger" id="txtMteAmountErr"></p>
                             </div>
                         </div>
-                        <div class="col-12 select-outline" id="optMteStatus_">
+                        <div class="col-12 select-outline mb-2" id="optMteStatus_">
                             <select id="optMteStatus" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteStatus" id="lblMteStatus">Status *</label>
                             <p class="font-small text-danger" id="optMteStatusErr"></p>

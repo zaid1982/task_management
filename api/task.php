@@ -30,6 +30,8 @@ try {
             $result = $fnMain->getList($urlArr[2]);
         } else if ($urlArr[1] === 'summary' && $urlArr[2] === 'all') {
             $result = $fnMain->getListSummaryAll();
+        } else if ($urlArr[1] === 'ref' && $urlArr[2] === 'mainTask') {
+            $result = $fnMain->getRefMainTask();
         } else {
             throw new Exception('[line: ' . __LINE__ . '] - Wrong GET Request');
         }

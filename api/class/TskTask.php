@@ -140,4 +140,17 @@ class TskTask extends General {
             throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
         }
     }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function getRefMainTask (): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
+            return DbMysql::selectAll($this::$tableName, array('taskIsMain'=>1, 'statusId'=>'IN|3,5'), 1);
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
 }
