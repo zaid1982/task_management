@@ -405,7 +405,7 @@ function ListAll() {
         if (divWidth < 644) { dtLllDone.column(16).visible(false); }
         if (divWidth < 576) { dtLllDone.column(17).visible(false); }
 
-        const dataApi = mzAjaxRequest('task/summary/all', 'GET');
+        const dataApi = mzAjax('task/summary/all', 'GET');
         $('#spanLllTodayTotal').text(dataApi['totalToday']);
         $('#spanLllTodayOverdue').text(dataApi['totalOverdue']);
         $('#spanLllTodayFuture').text(dataApi['totalFuture']);
@@ -415,31 +415,31 @@ function ListAll() {
     };
 
     this.genTableToday = function () {
-        const dataDb = mzAjaxRequest('task/list/today', 'GET');
+        const dataDb = mzAjax('task/list/today', 'GET');
         dtLllToday.clear().rows.add(dataDb).draw();
         $('#spanLllTodayTotal').text(dataDb.length);
     };
 
     this.genTableOverdue = function () {
-        const dataDb = mzAjaxRequest('task/list/overdue', 'GET');
+        const dataDb = mzAjax('task/list/overdue', 'GET');
         dtLllOverdue.clear().rows.add(dataDb).draw();
         $('#spanLllTodayOverdue').text(dataDb.length);
     };
 
     this.genTableFuture = function () {
-        const dataDb = mzAjaxRequest('task/list/future', 'GET');
+        const dataDb = mzAjax('task/list/future', 'GET');
         dtLllFuture.clear().rows.add(dataDb).draw();
         $('#spanLllTodayFuture').text(dataDb.length);
     };
 
     this.genTableUnscheduled = function () {
-        const dataDb = mzAjaxRequest('task/list/unscheduled', 'GET');
+        const dataDb = mzAjax('task/list/unscheduled', 'GET');
         dtLllUnscheduled.clear().rows.add(dataDb).draw();
         $('#spanLllTodayUnscheduled').text(dataDb.length);
     };
 
     this.genTableDone = function () {
-        const dataDb = mzAjaxRequest('task/list/done', 'GET');
+        const dataDb = mzAjax('task/list/done', 'GET');
         dtLllDone.clear().rows.add(dataDb).draw();
         $('#spanLllTodayDone').text(dataDb.length);
     };

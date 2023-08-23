@@ -5,8 +5,10 @@ function ModalTaskEdit () {
     let classFrom;
     let formValidate;
     let refStatus;
+    let refUser;
     let refSpace;
     let refFolder;
+    const todayDate = moment().format('YYYY-MM-DD');
 
     let vData = [
         {
@@ -96,9 +98,11 @@ function ModalTaskEdit () {
             name: 'Start Time',
             validator: {
                 notEmpty: false,
-                lower: {
+                timeDateLower: {
                     id: 'txtMteEndTime',
-                    label: 'End Time'
+                    label: 'End Time',
+                    dateFromId: 'txtMteStartDate',
+                    dateToId: 'txtMteEndDate'
                 }
             }
         },
@@ -116,9 +120,11 @@ function ModalTaskEdit () {
             name: 'End Time',
             validator: {
                 notEmpty: false,
-                higher: {
+                timeDateHigher: {
                     id: 'txtMteStartTime',
-                    label: 'Start Time'
+                    label: 'Start Time',
+                    dateFromId: 'txtMteStartDate',
+                    dateToId: 'txtMteEndDate'
                 }
             }
         },
@@ -160,9 +166,10 @@ function ModalTaskEdit () {
     ];
 
     this.init = function () {
-        mzOption('optMteSpace', refSpace, 'Choose your option', 'spaceName', {statusId: 1}, 'required');
-        mzOption('optMteMainTask', refStatus, 'Choose your option', 'statusName', {}, 'required');
-        mzOption('optMteStatus', refStatus, 'Choose your option', 'statusName', {id: '(3,4,5,7)'}, 'required');
+        mzOption('optMteSpace', refSpace, 'spaceName', {statusId: 1}, true);
+        mzOption('optMteMainTask', refStatus, 'statusName', {}, true);
+        mzOption('optMteStatus', refStatus, 'statusName', {id: '(3,4,5,7)'}, true);
+        self.setOptionAssignee();
         mzDateFromTo('txtMteStartDate', 'txtMteEndDate');
         formValidate = new MzValidate();
 
@@ -170,7 +177,7 @@ function ModalTaskEdit () {
             const spaceId = parseInt($(this).val());
             try {
                 $('#optMteFolder_').show();
-                mzOptionStop('optMteFolder', refFolder, 'Choose your option', 'folderName', {spaceId: spaceId, statusId: 1}, 'required');
+                mzOptionStop('optMteFolder', refFolder, 'folderName', {spaceId: spaceId, statusId: 1}, true);
                 $('#optMteFolderErr').html('');
             } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
         });
@@ -208,9 +215,23 @@ function ModalTaskEdit () {
             $('#optMteFolder_').hide();
             $('#optMteMainTask_').hide();
             $('#optMteStatus_').hide();
+            mzSetValue('optMteAssignee', mzGetUserId(), 'select');
+            mzSetValue('radMtePriority', 'Normal', 'radio2');
+            mzSetValue('radMteIsMain', 'Normal', 'radio2');
+            mzSetValue('txtMteDueDate', todayDate, 'date');
             $('#modalTaskEdit').modal({backdrop: 'static', keyboard: false}).scrollTop(0);
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
     };
+
+    this.setOptionAssignee = function () {
+        try {
+            document.getElementById('optMteAssignee').options[0] = new Option('Choose your option', "", true, true);
+            document.getElementById('optMteAssignee').options[0].disabled = true;
+            $.each(refUser, function (n, u) {
+                $('#optMteAssignee').append('<option value="'+n+'" data-icon="api/'+u['profileImage']+'" class="rounded-circle">'+u['userFullName']+'</option>');
+            });
+        } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
+    }
 
     this.getClassName = function () {
         return className;
@@ -222,6 +243,10 @@ function ModalTaskEdit () {
 
     this.setRefStatus = function (_refStatus) {
         refStatus = _refStatus;
+    };
+
+    this.setRefUser = function (_refUser) {
+        refUser = _refUser;
     };
 
     this.setRefSpace = function (_refSpace) {

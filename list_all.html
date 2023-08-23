@@ -329,10 +329,10 @@
 <script type="text/javascript" src="js/vendor/datatables/js/jszip.min.js"></script>
 <script type="text/javascript" src="js/vendor/datatables/js/pdfmake.min.js"></script>
 <script type="text/javascript" src="js/vendor/datatables/js/vfs_fonts.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/global/DtTaskDisplay.js"></script>
 
 <script type="text/javascript">
+    document.write('<scr' + 'ipt src="js/common.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
+
     let dtTaskDisplay;
     let modalTaskEdit;
     let mainClass;
@@ -345,12 +345,13 @@
                 modalTaskEdit = new ModalTaskEdit();
                 mainClass = new ListAll();
 
-                const refStatus_ = mzGetLocalArray('task_status', versionLocal_, 'status/ref');
-                const refUser_ = mzGetLocalArray('task_user', versionLocal_, 'user/refWithImage');
-                const refSpace_ = mzGetLocalArray('task_space', versionLocal_, 'space/ref');
-                const refFolder_ = mzGetLocalArray('task_folder', versionLocal_, 'folder/ref');
+                const refStatus_ = mzGetRef('task_status', versionLocal_, 'status/ref');
+                const refUser_ = mzGetRef('task_user', versionLocal_, 'user/refWithImage');
+                const refSpace_ = mzGetRef('task_space', versionLocal_, 'space/ref');
+                const refFolder_ = mzGetRef('task_folder', versionLocal_, 'folder/ref');
 
                 modalTaskEdit.setRefStatus(refStatus_);
+                modalTaskEdit.setRefUser(refUser_);
                 modalTaskEdit.setRefSpace(refSpace_);
                 modalTaskEdit.setRefFolder(refFolder_);
                 modalTaskEdit.setClassFrom(mainClass);
@@ -369,6 +370,7 @@
             HideLoader();
         }, 200);
     });
+    document.write('<scr' + 'ipt src="js/global/DtTaskDisplay.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
     document.write('<scr' + 'ipt src="js/pages/modal/ModalTaskEdit.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
     document.write('<scr' + 'ipt src="js/pages/ListAll.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
 </script>

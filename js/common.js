@@ -169,108 +169,120 @@ function MzValidate(isEnglish) {
     isEnglish = typeof isEnglish === 'undefined' ? true : isEnglish;
 
     const checkField = function (field_id, type, val) {
-        const fieldSelector = type === 'notEmptyCheck' || type === 'notEmptyRadio' || type === 'notEmptyCheckSingle' || type === 'notSimilarRadio' ? $("input[name='"+field_id+"']:checked") : $('#' + field_id);
-        const fieldVal = type !== 'notEmptyCheck' && type !== 'notEmptyRadio' && type !== 'notEmptyCheckSingle' ? fieldSelector.val() : '';
-        const idVal = $('#' + val.id).val();
-        switch (type) {
-            case 'notEmpty':
-                if (val === true && (fieldVal === '' || fieldVal === null))
-                    return false;
-                break;
-            case 'eqLength':
-                if (fieldVal.length !== val && fieldVal !== '')
-                    return false;
-                break;
-            case 'maxLength':
-                if (fieldVal.length > val && fieldVal !== '')
-                    return false;
-                break;
-            case 'minLength':
-                if (fieldVal.length < val && fieldVal !== '')
-                    return false;
-                break;
-            case 'numeric':
-                if (val === true && !mzValidNumeric(fieldVal) && fieldVal !== '')
-                    return false;
-                break;
-            case 'email':
-                if (val === true && !mzValidMail(fieldVal) && fieldVal !== '')
-                    return false;
-                break;
-            case 'digit':
-                if (val === true && !mzValidDigit(fieldVal) && fieldVal !== '')
-                    return false;
-                break;
-            case 'password':
-                if (val === true && !mzValidPassword(fieldVal) && fieldVal !== '')
-                    return false;
-                break;
-            case 'similar':
-                if (val !== '' && fieldVal !== idVal && fieldVal !== '')
-                    return false;
-                break;
-            case 'notSimilar':
-            case 'notSimilarRadio':
-                if (val !== '' && fieldVal === val)
-                    return false;
-                break;
-            case 'max':
-                if (fieldVal > val && fieldVal !== '')
-                    return false;
-                break;
-            case 'min':
-                if (fieldVal < val && fieldVal !== '')
-                    return false;
-                break;
-            case 'notEmptyArr':
-                if (val === true && fieldVal.length === 0)
-                    return false;
-                break;
-            case 'notEmptyFile':
-                if (val === true && fieldSelector.prop('files').length === 0) {
-                    return false;
-                }
-                break;
-            case 'notEmptyCheckSingle':
-            case 'notEmptyCheck':
-            case 'notEmptyRadio':
-                if (val === true && fieldSelector.length === 0)
-                    return false;
-                break;
-            case 'notEmptySummernote':
-                if (val === true && fieldSelector.summernote('isEmpty'))
-                    return false;
-                break;
-            case 'pdfType':
-                if (val === true && fieldSelector.prop('files').length > 0 && fieldSelector.prop('files')[0].type !== 'application/pdf') {
-                    return false;
-                }
-                break;
-            case 'imageType':
-                if (val === true && fieldSelector.prop('files').length > 0 && fieldSelector.prop('files')[0].type !== 'image/jpg' && fieldSelector.prop('files')[0].type !== 'image/jpeg' && fieldSelector.prop('files')[0].type !== 'image/png') {
-                    return false;
-                }
-                break;
-            case 'imagePdfType':
-                if (val === true && fieldSelector.prop('files').length > 0 && fieldSelector.prop('files')[0].type !== 'image/jpg' && fieldSelector.prop('files')[0].type !== 'image/jpeg' && fieldSelector.prop('files')[0].type !== 'image/png' && fieldSelector.prop('files')[0].type !== 'application/pdf') {
-                    return false;
-                }
-                break;
-            case 'fileSize':
-                if (fieldSelector.prop('files').length > 0 && fieldSelector.prop('files')[0].size > val*1024*1024) {
-                    return false;
-                }
-                break;
-            case 'lower':
-                if (val !== '' && fieldVal !== '' && idVal !== '' && fieldVal > idVal)
-                    return false;
-                break;
-            case 'higher':
-                if (val !== '' && fieldVal !== '' && idVal !== '' && fieldVal < idVal)
-                    return false;
-                break;
-        }
-        return true;
+        try {
+            const fieldSelector = type === 'notEmptyCheck' || type === 'notEmptyRadio' || type === 'notEmptyCheckSingle' || type === 'notSimilarRadio' ? $("input[name='"+field_id+"']:checked") : $('#' + field_id);
+            const fieldVal = type !== 'notEmptyCheck' && type !== 'notEmptyRadio' && type !== 'notEmptyCheckSingle' ? fieldSelector.val() : '';
+            const idVal = typeof val.id !== 'undefined' ? $('#' + val.id).val() : '';
+            const dateFrom = typeof val.id !== 'undefined' ? $('#' + val.dateFromId).val() : '';
+            const dateTo = typeof val.id !== 'undefined' ? $('#' + val.dateToId).val() : '';
+            switch (type) {
+                case 'notEmpty':
+                    if (val === true && (fieldVal === '' || fieldVal === null))
+                        return false;
+                    break;
+                case 'eqLength':
+                    if (fieldVal.length !== val && fieldVal !== '')
+                        return false;
+                    break;
+                case 'maxLength':
+                    if (fieldVal.length > val && fieldVal !== '')
+                        return false;
+                    break;
+                case 'minLength':
+                    if (fieldVal.length < val && fieldVal !== '')
+                        return false;
+                    break;
+                case 'numeric':
+                    if (val === true && !mzValidNumeric(fieldVal) && fieldVal !== '')
+                        return false;
+                    break;
+                case 'email':
+                    if (val === true && !mzValidMail(fieldVal) && fieldVal !== '')
+                        return false;
+                    break;
+                case 'digit':
+                    if (val === true && !mzValidDigit(fieldVal) && fieldVal !== '')
+                        return false;
+                    break;
+                case 'password':
+                    if (val === true && !mzValidPassword(fieldVal) && fieldVal !== '')
+                        return false;
+                    break;
+                case 'similar':
+                    if (val !== '' && fieldVal !== idVal && fieldVal !== '')
+                        return false;
+                    break;
+                case 'notSimilar':
+                case 'notSimilarRadio':
+                    if (val !== '' && fieldVal === val)
+                        return false;
+                    break;
+                case 'max':
+                    if (fieldVal > val && fieldVal !== '')
+                        return false;
+                    break;
+                case 'min':
+                    if (fieldVal < val && fieldVal !== '')
+                        return false;
+                    break;
+                case 'notEmptyArr':
+                    if (val === true && fieldVal.length === 0)
+                        return false;
+                    break;
+                case 'notEmptyFile':
+                    if (val === true && fieldSelector.prop('files').length === 0) {
+                        return false;
+                    }
+                    break;
+                case 'notEmptyCheckSingle':
+                case 'notEmptyCheck':
+                case 'notEmptyRadio':
+                    if (val === true && fieldSelector.length === 0)
+                        return false;
+                    break;
+                case 'notEmptySummernote':
+                    if (val === true && fieldSelector.summernote('isEmpty'))
+                        return false;
+                    break;
+                case 'pdfType':
+                    if (val === true && fieldSelector.prop('files').length > 0 && fieldSelector.prop('files')[0].type !== 'application/pdf') {
+                        return false;
+                    }
+                    break;
+                case 'imageType':
+                    if (val === true && fieldSelector.prop('files').length > 0 && fieldSelector.prop('files')[0].type !== 'image/jpg' && fieldSelector.prop('files')[0].type !== 'image/jpeg' && fieldSelector.prop('files')[0].type !== 'image/png') {
+                        return false;
+                    }
+                    break;
+                case 'imagePdfType':
+                    if (val === true && fieldSelector.prop('files').length > 0 && fieldSelector.prop('files')[0].type !== 'image/jpg' && fieldSelector.prop('files')[0].type !== 'image/jpeg' && fieldSelector.prop('files')[0].type !== 'image/png' && fieldSelector.prop('files')[0].type !== 'application/pdf') {
+                        return false;
+                    }
+                    break;
+                case 'fileSize':
+                    if (fieldSelector.prop('files').length > 0 && fieldSelector.prop('files')[0].size > val*1024*1024) {
+                        return false;
+                    }
+                    break;
+                case 'lower':
+                    if (val !== '' && fieldVal !== '' && idVal !== '' && fieldVal > idVal)
+                        return false;
+                    break;
+                case 'higher':
+                    if (val !== '' && fieldVal !== '' && idVal !== '' && fieldVal < idVal)
+                        return false;
+                    break;
+                case 'timeDateLower':
+                    if (val !== '' && fieldVal !== '' && idVal !== '' && dateFrom === dateTo && fieldVal > idVal)
+                        return false;
+                    break;
+                case 'timeDateHigher':
+                    if (val !== '' && fieldVal !== '' && idVal !== '' && dateFrom === dateTo && fieldVal < idVal)
+                        return false;
+                    break;
+            }
+            return true;
+        } catch (e) { console.log(e.message); }
     };
 
     const validateFields = function (field_id, validator, name, type) {
@@ -302,89 +314,97 @@ function MzValidate(isEnglish) {
         }*/
 
         $.each(validator, function (n2, u2) {
-            if (!checkField(field_id, n2, u2)) {
-                switch (n2) {
-                    case 'notEmpty':
-                        if (type === 'select') {
+            try {
+                if (!checkField(field_id, n2, u2)) {
+                    switch (n2) {
+                        case 'notEmpty':
+                            if (type === 'select') {
+                                msg += isEnglish ? '<br>Please choose ' + name : '<br>Sila pilih ' + name;
+                            } else {
+                                msg += isEnglish ? '<br>Please fill in ' + name : '<br>Sila isi ' + name;
+                            }
+                            return false;
+                        case 'eqLength':
+                            msg += '<br>Panjang perkataan mesti bersamaan ' + u2 + ' huruf';
+                            break;
+                        case 'maxLength':
+                            msg += isEnglish ? '<br>Maximum length must not exceed ' + u2 + ' letters' : '<br>Panjang maksimum mesti ' + u2 + ' huruf';
+                            break;
+                        case 'minLength':
+                            msg += isEnglish ? '<br>Minimum length must not less than ' + u2 + ' letters' : '<br>Panjang minimum mesti ' + u2 + ' huruf';
+                            break;
+                        case 'numeric':
+                            msg += isEnglish ? '<br>' + name + ' must in valid numeric format' : '<br>' + name + ' mesti dalam format numerik';
+                            break;
+                        case 'email':
+                            msg += isEnglish ? '<br>' + name + ' must in valid email format' : '<br>' + name + ' mesti dalam format emel';
+                            break;
+                        case 'digit':
+                            msg += isEnglish ? '<br>' + name + ' must in valid digit format' : '<br>' + name + ' mesti dalam format digit';
+                            break;
+                        case 'password':
+                            msg += '<br>' + name + ' mesti dimulakan dengan huruf besar dan mengandungi 1 huruf kecil, 1 huruf besar, 1 special character dan 1 nombor';
+                            break;
+                        case 'similar':
+                            msg += isEnglish ? '<br>' + name + ' must equal to ' + u2.label : '<br>' + name + ' mesti sama dengan ' + u2.label;
+                            break;
+                        case 'notSimilar':
+                        case 'notSimilarRadio':
+                            msg += isEnglish ? '<br>' + name + ' must not equal to the original value' : '<br>' + name + ' mesti berlainan dengan nilai asal';
+                            break;
+                        case 'max':
+                            msg += isEnglish ? '<br>' + name + ' must not greater than ' + u2 : '<br>' + name + ' mesti tidak melebihi ' + u2;
+                            break;
+                        case 'min':
+                            msg += isEnglish ? '<br>' + name + ' must not less than ' + u2 : '<br>' + name + ' mesti tidak kurang dari ' + u2;
+                            break;
+                        case 'notEmptyArr':
                             msg += isEnglish ? '<br>Please choose ' + name : '<br>Sila pilih ' + name;
-                        } else {
-                            msg += isEnglish ? '<br>Please fill in ' + name : '<br>Sila isi ' + name;
-                        }
-                        return false;
-                    case 'eqLength':
-                        msg += '<br>Panjang perkataan mesti bersamaan ' + u2 + ' huruf';
-                        break;
-                    case 'maxLength':
-                        msg += isEnglish ? '<br>Maximum length must not exceed ' + u2 + ' letters' : '<br>Panjang maksimum mesti ' + u2 + ' huruf';
-                        break;
-                    case 'minLength':
-                        msg += isEnglish ? '<br>Minimum length must not less than ' + u2 + ' letters' : '<br>Panjang minimum mesti ' + u2 + ' huruf';
-                        break;
-                    case 'numeric':
-                        msg += isEnglish ? '<br>' + name + ' must in valid numeric format' : '<br>' + name + ' mesti dalam format numerik';
-                        break;
-                    case 'email':
-                        msg += isEnglish ? '<br>' + name + ' must in valid email format' : '<br>' + name + ' mesti dalam format emel';
-                        break;
-                    case 'digit':
-                        msg += isEnglish ? '<br>' + name + ' must in valid digit format' : '<br>' + name + ' mesti dalam format digit';
-                        break;
-                    case 'password':
-                        msg += '<br>' + name + ' mesti dimulakan dengan huruf besar dan mengandungi 1 huruf kecil, 1 huruf besar, 1 special character dan 1 nombor';
-                        break;
-                    case 'similar':
-                        msg += isEnglish ? '<br>' + name + ' must equal to ' + u2.label : '<br>' + name + ' mesti sama dengan ' + u2.label;
-                        break;
-                    case 'notSimilar':
-                    case 'notSimilarRadio':
-                        msg += isEnglish ? '<br>' + name + ' must not equal to the original value' : '<br>' + name + ' mesti berlainan dengan nilai asal';
-                        break;
-                    case 'max':
-                        msg += isEnglish ? '<br>' + name + ' must not greater than ' + u2 : '<br>' + name + ' mesti tidak melebihi ' + u2;
-                        break;
-                    case 'min':
-                        msg += isEnglish ? '<br>' + name + ' must not less than ' + u2 : '<br>' + name + ' mesti tidak kurang dari ' + u2;
-                        break;
-                    case 'notEmptyArr':
-                        msg += isEnglish ? '<br>Please choose ' + name : '<br>Sila pilih ' + name;
-                        return false;
-                    case 'notEmptyFile':
-                        msg += isEnglish ? '<br>Please upload ' + name : '<br>Sila muatnaik file ' + name;
-                        return false;
-                    case 'notEmptyCheck':
-                        msg += isEnglish ? '<br>Please choose at least 1 ' + name : '<br>Sila pilih sekurang-kurangnya 1 ' + name;
-                        return false;
-                    case 'notEmptyRadio':
-                        msg += isEnglish ? '<br>Please choose 1 ' + name : '<br>Sila pilih 1 ' + name;
-                        return false;
-                    case 'notEmptyCheckSingle':
-                        msg += isEnglish ? '<br>Please make sure ' + name + ' ticked' : '<br>Sila pastikan ' + name + ' dipilih';
-                        return false;
-                    case 'notEmptySummernote':
-                        msg += isEnglish ? '<br>Please fill in '+name : '<br>Sila isi '+name;
-                        return false;
-                    case 'pdfType':
-                        msg += isEnglish ? '<br>Please make sure the uploaded file is in PDF type' : '<br>Sila pastikan format dokumen muatnaik adalah PDF';
-                        return false;
-                    case 'imageType':
-                        msg += isEnglish ? '<br>Please make sure the uploaded file is in JPG, JPEG, PNG type' : '<br>Sila pastikan format dokumen muatnaik adalah JPG, JPEG, PNG';
-                        return false;
-                    case 'imagePdfType':
-                        msg += isEnglish ? '<br>Please make sure the uploaded file is in PDF, JPG, JPEG, PNG type' : '<br>Sila pastikan format dokumen muatnaik adalah PDF, JPG, JPEG, PNG';
-                        return false;
-                    case 'lower':
-                        msg += isEnglish ?  '<br>' + name + ' must lower than ' + u2.label : '<br>' + name + ' mestilah melebihi ' + u2.label;
-                        break;
-                    case 'higher':
-                        msg += isEnglish ?  '<br>' + name + ' must higher than ' + u2.label : '<br>' + name + ' mestilah kurang dari ' + u2.label;
-                        break;
+                            return false;
+                        case 'notEmptyFile':
+                            msg += isEnglish ? '<br>Please upload ' + name : '<br>Sila muatnaik file ' + name;
+                            return false;
+                        case 'notEmptyCheck':
+                            msg += isEnglish ? '<br>Please choose at least 1 ' + name : '<br>Sila pilih sekurang-kurangnya 1 ' + name;
+                            return false;
+                        case 'notEmptyRadio':
+                            msg += isEnglish ? '<br>Please choose 1 ' + name : '<br>Sila pilih 1 ' + name;
+                            return false;
+                        case 'notEmptyCheckSingle':
+                            msg += isEnglish ? '<br>Please make sure ' + name + ' ticked' : '<br>Sila pastikan ' + name + ' dipilih';
+                            return false;
+                        case 'notEmptySummernote':
+                            msg += isEnglish ? '<br>Please fill in '+name : '<br>Sila isi '+name;
+                            return false;
+                        case 'pdfType':
+                            msg += isEnglish ? '<br>Please make sure the uploaded file is in PDF type' : '<br>Sila pastikan format dokumen muatnaik adalah PDF';
+                            return false;
+                        case 'imageType':
+                            msg += isEnglish ? '<br>Please make sure the uploaded file is in JPG, JPEG, PNG type' : '<br>Sila pastikan format dokumen muatnaik adalah JPG, JPEG, PNG';
+                            return false;
+                        case 'imagePdfType':
+                            msg += isEnglish ? '<br>Please make sure the uploaded file is in PDF, JPG, JPEG, PNG type' : '<br>Sila pastikan format dokumen muatnaik adalah PDF, JPG, JPEG, PNG';
+                            return false;
+                        case 'lower':
+                            msg += isEnglish ?  '<br>' + name + ' must lower than ' + u2.label : '<br>' + name + ' mestilah melebihi ' + u2.label;
+                            break;
+                        case 'higher':
+                            msg += isEnglish ?  '<br>' + name + ' must higher than ' + u2.label : '<br>' + name + ' mestilah kurang dari ' + u2.label;
+                            break;
+                        case 'timeDateLower':
+                            msg += isEnglish ?  '<br>' + name + ' must lower than ' + u2.label : '<br>' + name + ' mestilah melebihi ' + u2.label;
+                            break;
+                        case 'timeDateHigher':
+                            msg += isEnglish ?  '<br>' + name + ' must higher than ' + u2.label : '<br>' + name + ' mestilah kurang dari ' + u2.label;
+                            break;
+                    }
+                } else {
+                    if (n2 === 'lower' || n2 === 'higher') {
+                        $('#' +u2.id).removeClass('invalid');
+                        $('#' +u2.id + 'Err').html('');
+                    }
                 }
-            } else {
-                if (n2 === 'lower' || n2 === 'higher') {
-                    $('#' +u2.id).removeClass('invalid');
-                    $('#' +u2.id + 'Err').html('');
-                }
-            }
+            } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
         });
         if (msg !== '') {
             if (type === 'select') {
@@ -589,7 +609,7 @@ function MzValidate(isEnglish) {
     }
 }
 
-function mzAjaxRequest(url, type, data, functionStr) {
+function mzAjax (url, type, data, functionStr) {
     let returnVal = '';
     if (typeof url === 'undefined' || typeof type === 'undefined' || url === '' || type === '') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
@@ -671,7 +691,7 @@ function mzLogout() {
 }
 
 function mzLogoutError(errorType) {
-	mzAjaxRequest('user/log_out/'+errorType, 'POST');
+    mzAjax('user/log_out/'+errorType, 'POST');
     sessionStorage.clear();
     sessionStorage.setItem('errorLogout', errorType);
     window.location.href = 'p_login';
@@ -814,7 +834,9 @@ function setupPages(isExternal) {
         clear: 'Padam',
         close: 'Batal'}*/
     );
-    $('.timepicker').pickatime({});
+    $('.timepicker').pickatime({
+        autoclose: true
+    });
 
     // Toast Initialization
     toastr.options = {
@@ -1043,7 +1065,7 @@ function mzConvertMonth(monthInput) {
     }
 }
 
-function mzSetDate(id, dateInput) {
+function mzSetDate (id, dateInput) {
     const dateSplit = dateInput.split('-');
     if (dateSplit.length === 3) {
         let day = parseInt(dateSplit[2]);
@@ -1055,7 +1077,7 @@ function mzSetDate(id, dateInput) {
     }
 }
 
-function mzEmailShort(emailInput, shortLength) {
+function mzEmailShort (emailInput, shortLength) {
     let emailNew = '';
     shortLength = typeof shortLength === 'undefined' ? 20 : shortLength;
     if (emailInput !== null && emailInput.length > shortLength) {
@@ -1072,79 +1094,11 @@ function mzEmailShort(emailInput, shortLength) {
     return emailNew;
 }
 
-function mzGetDataVersion(isExternal) {
-    return mzAjaxRequest(isExternal === true ? 'version/external' : 'version', 'GET');
+function mzGetDataVersion (isExternal) {
+    return mzAjax(isExternal === true ? 'version/external' : 'version', 'GET');
 }
 
-function mzGetLocalSimple(name, version, id, value, filters, sort) {
-    if (typeof name === 'undefined' || typeof version === 'undefined' || typeof id === 'undefined' || typeof value === 'undefined') {
-        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-    }
-    if (id === '' && value === '') {
-        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-    }
-    const dataSort = typeof sort === 'undefined' ? 'ASC' : sort;
-    if (typeof version[name] === 'undefined' || version[name] === '') {
-        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-    }
-    const dataFilterArr = typeof filters === 'undefined' ? [] : filters;
-
-    let returnVal = [];
-    let getNew = false;
-    let objData;
-    let rawData;
-    const localData = localStorage.getItem(name);
-    if (localData === null) {
-        getNew = true;
-    } else {
-        objData = JSON.parse(localData);
-        if (typeof objData.version === 'undefined' || typeof objData.data === 'undefined' || objData.version !== version[name]) {
-            getNew = true;
-        } else {
-            rawData = objData.data;
-        }
-    }
-
-    if (getNew) {
-        rawData = mzAjaxRequest('local_data', 'GET', {Name:name});
-        localStorage.setItem(name, JSON.stringify({version:version[name], data:rawData}));
-    }
-
-    $.each(rawData, function (n, u) {
-        if (typeof u[value] === 'undefined' || typeof u[id] === 'undefined') {
-            throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-        }
-        const rawIndex = parseInt(u[id]);
-        if (isNaN(rawIndex)) {
-            throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-        }
-        if (dataFilterArr !== '') {
-            const keysFilter = Object.keys(dataFilterArr);
-            let filterCnt = 0;
-            for (let i=0; i<keysFilter.length; i++) {
-                const filterKey = keysFilter[i];
-                const filterVal = dataFilterArr[filterKey];
-                if (typeof u[filterKey] !== 'undefined' && u[filterKey] === filterVal) {
-                    filterCnt++;
-                }
-            }
-            if (filterCnt === keysFilter.length) {
-                returnVal[rawIndex] = u[value];
-            }
-        } else {
-            returnVal[rawIndex] = u[value];
-        }
-    });
-
-    if (dataSort === 'DESC') {
-        returnVal.reverse();
-    } else if (dataSort === 'ASC') {
-        returnVal.sort();
-    }
-    return returnVal;
-}
-
-function mzGetLocalArray(name, version, api) {
+function mzGetRef (name, version, api) {
     if (typeof name === 'undefined' || typeof version === 'undefined') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
     }
@@ -1167,75 +1121,18 @@ function mzGetLocalArray(name, version, api) {
         }
     }
     if (getNew) {
-        rawData = mzAjaxRequest(api, 'GET');
+        rawData = mzAjax(api, 'GET');
         const rawEncrypted = CryptoJS.AES.encrypt(JSON.stringify({version:version[name], data:rawData}), 'TaskManagement');
         localStorage.setItem(name, rawEncrypted);
     }
     return rawData;
 }
 
-function mzGetLocalRaw(name, version, filters, api) {
-    if (typeof name === 'undefined' || typeof version === 'undefined') {
-        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-    }
-    if (typeof version[name] === 'undefined' || version[name] === '') {
-        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-    }
-    const dataFilterArr = typeof filters === 'undefined' ? [] : filters;
-
-    let returnVal = [];
-    let getNew = false;
-    let objData;
-    let rawData;
-    const localData = localStorage.getItem(name);
-    if (localData === null) {
-        getNew = true;
-    } else {
-        const objEncrypted = CryptoJS.AES.decrypt(localData,'TaskManagement').toString(CryptoJS.enc.Utf8);
-        objData = JSON.parse(objEncrypted);
-        if (typeof objData.version === 'undefined' || typeof objData.data === 'undefined' || objData.version !== version[name]) {
-            getNew = true;
-        } else {
-            rawData = objData.data;
-        }
-    }
-
-    if (getNew) {
-        if (typeof api === 'undefined') {
-            rawData = mzAjaxRequest('local_data', 'GET', {Name:name});
-        } else {
-            rawData = mzAjaxRequest(api, 'GET');
-        }
-        const rawEncrypted = CryptoJS.AES.encrypt(JSON.stringify({version:version[name], data:rawData}), 'TaskManagement');
-        localStorage.setItem(name, rawEncrypted.toString());
-    }
-
-    $.each(rawData, function (n, u) {
-        if (dataFilterArr !== '') {
-            const keysFilter = Object.keys(dataFilterArr);
-            let filterCnt = 0;
-            for (let i=0; i<keysFilter.length; i++) {
-                const filterKey = keysFilter[i];
-                const filterVal = dataFilterArr[filterKey];
-                if (typeof u[filterKey] !== 'undefined' && u[filterKey] === filterVal) {
-                    filterCnt++;
-                }
-            }
-            if (filterCnt === keysFilter.length) {
-                returnVal.push(u);
-            }
-        } else {
-            returnVal.push(u);
-        }
-    });
-    return returnVal;
-}
-
 function mzCmp(a, b) {
     return a[1].localeCompare(b[1]);
 }
 
-function mzOptionStopClear(name, defaultText, type) {
+function mzOptionStopClear(name, defaultText, required) {
     let selectorName = $('#'+name);
     let selectorLabel = $('#lbl' + name.substring(3));
     selectorName.materialSelect('destroy');
@@ -1244,7 +1141,7 @@ function mzOptionStopClear(name, defaultText, type) {
     }
     removeOptions(document.getElementById(name));
     document.getElementById(name).options[0] = new Option(defaultText, "", true, true);
-    if (typeof type !== 'undefined' && type === 'required') {
+    if (typeof required !== 'undefined' && required === true) {
         document.getElementById(name).options[0].disabled = true;
     }
     selectorName.val(null);
@@ -1255,21 +1152,24 @@ function mzOptionStopClear(name, defaultText, type) {
     selectorLabel.addClass('active');
 }
 
-function mzOptionStop(name, data, defaultText, valIndex, filters, type, isSort, sortIndex) {
+function mzOptionStop(name, data, valIndex, filters, required, defaultText, isSort, sortIndex) {
     let selectorName = $('#'+name);
     selectorName.materialSelect({'destroy': true});
-    mzOption(name, data, defaultText, valIndex, filters, type, isSort, sortIndex);
+    mzOption(name, data, valIndex, filters, required, defaultText, isSort, sortIndex);
     selectorName.materialSelect();
     selectorName.removeClass('invalid');
     $('#'+name+'Err').html('');
 }
 
-function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sortIndex) {
-    if (typeof name === 'undefined' || typeof data === 'undefined' || typeof defaultText === 'undefined') {
+function mzOption(name, data, valIndex, filters, required, defaultText, isSort, sortIndex) {
+    if (typeof name === 'undefined' || typeof data === 'undefined') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
     }
     if (name === '') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
+    }
+    if (typeof defaultText === 'undefined') {
+        defaultText = 'Choose option';
     }
     if (typeof isSort === 'undefined') {
         isSort = true;
@@ -1280,7 +1180,7 @@ function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sort
     removeOptions(document.getElementById(name));
     document.getElementById(name).options[optionIndex++] = new Option(defaultText, "", true, true);
 
-    if (typeof type !== 'undefined' && type === 'required') {
+    if (typeof required !== 'undefined' && required === true) {
         document.getElementById(name).options[0].disabled = true;
     }
 
@@ -1350,62 +1250,12 @@ function mzOption(name, data, defaultText, valIndex, filters, type, isSort, sort
     //$('#lbl' + name.substring(3)).addClass('active');
 }
 
-function removeOptions(selectbox) {
+function removeOptions(selectBox) {
     let i;
-    for(i = selectbox.options.length - 1 ; i >= 0 ; i--)
+    for(i = selectBox.options.length - 1 ; i >= 0 ; i--)
     {
-        selectbox.remove(i);
+        selectBox.remove(i);
     }
-}
-
-function mzOptionArr(name, data, defaultText, keyIndex, valIndex, type, isSort, sortIndex) {
-    const fieldSelector = $('#' + name);
-    fieldSelector.materialSelect({'destroy': true});
-    if (typeof name === 'undefined' || typeof data === 'undefined' || typeof defaultText === 'undefined') {
-        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-    }
-    if (name === '' || typeof data === 'undefined') {
-        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-    }
-    if (typeof isSort === 'undefined') {
-        isSort = true;
-    }
-
-    let optionIndex = 0;
-
-    removeOptions(document.getElementById(name));
-    document.getElementById(name).options[optionIndex++] = new Option(defaultText, "", true, true);
-
-    if (typeof type !== 'undefined' && type === 'required') {
-        document.getElementById(name).options[0].disabled = true;
-    }
-
-    let dataSort = [];
-    $.each(data, function (n, u) {
-        if (typeof u !== 'undefined' && typeof u[keyIndex] !== 'undefined' && typeof u[valIndex] !== 'undefined') {
-            dataSort.push(u);
-        }
-    });
-
-    if (isSort) {
-        if (typeof sortIndex !== 'undefined' && sortIndex !== '') {
-            dataSort.sort(function(a, b){
-                return a[sortIndex].localeCompare(b[sortIndex], 'en', {numeric: true});
-            });
-        } else {
-            dataSort.sort(function(a, b){
-                return a[valIndex].localeCompare(b[valIndex]);
-            });
-        }
-    }
-
-    $.each(dataSort, function (n, u) {
-        if (typeof u !== 'undefined' && typeof u[valIndex] !== 'undefined') {
-            document.getElementById(name).options[optionIndex++] = new Option(u[valIndex], u[keyIndex]);
-        }
-    });
-    fieldSelector.val(null);
-    fieldSelector.materialSelect();
 }
 
 function mzChartOption() {
@@ -1426,54 +1276,56 @@ function mzChartOption() {
     });
 }
 
-function mzSetFieldValue(name, value, type, label) {
-    let selectorOption = $('#opt'+name);
+function mzSetValue(name, value, type, label) {
+    let selector = $('#'+name);
+    let selectorName = $('#'+name);
+    let selectorLabel = $('#lbl' + name.substring(3));
     if (type === 'text') {
-        $('#txt'+name).val('');
-        $('#lbl'+name).removeClass('active');
+        selector.val('');
+        selectorLabel.removeClass('active');
     }
     else if (type === 'textarea') {
-        $('#txa'+name).val('');
-        $('#lbl'+name).removeClass('active');
+        selector.val('');
+        selectorLabel.removeClass('active');
     }
     else if (type === 'select') {
-        selectorOption.materialSelect('destroy');
-        selectorOption.val('');
-        selectorOption.materialSelect();
+        selector.materialSelect('destroy');
+        selector.val('');
+        selector.materialSelect();
     }
     else if (type === 'summernote') {
-        $('#txa'+name).summernote('code', '');
+        selector.summernote('code', '');
     }
 
     if (value !== null && value !== '' && value.length !== 0) {
         if (type === 'text') {
-            $('#txt'+name).val(value);
-            $('#lbl'+name).addClass('active');
+            selector.val(value);
+            selectorLabel.addClass('active');
         }
         else if (type === 'select') {
-            selectorOption.materialSelect('destroy');
-            selectorOption.val(value);
+            selector.materialSelect('destroy');
+            selector.val(value);
             //$('#opt' + name).prevAll('.select-dropdown').children('li:contains('+value+')').trigger('click');
             //$('#lbl'+name).html(label).addClass('active');
-            selectorOption.materialSelect();
+            selector.materialSelect();
         }
         else if (type === 'textarea') {
-            $('#txa'+name).val(value);
-            $('#lbl'+name).addClass('active');
+            selector.val(value);
+            selectorLabel.addClass('active');
         }
         else if (type === 'checkSingle') {
-            $('#chk' + name).prop('checked', value === label);
+            selector.prop('checked', value === label);
         }
         else if (type === 'check') {
             for (let i = 0; i < value.length; i++) {
-                $('#chk'+name+value[i]).prop('checked', true);
+                $('#'+name+value[i]).prop('checked', true);
             }
         }
         else if (type === 'radio') {
-            $('#rad'+name).prop('checked', true);
+            selector.prop('checked', true);
         }
         else if (type === 'radio2') {
-            $('input[name="rad'+name+'"][value="'+value+'"]').prop('checked', true);
+            $('input[name="'+name+'"][value="'+value+'"]').prop('checked', true);
         }
         else if (type === 'date') {
             const dateSplit = value.split("-");
@@ -1483,10 +1335,10 @@ function mzSetFieldValue(name, value, type, label) {
             const day = parseInt(dateSplit[2]);
             const month = parseInt(dateSplit[1])-1;
             const year = parseInt(dateSplit[0]);
-            $('#txt'+name).pickadate('set').set('select', new Date(year, month, day));
+            selector.pickadate('set').set('select', new Date(year, month, day));
         }
         else if (type === 'summernote') {
-            $('#txa'+name).summernote('code', value);
+            selector.summernote('code', value);
         }
     }
 }
@@ -1684,7 +1536,7 @@ function mzOpenPdf (pdfId, pdfTitle, isExternal) {
     setTimeout(function () {
         try {
             const external = typeof isExternal !== 'undefined' && isExternal === true ? 'external/' : '';
-            const pdfSrc = mzAjaxRequest('pdf/'+external+'url/'+pdfId, 'GET');
+            const pdfSrc = mzAjax('pdf/'+external+'url/'+pdfId, 'GET');
             $('#mpdf_title').html('<i class="far fa-file-pdf text-white"></i> &nbsp;'+pdfTitle);
             $('#mpdf_iframe').attr('src', pdfSrc);
             $('#modal_pdf').modal('show');
@@ -1699,7 +1551,7 @@ function mzOpenUpload (uploadId) {
     ShowLoader();
     setTimeout(function () {
         try {
-            const pdfSrc = mzAjaxRequest('pdf/upload/'+uploadId, 'GET');
+            const pdfSrc = mzAjax('pdf/upload/'+uploadId, 'GET');
             $('#mpdf_title').html('<i class="far fa-file-pdf text-white"></i> &nbsp;'+pdfSrc['title']);
             $('#mpdf_iframe').attr('src', pdfSrc['src']);
             $('#modal_pdf').modal('show');

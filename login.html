@@ -135,7 +135,7 @@
                         action: 'activate',
                         activationInput: getVarKey
                     };
-                    mzAjaxRequest('register.php', 'POST', data);
+                    mzAjax('register.php', 'POST', data);
                     toastr['success'](_ALERT_MSG_SUCCESS_ACTIVATE, _ALERT_TITLE_SUCCESS_ACTIVATE);
                 } catch (e) {
                     toastr['error'](e.message, _ALERT_TITLE_ERROR_ACTIVATE);
@@ -182,7 +182,7 @@
                             username: $('#txtLgnUsername').val(),
                             password: $('#txtLgnPassword').val()
                         };
-                        const respLogin = mzAjaxRequest('login', 'POST', data);
+                        const respLogin = mzAjax('login', 'POST', data);
                         sessionStorage.setItem('token', respLogin.token);
 
                         let userInfo = {};
