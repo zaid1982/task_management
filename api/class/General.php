@@ -9,10 +9,8 @@ use \Firebase\JWT\JWT;
 class General {
 
     public int $userId;
+    public string $userFullName;
     public bool $isLogged = false;
-    public int $pdfPageWidth = 180;
-    public float $pdfLineSize = 0.1;
-    public float $pdfLineBoldSize = 0.6;
     public string $auditRemark;
     public string $errMsg;
 

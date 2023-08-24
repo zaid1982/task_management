@@ -1,3 +1,2 @@
-
-.idea/php.xml
-.idea/inspectionProfiles/Project_Default.xml
+/api/vendor
+/.idea
