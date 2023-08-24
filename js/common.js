@@ -173,8 +173,6 @@ function MzValidate(isEnglish) {
             const fieldSelector = type === 'notEmptyCheck' || type === 'notEmptyRadio' || type === 'notEmptyCheckSingle' || type === 'notSimilarRadio' ? $("input[name='"+field_id+"']:checked") : $('#' + field_id);
             const fieldVal = type !== 'notEmptyCheck' && type !== 'notEmptyRadio' && type !== 'notEmptyCheckSingle' ? fieldSelector.val() : '';
             const idVal = typeof val.id !== 'undefined' ? $('#' + val.id).val() : '';
-            const dateFrom = typeof val.id !== 'undefined' ? $('#' + val.dateFromId).val() : '';
-            const dateTo = typeof val.id !== 'undefined' ? $('#' + val.dateToId).val() : '';
             switch (type) {
                 case 'notEmpty':
                     if (val === true && (fieldVal === '' || fieldVal === null))
@@ -272,13 +270,18 @@ function MzValidate(isEnglish) {
                     if (val !== '' && fieldVal !== '' && idVal !== '' && fieldVal < idVal)
                         return false;
                     break;
-                case 'timeDateLower':
-                    if (val !== '' && fieldVal !== '' && idVal !== '' && dateFrom === dateTo && fieldVal > idVal)
-                        return false;
-                    break;
-                case 'timeDateHigher':
-                    if (val !== '' && fieldVal !== '' && idVal !== '' && dateFrom === dateTo && fieldVal < idVal)
-                        return false;
+                case 'inList':
+                    if (val !== '' && fieldVal !== '' && Array.isArray(val)) {
+                        let isValid = false;
+                        for (let i=0; i<val.length; i++) {
+                            if (val[i] === fieldVal) {
+                                isValid = true;
+                                break;
+                            }
+                        }
+                        if (!isValid)
+                            return false;
+                    }
                     break;
             }
             return true;
@@ -391,11 +394,8 @@ function MzValidate(isEnglish) {
                         case 'higher':
                             msg += isEnglish ?  '<br>' + name + ' must higher than ' + u2.label : '<br>' + name + ' mestilah kurang dari ' + u2.label;
                             break;
-                        case 'timeDateLower':
-                            msg += isEnglish ?  '<br>' + name + ' must lower than ' + u2.label : '<br>' + name + ' mestilah melebihi ' + u2.label;
-                            break;
-                        case 'timeDateHigher':
-                            msg += isEnglish ?  '<br>' + name + ' must higher than ' + u2.label : '<br>' + name + ' mestilah kurang dari ' + u2.label;
+                        case 'inList':
+                            msg += isEnglish ?  '<br>' + name + ' is not in list' : '<br>' + name + ' tiada dalam senarai';
                             break;
                     }
                 } else {
@@ -453,11 +453,19 @@ function MzValidate(isEnglish) {
                 fieldSelector.removeClass('invalid');
             }
             fieldErrSelector.html('');
-            fieldSelector.on('keyup change', function () {
-                if (u.enabled) {
-                    validateFields(u.field_id, u.validator, u.name, u.type);
-                }
-            });
+            if (u.focus){
+                fieldSelector.on('keyup blur', function () {
+                    if (u.enabled) {
+                        validateFields(u.field_id, u.validator, u.name, u.type);
+                    }
+                });
+            } else {
+                fieldSelector.on('keyup change', function () {
+                    if (u.enabled) {
+                        validateFields(u.field_id, u.validator, u.name, u.type);
+                    }
+                });
+            }
             u.enabled = true;
             arrFields.push(u);
         });
@@ -959,9 +967,9 @@ function mzDateEnable(dateId, dateStr) {
 
 function mzConvertDate(dateInput) {
     if (typeof dateInput === 'undefined' || dateInput === '') {
-        return '';
+        return null;
     }
-    let dateNew = '';
+    let dateNew = null;
     const dateSplit = dateInput.split(" ");
     if (dateSplit.length === 3) {
         let day = dateSplit[0];
@@ -1588,10 +1596,26 @@ function mzDisplayImageFileInput(input, targetId) {
     }
 }
 
-function mzIntNull (data) {
+function mzChkVal (fieldName) {
+    let returnVal = '';
+    $("input[name='"+fieldName+"[]']:checked").map(function(){
+        returnVal += ','+$(this).val();
+    });
+    returnVal = returnVal.substring(1);
+    return returnVal;
+}
+
+function mzNullInt (data) {
     const returnVal = parseInt(data);
     if (isNaN(returnVal)) {
         return null;
     }
     return returnVal;
+}
+
+function mzNullString (data) {
+    if (data === '') {
+        return null;
+    }
+    return data;
 }

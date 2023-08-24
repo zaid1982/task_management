@@ -1748,7 +1748,7 @@ a.text-light:hover, a.text-light:focus {
   color: #c7c7c7 !important; }
 
 .font-small {
-  font-size: 0.8rem; }
+  font-size: 0.9rem; }
 
 .view {
   position: relative;
@@ -16191,9 +16191,9 @@ button.md-toast-close-button {
 .mdb-skin .md-outline input[type=search-md]:focus:not([readonly]),
 .mdb-skin .md-outline input[type=search]:focus:not([readonly]),
 .mdb-skin .md-outline textarea:focus:not([readonly]) {
-  border-color: #33b5e5;
-  -webkit-box-shadow: inset 0px 0px 0px 1px #33b5e5;
-  box-shadow: inset 0px 0px 0px 1px #33b5e5; }
+  border-color: #33b5e5!important;
+  -webkit-box-shadow: inset 0px 0px 0px 1px #33b5e5!important;
+  box-shadow: inset 0px 0px 0px 1px #33b5e5!important; }
   .mdb-skin .md-outline input[type=text]:focus:not([readonly]) + label,
   .mdb-skin .md-outline input[type=password]:focus:not([readonly]) + label,
   .mdb-skin .md-outline input[type=email]:focus:not([readonly]) + label,
@@ -16206,7 +16206,7 @@ button.md-toast-close-button {
   .mdb-skin .md-outline input[type=search-md]:focus:not([readonly]) + label,
   .mdb-skin .md-outline input[type=search]:focus:not([readonly]) + label,
   .mdb-skin .md-outline textarea:focus:not([readonly]) + label {
-    color: #33b5e5; }
+    color: #33b5e5!important; }
 
 .mdb-skin .md-bg input[type=text],
 .mdb-skin .md-bg input[type=password],

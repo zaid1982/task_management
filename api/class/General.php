@@ -201,24 +201,26 @@ class General {
      * @param array $inputArr
      * @param array $indexArr
      * @param bool $isAlert
+     * @param array $errorArr
      * @return void
      * @throws Exception
      */
-    public function checkMandatoryArray (array $inputArr, array $indexArr, bool $isAlert=false): void {
+    public function checkMandatoryArray (array $inputArr, array $indexArr, bool $isAlert=false, array $errorArr=array()): void {
         try {
             //$this->logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering '.__FUNCTION__);
             $this->checkEmptyArray($inputArr, 'inputArr');
             $this->checkEmptyArray($indexArr, 'indexArr');
             $throwCode = $isAlert ? 31 : 30;
-            foreach ($indexArr as $index) {
+            foreach ($indexArr as $i=>$index) {
+                $errFieldName = $isAlert ? $errorArr[$i] : $index;
                 if (!array_key_exists($index, $inputArr)) {
-                    throw new Exception('Index '.$index.' not exist');
+                    throw new Exception('Index '.$errFieldName.' not exist');
                 }
                 $param = $inputArr[$index];
                 if (is_null($param) || $param === '') {
-                    throw new Exception('[' . __LINE__ . '] - Parameter '.$index.' empty', $throwCode);
+                    throw new Exception('[' . __LINE__ . '] - Parameter '.$errFieldName.' empty', $throwCode);
                 } else if (gettype($param) === 'integer' && $param === 0) {
-                    throw new Exception('[' . __LINE__ . '] - Integer '.$index.' 0', $throwCode);
+                    throw new Exception('[' . __LINE__ . '] - Integer '.$errFieldName.' 0', $throwCode);
                 }
             }
         } catch(Exception $ex) {

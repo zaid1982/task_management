@@ -23,6 +23,10 @@
 .ml-4_5 {
     margin-left: 40px !important;
 }
+.margin1 {
+    margin-top: 0 !important;
+    margin-bottom: 1.2rem !important;
+}
 .th-strong th {
     font-weight: 900 !important;
 }

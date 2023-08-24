@@ -35,4 +35,7 @@ class Constant {
         'resetPassword' => 'Password successfully reset and email will be send to user!'
     );
 
+    public static array $task = array(
+        'create' => 'Task successfully added!'
+    );
 }

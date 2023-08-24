@@ -22,13 +22,14 @@ try {
     $urlArr = $fnMain->getUrlArr($_SERVER['REQUEST_URI'], $apiName);
 
     if ('POST' === $requestMethod) {
+        if (isset($urlArr[1])) {
+            throw new Exception('[line: ' . __LINE__ . '] - Wrong POST Request');
+        }
+        $bodyParams = json_decode(file_get_contents("php://input"), true);
         DbMysql::beginTransaction();
         $isTransaction = true;
-        $bodyParams = json_decode(file_get_contents("php://input"), true);
-        if (!isset($urlArr[1])) {
-            $result = $fnMain->checkLogin($bodyParams['username'], $bodyParams['password']);
-            $fnMain->saveAudit(1, $bodyParams['username']);
-        }
+        $result = $fnMain->checkLogin($bodyParams['username'], $bodyParams['password']);
+        $fnMain->saveAudit(1, $bodyParams['username']);
         DbMysql::commit();
         $formData['result'] = $result;
         $formData['success'] = true;

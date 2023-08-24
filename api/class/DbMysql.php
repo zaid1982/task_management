@@ -311,7 +311,7 @@ class DbMysql {
                 $index = self::convertToDbString($columnIndex);
                 if ($columnValue === '++') {
                     $setString .= "$index = $index + 1, ";
-                } else if (substr($columnValue, 0, 1) === '|') {
+                } else if (str_starts_with($columnValue, '|')) {
                     $setString.= "$index = ".substr($columnValue, 1).", ";
                 } else if ($columnValue === 'NOW()' || $columnValue === 'CURDATE()') {
                     $setString .= "$index = $columnValue, ";
@@ -341,7 +341,7 @@ class DbMysql {
                     continue;
                 } else if ($columnValue === '' || $columnValue === 'NULL' || $columnValue === null) {
                     $preparedValues[] = null;
-                } else if (substr($columnValue, 0, 1) === '|') {
+                } else if (str_starts_with($columnValue, '|')) {
                     continue;
                 } else if (gettype($columnValue) === 'integer' && $columnValue === 0) {
                     $preparedValues[] = null;
@@ -395,7 +395,7 @@ class DbMysql {
                     $insertValues[] = '?';
                 } else if ($columnValue === 'NOW()' || $columnValue === 'CURDATE()') {
                     $insertValues[] = $columnValue;
-                } else if (substr($columnValue, 0, 1) === '|') {
+                } else if (str_starts_with($columnValue, '|')) {
                     $insertValues[] = substr($columnValue, 1);
                 } else {
                     $insertValues[] = '?';
@@ -425,7 +425,7 @@ class DbMysql {
                     $insertValues[] = null;
                 } else if ($columnValue === 'NOW()' || $columnValue === 'CURDATE()') {
                     continue;
-                } else if (substr($columnValue, 0, 1) === '|') {
+                } else if (str_starts_with($columnValue, '|')) {
                     continue;
                 } else {
                     $insertValues[] = addslashes($columnValue);

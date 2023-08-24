@@ -9,8 +9,20 @@ function ModalTaskEdit () {
     let refSpace;
     let refFolder;
     let refMainTask = [];
+    let submitType = '';
     const todayDate = moment().format('YYYY-MM-DD');
     const yesterdayDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
+    const refTimeEstimate = ['10 minutes', '15 minutes', '20 minutes', '30 minutes', '40 minutes', '50 minutes',
+        '1 hour', '1 hour 15 minutes', '1 hour 30 minutes', '1 hour 45 minutes', '2 hours', '2 hours 30 minutes', '3 hours', '4 hours', '5 hours', '6 hours'];
+
+    let refTime = [];
+    for (let i = 0; i < 24; i++) {
+        const hour = i < 10 ? '0' + i : i.toString();
+        refTime.push(hour+':00');
+        refTime.push(hour+':15');
+        refTime.push(hour+':30');
+        refTime.push(hour+':45');
+    }
 
     let vData = [
         {
@@ -83,30 +95,6 @@ function ModalTaskEdit () {
             type: 'date',
             name: 'Due Date',
             validator: {
-                notEmpty: true
-            }
-        },
-        {
-            field_id: 'optMteTimeEstimate',
-            type: 'select',
-            name: 'Time Estimate',
-            validator: {
-                notEmpty: false
-            }
-        },
-        {
-            field_id: 'txtMteStartDate',
-            type: 'date',
-            name: 'Start Date',
-            validator: {
-                notEmpty: false
-            }
-        },
-        {
-            field_id: 'optMteStartTime',
-            type: 'select',
-            name: 'Start Time',
-            validator: {
                 notEmpty: false
             }
         },
@@ -118,6 +106,34 @@ function ModalTaskEdit () {
                 notEmpty: false,
                 numeric: true,
                 min: 0
+            }
+        },
+        {
+            field_id: 'txtMteTimeEstimate',
+            type: 'text',
+            focus: true,
+            name: 'Time Estimate',
+            validator: {
+                notEmpty: false,
+                inList: refTimeEstimate
+            }
+        },
+        {
+            field_id: 'txtMteStartDate',
+            type: 'date',
+            name: 'Start Date',
+            validator: {
+                notEmpty: false
+            }
+        },
+        {
+            field_id: 'txtMteStartTime',
+            type: 'text',
+            focus: true,
+            name: 'Start Time',
+            validator: {
+                notEmpty: false,
+                inList: refTime
             }
         },
         {
@@ -139,12 +155,13 @@ function ModalTaskEdit () {
         }
     ];
 
+
     this.init = function () {
         mzOption('optMteSpace', refSpace, 'spaceName', {statusId: 1}, true);
         mzOption('optMteStatus', refStatus, 'statusName', {id: '(3,4,5,7)'}, true);
         self.setOptionAssignee();
-        self.setOptionTimeEstimate();
-        self.setOptionStartTime();
+        $('#txtMteTimeEstimate').mdbAutocomplete({ data: refTimeEstimate });
+        $('#txtMteStartTime').mdbAutocomplete({ data: refTime });
         refMainTask = mzAjax('task/ref/mainTask', 'GET');
         formValidate = new MzValidate();
 
@@ -176,6 +193,7 @@ function ModalTaskEdit () {
             try {
                 if (isMain === 'Sub') {
                     $('#optMteMainTask_').show();
+                    $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
                     formValidate.enableField('optMteMainTask');
                     const folderId = parseInt($('#optMteFolder').val());
                     if (!isNaN(folderId)) {
@@ -183,9 +201,12 @@ function ModalTaskEdit () {
                     } else {
                         mzOptionStopClear('optMteMainTask', true);
                     }
+                } else if (isMain === 'Main') {
+                    $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').hide();
                 } else {
                     mzOptionStopClear('optMteMainTask', true);
                     formValidate.disableField('optMteMainTask');
+                    $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
                     $('#optMteMainTask_').hide();
                 }
             } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
@@ -196,7 +217,40 @@ function ModalTaskEdit () {
                 toastr['error'](_ALERT_MSG_VALIDATION, _ALERT_TITLE_ERROR);
             } else {
                 ShowLoader(); setTimeout(function () { try {
-                    alert(0);
+                    const dueDate = mzConvertDate($('#txtMteDueDate').val());
+                    const isMain = $("input[name='radMteIsMain']:checked").val();
+                    let data = {
+                        taskName: $('#txtMteTaskName').val(),
+                        folderId: mzNullInt($('#optMteFolder').val()),
+                        taskAssignee: mzNullInt($('#optMteAssignee').val()),
+                        taskTags: mzChkVal('chkMteTags'),
+                        taskPriority: $("input[name='radMtePriority']:checked").val(),
+                        isMain: isMain,
+                        taskMainId: mzNullInt($('#optMteMainTask').val()),
+                        taskDateDue: dueDate,
+                        taskAmount: mzNullString($('#txtMteAmount').val()),
+                        timeEstimate: mzNullString($('#txtMteTimeEstimate').val()),
+                        startDate: mzConvertDate($('#txtMteStartDate').val()),
+                        startTime: mzNullString($('#txtMteStartTime').val()),
+                        taskDescription: mzNullString($('#txaMteRemark').val())
+                    };
+                    if (submitType === 'add') {
+                        console.log(data);
+                        mzAjax('task', 'POST', data);
+                        if (dueDate === null) {
+                            classFrom.genTableUnscheduled();
+                        } else if (dueDate === todayDate) {
+                            classFrom.genTableToday();
+                        } else if (dueDate === yesterdayDate) {
+                            classFrom.genTableOverdue();
+                        } else {
+                            classFrom.genTableFuture();
+                        }
+                        if (isMain === 'Main') {
+                            refMainTask = mzAjax('task/ref/mainTask', 'GET');
+                        }
+                    }
+                    $('#modalTaskEdit').modal('hide');
                 } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
             }
         });
@@ -208,6 +262,7 @@ function ModalTaskEdit () {
             formValidate.registerFields(vData);
             formValidate.disableField('optMteMainTask');
             formValidate.disableField('optMteStatus');
+            mzSetMinDate('txtMteDueDate', yesterdayDate);
             mzSetMinDate('txtMteStartDate', yesterdayDate);
             $('#optMteFolder_').hide();
             $('#optMteMainTask_').hide();
@@ -215,7 +270,8 @@ function ModalTaskEdit () {
             mzSetValue('optMteAssignee', mzGetUserId(), 'select');
             mzSetValue('radMtePriority', 'Normal', 'radio2');
             mzSetValue('radMteIsMain', 'Normal', 'radio2');
-            mzSetValue('txtMteDueDate', todayDate, 'date');
+            $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
+            submitType = 'add';
             $('#modalTaskEdit').modal({backdrop: 'static', keyboard: false}).scrollTop(0);
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
     };
@@ -227,48 +283,6 @@ function ModalTaskEdit () {
             $.each(refUser, function (n, u) {
                 $('#optMteAssignee').append('<option value="'+n+'" data-icon="api/'+u['profileImage']+'" class="rounded-circle">'+u['userFullName']+'</option>');
             });
-        } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
-    }
-
-    this.setOptionTimeEstimate = function () {
-        try {
-            document.getElementById('optMteTimeEstimate').options[0] = new Option('Choose option', "", true, true);
-            let selector = $('#optMteTimeEstimate');
-            selector.append('<option value="00:10">10 minutes</option>');
-            selector.append('<option value="00:15">15 minutes</option>');
-            selector.append('<option value="00:20">20 minutes</option>');
-            selector.append('<option value="00:30">30 minutes</option>');
-            selector.append('<option value="00:40">40 minutes</option>');
-            selector.append('<option value="00:45">45 minutes</option>');
-            selector.append('<option value="01:00">1 hour</option>');
-            selector.append('<option value="01:15">1 hour 15 min</option>');
-            selector.append('<option value="01:30">1 hour 30 min</option>');
-            selector.append('<option value="02:00">2 hours</option>');
-            selector.append('<option value="02:30">2 hours 30 min</option>');
-            selector.append('<option value="03:00">3 hours</option>');
-            selector.append('<option value="04:00">4 hours</option>');
-            selector.append('<option value="05:00">5 hours</option>');
-            selector.append('<option value="06:00">6 hours</option>');
-            selector.append('<option value="07:00">7 hours</option>');
-            selector.append('<option value="08:00">8 hours</option>');
-            selector.append('<option value="09:00">9 hours</option>');
-            selector.append('<option value="10:00">10 hours</option>');
-            selector.append('<option value="11:00">11 hours</option>');
-            selector.append('<option value="12:00">12 hours</option>');
-        } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
-    }
-
-    this.setOptionStartTime = function () {
-        try {
-            document.getElementById('optMteStartTime').options[0] = new Option('Choose option', "", true, true);
-            let selector = $('#optMteStartTime');
-            for (let i = 0; i < 24; i++) {
-                const hour = i < 10 ? '0' + i : i.toString();
-                selector.append('<option value="'+hour+':00">'+hour+':00</option>');
-                selector.append('<option value="'+hour+':15">'+hour+':15</option>');
-                selector.append('<option value="'+hour+':30">'+hour+':30</option>');
-                selector.append('<option value="'+hour+':45">'+hour+':45</option>');
-            }
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
     }
 

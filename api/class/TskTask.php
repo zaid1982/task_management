@@ -153,4 +153,57 @@ class TskTask extends General {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }
     }
+
+    /**
+     * @param array $inputParams
+     * @return int
+     * @throws Exception
+     */
+    public function insert (array $inputParams): int {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($this->userId, 'userId');
+            $params = parent::arraySpliceAssoc($inputParams, array('taskName', 'folderId', 'taskAssignee', 'taskTags', 'taskPriority', 'taskMainId', 'taskDateDue', 'taskAmount', 'taskDescription'));
+            parent::checkMandatoryArray($params, array('taskName', 'folderId', 'taskAssignee', 'taskTags', 'taskPriority'), true,
+                array('Task Name', 'Folder', 'Assignee', 'Tags', 'Priority'));
+            $params['taskCreatedBy'] = $this->userId;
+            if ($inputParams['isMain'] === 'Main') {
+                $params['taskIsMain'] = 1;
+            } else  {
+                if ($inputParams['isMain'] === 'Sub') {
+                    parent::checkMandatoryArray($params, array('taskMainId'), true, array('Main Task'));
+                }
+                if ($inputParams['timeEstimate'] !== null) {
+                    $timeEstimate = $inputParams['timeEstimate'];
+                    if (substr($timeEstimate, 2) === ' minutes') {
+                        $params['taskTimeEstimate'] = '00:'.substr($timeEstimate, 0, 2).':00';
+                    } else if (substr($timeEstimate, 1) === ' hours') {
+                        $params['taskTimeEstimate'] = '0'.substr($timeEstimate, 0, 1).':00:00';
+                    } else if ($timeEstimate === '1 hour') {
+                        $params['taskTimeEstimate'] = '01:00:00';
+                    } else if ($timeEstimate === '1 hour 15 minutes') {
+                        $params['taskTimeEstimate'] = '01:15:00';
+                    } else if ($timeEstimate === '1 hour 30 minutes') {
+                        $params['taskTimeEstimate'] = '01:30:00';
+                    } else if ($timeEstimate === '1 hour 45 minutes') {
+                        $params['taskTimeEstimate'] = '01:45:00';
+                    } else if ($timeEstimate === '2 hours 30 minutes') {
+                        $params['taskTimeEstimate'] = '02:30:00';
+                    }
+                }
+                if ($inputParams['startDate'] !== null) {
+                    $params['taskDateStart'] = $inputParams['startDate'].($inputParams['startTime'] !== null ? ' '.$inputParams['startTime'].':00' : '');
+                    if ($inputParams['timeEstimate'] !== null) {
+                        $params['taskDateEnd'] = "|ADDTIME('".$params['taskDateStart']."', '".$params['taskTimeEstimate']."')";
+                    }
+                }
+                if ($inputParams['isMain'] === 'Sub' && isset($params['taskTimeEstimate'])) {
+                    DbMysql::update($this::$tableName, array('taskTimeEstimate'=>"|IF(ISNULL(task_time_estimate), '".$params['taskTimeEstimate']."', ADDTIME(task_time_estimate, '".$params['taskTimeEstimate']."'))"), array('taskId'=>$params['taskMainId']));
+                }
+            }
+            return DbMysql::insert($this::$tableName, $params);
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
 }

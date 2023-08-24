@@ -37,6 +37,19 @@ try {
         }
         $formData['result'] = $result;
         $formData['success'] = true;
+    }
+    else if ('POST' === $requestMethod) {
+        if (isset($urlArr[1])) {
+            throw new Exception('[line: ' . __LINE__ . '] - Wrong POST Request');
+        }
+        $bodyParams = json_decode(file_get_contents("php://input"), true);
+        DbMysql::beginTransaction();
+        $isTransaction = true;
+        $taskId = $fnMain->insert($bodyParams);
+        $fnMain->saveAudit(3, 'taskId = '.$taskId);
+        DbMysql::commit();
+        $formData['errmsg'] = Constant::$task['create'];
+        $formData['success'] = true;
     } else {
         throw new Exception('[line: ' . __LINE__ . '] - Wrong Request Method');
     }
