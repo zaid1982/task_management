@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
         <div class="modal-content">
             <div class="modal-header pb-2">
-                <h4 class="modal-title w-100 white-text" id="myModalLabel"><i class="fa-solid fa-calendar-plus mr-2"></i>Add New Task</h4>
+                <h4 class="modal-title w-100 white-text" id="lblMteTitle"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="white-text">&times;</span>
                 </button>
@@ -11,24 +11,24 @@
                 <form id="formMte" autocomplete="off">
                     <div class="row">
                         <div class="col-12">
-                            <div class="md-form md-outline margin1">
+                            <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMteTaskName" class="form-control">
                                 <label for="txtMteTaskName" id="lblMteTaskName">Task Name *</label>
                                 <p class="font-small text-danger" id="txtMteTaskNameErr"></p>
                             </div>
                         </div>
-                        <div class="col-12 select-outline" id="optMteSpace_">
-                            <select id="optMteSpace" class="mdb-select md-form md-outline colorful-select margin1"></select>
+                        <div class="col-12 select-outline my-s" id="optMteSpace_">
+                            <select id="optMteSpace" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteSpace" id="lblMteSpace">Space *</label>
                             <p class="font-small text-danger" id="optMteSpaceErr"></p>
                         </div>
-                        <div class="col-12 select-outline" id="optMteFolder_">
-                            <select id="optMteFolder" class="mdb-select md-form md-outline colorful-select margin1"></select>
+                        <div class="col-12 select-outline my-s" id="optMteFolder_">
+                            <select id="optMteFolder" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteFolder" id="lblMteFolder">Folder *</label>
                             <p class="font-small text-danger" id="optMteFolderErr"></p>
                         </div>
-                        <div class="col-12 select-outline" id="optMteAssignee_">
-                            <select id="optMteAssignee" class="mdb-select md-form md-outline colorful-select margin1"></select>
+                        <div class="col-12 select-outline my-s" id="optMteAssignee_">
+                            <select id="optMteAssignee" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteAssignee" id="lblMteAssignee">Assignee *</label>
                             <p class="font-small text-danger" id="optMteAssigneeErr"></p>
                         </div>
@@ -113,66 +113,66 @@
                             <div class="mt-0 ml-1 pt-1">
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="radMteIsMain" id="radMteIsMain1" value="Normal">
-                                    <label class="form-check-label" for="radMteIsMain1">Normal</label>
+                                    <label class="form-check-label" for="radMteIsMain1" id="lblMteIsMain1">Normal</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="radMteIsMain" id="radMteIsMain2" value="Main">
-                                    <label class="form-check-label" for="radMteIsMain2">Main</label>
+                                    <label class="form-check-label" for="radMteIsMain2" id="lblMteIsMain2">Main</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="radMteIsMain" id="radMteIsMain3" value="Sub">
-                                    <label class="form-check-label" for="radMteIsMain3">Sub</label>
+                                    <label class="form-check-label" for="radMteIsMain3" id="lblMteIsMain3">Sub</label>
                                 </div>
                             </div>
                             <p class="font-small text-danger mt-0" id="radMteIsMainErr"></p>
                         </div>
-                        <div class="col-12 select-outline" id="optMteMainTask_">
-                            <select id="optMteMainTask" class="mdb-select md-form md-outline colorful-select margin1"></select>
+                        <div class="col-12 select-outline my-s" id="optMteMainTask_">
+                            <select id="optMteMainTask" class="mdb-select md-form md-outline colorful-select my-0"></select>
                             <label for="optMteMainTask" id="lblMteMainTask">Main Task *</label>
                             <p class="font-small text-danger" id="optMteMainTaskErr"></p>
                         </div>
                         <div class="col-6 pr-0">
-                            <div class="md-form md-outline margin1">
+                            <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMteDueDate" class="form-control datepicker" readonly>
                                 <label for="txtMteDueDate" id="lblMteDueDate">Due Date</label>
                                 <p class="font-small text-danger" id="txtMteDueDateErr"></p>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="md-form md-outline margin1">
+                            <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMteAmount" class="form-control">
                                 <label for="txtMteAmount" id="lblMteAmount">Amount (RM)</label>
                                 <p class="font-small text-danger" id="txtMteAmountErr"></p>
                             </div>
                         </div>
                         <div class="col-12" id="txtMteTimeEstimate_">
-                            <div class="md-form md-outline margin1">
+                            <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMteTimeEstimate" class="form-control mdb-autocomplete">
                                 <label for="txtMteTimeEstimate" id="lblMteTimeEstimate">Time Estimate</label>
                                 <p class="font-small text-danger" id="txtMteTimeEstimateErr"></p>
                             </div>
                         </div>
                         <div class="col-md-6 pr-0" id="txtMteStartDate_">
-                            <div class="md-form md-outline margin1">
+                            <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMteStartDate" class="form-control datepicker" readonly>
                                 <label for="txtMteStartDate" id="lblMteStartDate">Start Date</label>
                                 <p class="font-small text-danger" id="txtMteStartDateErr"></p>
                             </div>
                         </div>
                         <div class="col-md-6" id="txtMteStartTime_">
-                            <div class="md-form md-outline margin1">
+                            <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMteStartTime" class="form-control mdb-autocomplete">
                                 <label for="txtMteStartTime" id="lblMteStartTime">Start Time</label>
                                 <p class="font-small text-danger" id="txtMteStartTimeErr"></p>
                             </div>
                         </div>
                         <div class="col-12 select-outline" id="optMteStatus_">
-                            <select id="optMteStatus" class="mdb-select md-form md-outline colorful-select margin1"></select>
+                            <select id="optMteStatus" class="mdb-select md-form md-outline colorful-select my-a"></select>
                             <label for="optMteStatus" id="lblMteStatus">Status *</label>
                             <p class="font-small text-danger" id="optMteStatusErr"></p>
                         </div>
                         <div class="col-12">
-                            <div class="md-form md-outline margin1">
+                            <div class="md-form md-outline my-a">
                                 <textarea id="txaMteRemark" class="md-textarea form-control" rows="3"></textarea>
                                 <label for="txaMteRemark" id="lblMteRemark" class="text-muted">Remark</label>
                                 <p class="font-small text-danger" id="txaMteRemarkErr"></p>

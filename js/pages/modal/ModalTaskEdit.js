@@ -4,6 +4,7 @@ function ModalTaskEdit () {
     let self = this;
     let classFrom;
     let formValidate;
+    let taskId;
     let refStatus;
     let refUser;
     let refSpace;
@@ -262,16 +263,44 @@ function ModalTaskEdit () {
             formValidate.registerFields(vData);
             formValidate.disableField('optMteMainTask');
             formValidate.disableField('optMteStatus');
+            $('#optMteFolder_, #optMteMainTask_, #optMteStatus_').hide();
+            $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
+            mzDisableSelect('optMteSpace', false);
+            mzDisableSelect('optMteFolder', false);
+            mzDisableSelect('optMteMainTask', false);
+            self.enableRadIsMain();
             mzSetMinDate('txtMteDueDate', yesterdayDate);
             mzSetMinDate('txtMteStartDate', yesterdayDate);
-            $('#optMteFolder_').hide();
-            $('#optMteMainTask_').hide();
-            $('#optMteStatus_').hide();
             mzSetValue('optMteAssignee', mzGetUserId(), 'select');
             mzSetValue('radMtePriority', 'Normal', 'radio2');
             mzSetValue('radMteIsMain', 'Normal', 'radio2');
-            $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
             submitType = 'add';
+            $('#lblMteTitle').html('<i class="fa-solid fa-calendar-plus mr-2"></i>Add New Task');
+            $('#modalTaskEdit').modal({backdrop: 'static', keyboard: false}).scrollTop(0);
+        } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
+    };
+
+    this.edit = function (_taskId) {
+        ShowLoader(); setTimeout(function () { try {
+            mzEmptyParams([_taskId]);
+            taskId = _taskId;
+            formValidate.clearValidation();
+            formValidate.registerFields(vData);
+            formValidate.disableField('optMteMainTask');
+            formValidate.enableField('optMteStatus');
+            $('#optMteFolder_, #optMteStatus_, #txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
+            $('#optMteMainTask_').hide();
+            mzDisableSelect('optMteSpace', true);
+            mzDisableSelect('optMteFolder', true);
+            mzDisableSelect('optMteMainTask', true);
+            mzSetMinDate('txtMteDueDate', yesterdayDate);
+            mzSetMinDate('txtMteStartDate', yesterdayDate);
+            //const task = mzAjax('task/'+taskId, 'GET');
+            // if main task, hide estimate amd start
+            mzSetValue('radMteIsMain', 'Normal', 'radio2');
+            self.disableRadIsMain('Normal');
+            submitType = 'edit';
+            $('#lblMteTitle').html('<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Task');
             $('#modalTaskEdit').modal({backdrop: 'static', keyboard: false}).scrollTop(0);
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
     };
@@ -283,6 +312,32 @@ function ModalTaskEdit () {
             $.each(refUser, function (n, u) {
                 $('#optMteAssignee').append('<option value="'+n+'" data-icon="api/'+u['profileImage']+'" class="rounded-circle">'+u['userFullName']+'</option>');
             });
+        } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
+    }
+
+    this.enableRadIsMain = function () {
+        try {
+            $('#lblMteIsMain1').removeClass('disabled md-disabled');
+            $('#lblMteIsMain2').removeClass('disabled md-disabled');
+            $('#lblMteIsMain3').removeClass('disabled md-disabled');
+        } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
+    }
+
+    this.disableRadIsMain = function (value) {
+        try {
+            const selectorLbl1 = $('#lblMteIsMain1');
+            const selectorLbl2 = $('#lblMteIsMain2');
+            const selectorLbl3 = $('#lblMteIsMain3');
+            selectorLbl1.addClass('disabled');
+            selectorLbl2.addClass('disabled');
+            selectorLbl3.addClass('disabled');
+            if (value === 'Normal') {
+                selectorLbl1.addClass('md-disabled');
+            } else if (value === 'Main') {
+                selectorLbl2.addClass('md-disabled');
+            } else if (value === 'Sub') {
+                selectorLbl3.addClass('md-disabled');
+            }
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
     }
 

@@ -1438,7 +1438,7 @@ function mzDisableSelect(fieldId, disable) {
     selector.materialSelect();
 }
 
-function mzCheckFuncParam (arrParam) {
+function mzEmptyParams (arrParam) {
     for (let i=0; i<arrParam.length; i++) {
         if (typeof arrParam[i] === 'undefined' || arrParam[i] === '') {
             throw new Error(_ALERT_MSG_ERROR_DEFAULT);

@@ -96,6 +96,15 @@ function ListAll() {
                         self.genTableToday();
                     } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
                 });
+                $('.lnkLllTodayEdit').off('click').on('click', function () {
+                    const linkId = $(this).attr('id');
+                    const linkIndex = linkId.indexOf('_');
+                    if (linkIndex > 0) {
+                        const rowId = linkId.substring(linkIndex+1);
+                        const currentRow = dtLllToday.row(parseInt(rowId)).data();
+                        modalTaskEdit.edit(currentRow['taskId']);
+                    }
+                });
             },
             aoColumns: [
                 { mData: null},

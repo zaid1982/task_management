@@ -23,9 +23,13 @@
 .ml-4_5 {
     margin-left: 40px !important;
 }
-.margin1 {
+.my-a {
     margin-top: 0 !important;
     margin-bottom: 1.2rem !important;
+}
+.my-s {
+    margin-top: 0 !important;
+    margin-bottom: 0.2rem !important;
 }
 .th-strong th {
     font-weight: 900 !important;
