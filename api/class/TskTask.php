@@ -119,6 +119,41 @@ class TskTask extends General {
     }
 
     /**
+     * @param int $taskId
+     * @return array
+     * @throws Exception
+     */
+    public function getEdit (int $taskId): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            $tskTask = DbMysql::select($this::$tableName, array('taskId'=>$taskId), 1);
+            $returnArr = parent::arraySpliceAssoc($tskTask, array('taskId', 'taskName', 'folderId', 'taskAssignee', 'taskPriority', 'taskMainId', 'taskDateDue', 'taskAmount', 'taskDescription', 'statusId'));
+            $returnArr['tags'] = $this->getTagsArr($tskTask['taskTags']);
+            $returnArr['isMain'] = 'Normal';
+            $returnArr['timeEstimate'] = null;
+            $returnArr['startDate'] = null;
+            $returnArr['startTime'] = null;
+            if ($tskTask['taskIsMain'] === 1) {
+                $returnArr['isMain'] = 'Main';
+            } else if ($tskTask['taskMainId'] !== null) {
+                $returnArr['isMain'] = 'Sub';
+            }
+            if ($tskTask['taskIsMain'] !== 1 && $tskTask['taskTimeEstimate'] !== null) {
+                $returnArr['timeEstimate'] = $this->getTimeEstimateDisplay($tskTask['taskTimeEstimate']);
+                $returnArr['timeEstimateInList'] = $this->getIsTimeEstimateInList($returnArr['timeEstimate']);
+            }
+            if ($tskTask['taskDateStart'] !== null) {
+                $returnArr['startDate'] = substr($tskTask['taskDateStart'], 0, 10);
+                $returnArr['startTime'] = substr($tskTask['taskDateStart'], 11, 5);
+            }
+            return $returnArr;
+        } catch (Exception|Throwable $ex) {
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
      * @return array
      * @throws Exception
      */
@@ -202,6 +237,78 @@ class TskTask extends General {
                 }
             }
             return DbMysql::insert($this::$tableName, $params);
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param string $timeEstimate
+     * @return string|null
+     * @throws Exception
+     */
+    private function getTimeEstimateDisplay (string $timeEstimate): string|null {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyString($timeEstimate, 'timeEstimate');
+            $partials = explode(':', $timeEstimate);
+            if (count($partials) !== 3) {
+                return null;
+            }
+            $returnVal = '';
+            if ($partials[0] === '01') {
+                $returnVal = '1 hour ';
+            } else if ($partials[0] !== '00') {
+                $returnVal = intval($partials[0]).' hours';
+            }
+            if ($partials[1] !== '00') {
+                $returnVal .= $partials[1].' minutes';
+            }
+            return $returnVal;
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param string|null $timeEstimateDisplay
+     * @return bool
+     * @throws Exception
+     */
+    private function getIsTimeEstimateInList (string|null $timeEstimateDisplay): bool {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            if ($timeEstimateDisplay === null) {
+                return false;
+            }
+            parent::checkEmptyString($timeEstimateDisplay, 'timeEstimate');
+            $timeDisplayArr = array('10 minutes', '15 minutes', '20 minutes', '30 minutes', '40 minutes', '50 minutes',
+                '1 hour', '1 hour 15 minutes', '1 hour 30 minutes', '1 hour 45 minutes', '2 hours', '2 hours 30 minutes', '3 hours', '4 hours', '5 hours', '6 hours');
+            if (in_array($timeEstimateDisplay, $timeDisplayArr)) {
+                return true;
+            }
+            return false;
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param string $tags
+     * @return array
+     * @throws Exception
+     */
+    private function getTagsArr (string $tags): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyString($tags, 'tags');
+            $tagDisplayArr = array('', 'personal', 'vm', 'sales', 'hr', 'meeting', 'payment', 'doc', 'coding', 'cr', 'bugs', 'config', 'support');
+            $tagArr = explode(',', $tags);
+            $returnArr = array();
+            foreach ($tagArr as $tag) {
+                $returnArr[] = array_search($tag, $tagDisplayArr);
+            }
+            return $returnArr;
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }

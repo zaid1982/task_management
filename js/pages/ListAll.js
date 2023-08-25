@@ -65,7 +65,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 10,
+            pageLength: 50,
             autoWidth: false,
             dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -102,7 +102,7 @@ function ListAll() {
                     if (linkIndex > 0) {
                         const rowId = linkId.substring(linkIndex+1);
                         const currentRow = dtLllToday.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId']);
+                        modalTaskEdit.edit(currentRow['taskId'], 1);
                     }
                 });
             },
@@ -144,7 +144,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 10,
+            pageLength: 50,
             autoWidth: false,
             dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -174,6 +174,15 @@ function ListAll() {
                     ShowLoader(); setTimeout(function () { try {
                         self.genTableOverdue();
                     } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
+                });
+                $('.lnkLllOverdueEdit').off('click').on('click', function () {
+                    const linkId = $(this).attr('id');
+                    const linkIndex = linkId.indexOf('_');
+                    if (linkIndex > 0) {
+                        const rowId = linkId.substring(linkIndex+1);
+                        const currentRow = dtLllOverdue.row(parseInt(rowId)).data();
+                        modalTaskEdit.edit(currentRow['taskId'], 2);
+                    }
                 });
             },
             aoColumns: [
@@ -214,7 +223,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 10,
+            pageLength: 50,
             autoWidth: false,
             dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -244,6 +253,15 @@ function ListAll() {
                     ShowLoader(); setTimeout(function () { try {
                         self.genTableFuture();
                     } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
+                });
+                $('.lnkLllFutureEdit').off('click').on('click', function () {
+                    const linkId = $(this).attr('id');
+                    const linkIndex = linkId.indexOf('_');
+                    if (linkIndex > 0) {
+                        const rowId = linkId.substring(linkIndex+1);
+                        const currentRow = dtLllFuture.row(parseInt(rowId)).data();
+                        modalTaskEdit.edit(currentRow['taskId'], 3);
+                    }
                 });
             },
             aoColumns: [
@@ -282,7 +300,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 10,
+            pageLength: 50,
             autoWidth: false,
             dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -312,6 +330,15 @@ function ListAll() {
                     ShowLoader(); setTimeout(function () { try {
                         self.genTableUnscheduled();
                     } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
+                });
+                $('.lnkLllUnscheduledEdit').off('click').on('click', function () {
+                    const linkId = $(this).attr('id');
+                    const linkIndex = linkId.indexOf('_');
+                    if (linkIndex > 0) {
+                        const rowId = linkId.substring(linkIndex+1);
+                        const currentRow = dtLllUnscheduled.row(parseInt(rowId)).data();
+                        modalTaskEdit.edit(currentRow['taskId'], 4);
+                    }
                 });
             },
             aoColumns: [
@@ -344,15 +371,15 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 10,
+            pageLength: 50,
             autoWidth: false,
             dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
-                { className: 'text-center', targets: [0, 6, 8, 9, 11, 12, 13 ,14, 15, 16, 17, 18, 19, 20, 21, 22] },
+                { className: 'text-center', targets: [0, 6, 8, 9, 11, 12, 13 ,14, 15, 16, 17, 18, 19, 20, 21] },
                 { className: 'text-right', targets: [10] },
-                { className: 'noVis', targets: [0, 22] },
+                { className: 'noVis', targets: [0] },
                 { visible: false, targets: [2, 5, 14, 15, 16, 21] }
             ],
             buttons: [
@@ -398,8 +425,7 @@ function ListAll() {
                 { mData: 'timeSpent', mRender: function (data, type, row) { return dtDisplay.getRecordedTime(data, row['taskTimeEstimate']); }},
                 { mData: 'efficiency', mRender: function (data) { return dtDisplay.getEfficiency(data); }},
                 { mData: 'lateness', mRender: function(data) { return dtDisplay.getLateness(data); }}, // 20
-                { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }},
-                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(1, 'lnkLllDone', meta.row); }}
+                { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }}
             ]
         });
 

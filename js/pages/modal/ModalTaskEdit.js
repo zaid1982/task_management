@@ -11,6 +11,7 @@ function ModalTaskEdit () {
     let refFolder;
     let refMainTask = [];
     let submitType = '';
+    let tableType;
     const todayDate = moment().format('YYYY-MM-DD');
     const yesterdayDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
     const refTimeEstimate = ['10 minutes', '15 minutes', '20 minutes', '30 minutes', '40 minutes', '50 minutes',
@@ -20,9 +21,17 @@ function ModalTaskEdit () {
     for (let i = 0; i < 24; i++) {
         const hour = i < 10 ? '0' + i : i.toString();
         refTime.push(hour+':00');
+        refTime.push(hour+':05');
+        refTime.push(hour+':10');
         refTime.push(hour+':15');
+        refTime.push(hour+':20');
+        refTime.push(hour+':25');
         refTime.push(hour+':30');
+        refTime.push(hour+':35');
+        refTime.push(hour+':40');
         refTime.push(hour+':45');
+        refTime.push(hour+':50');
+        refTime.push(hour+':55');
     }
 
     let vData = [
@@ -56,7 +65,7 @@ function ModalTaskEdit () {
             type: 'select',
             name: 'Assignee',
             validator: {
-                notEmpty: false
+                notEmpty: true
             }
         },
         {
@@ -160,9 +169,8 @@ function ModalTaskEdit () {
     this.init = function () {
         mzOption('optMteSpace', refSpace, 'spaceName', {statusId: 1}, true);
         mzOption('optMteStatus', refStatus, 'statusName', {id: '(3,4,5,7)'}, true);
-        self.setOptionAssignee();
-        $('#txtMteTimeEstimate').mdbAutocomplete({ data: refTimeEstimate });
         $('#txtMteStartTime').mdbAutocomplete({ data: refTime });
+        self.setOptionAssignee();
         refMainTask = mzAjax('task/ref/mainTask', 'GET');
         formValidate = new MzValidate();
 
@@ -190,27 +198,7 @@ function ModalTaskEdit () {
         });
 
         $("input[name='radMteIsMain']:radio").on('change', function () {
-            const isMain = $(this).val();
-            try {
-                if (isMain === 'Sub') {
-                    $('#optMteMainTask_').show();
-                    $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
-                    formValidate.enableField('optMteMainTask');
-                    const folderId = parseInt($('#optMteFolder').val());
-                    if (!isNaN(folderId)) {
-                        mzOptionStop('optMteMainTask', refMainTask, 'taskName', {folderId: folderId}, true);
-                    } else {
-                        mzOptionStopClear('optMteMainTask', true);
-                    }
-                } else if (isMain === 'Main') {
-                    $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').hide();
-                } else {
-                    mzOptionStopClear('optMteMainTask', true);
-                    formValidate.disableField('optMteMainTask');
-                    $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
-                    $('#optMteMainTask_').hide();
-                }
-            } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
+            self.setTaskTypeHide($(this).val());
         });
 
         $('#btnMteSave').on('click', function () {
@@ -236,7 +224,6 @@ function ModalTaskEdit () {
                         taskDescription: mzNullString($('#txaMteRemark').val())
                     };
                     if (submitType === 'add') {
-                        console.log(data);
                         mzAjax('task', 'POST', data);
                         if (dueDate === null) {
                             classFrom.genTableUnscheduled();
@@ -268,42 +255,97 @@ function ModalTaskEdit () {
             mzDisableSelect('optMteSpace', false);
             mzDisableSelect('optMteFolder', false);
             mzDisableSelect('optMteMainTask', false);
+            mzDisableSelect('optMteAssignee', false);
             self.enableRadIsMain();
             mzSetMinDate('txtMteDueDate', yesterdayDate);
             mzSetMinDate('txtMteStartDate', yesterdayDate);
             mzSetValue('optMteAssignee', mzGetUserId(), 'select');
             mzSetValue('radMtePriority', 'Normal', 'radio2');
             mzSetValue('radMteIsMain', 'Normal', 'radio2');
+            $('#txtMteTimeEstimate').mdbAutocomplete({ data: refTimeEstimate });
             submitType = 'add';
             $('#lblMteTitle').html('<i class="fa-solid fa-calendar-plus mr-2"></i>Add New Task');
             $('#modalTaskEdit').modal({backdrop: 'static', keyboard: false}).scrollTop(0);
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
     };
 
-    this.edit = function (_taskId) {
+    this.edit = function (_taskId, _tableType) {
         ShowLoader(); setTimeout(function () { try {
-            mzEmptyParams([_taskId]);
+            mzEmptyParams([_taskId, _tableType]);
             taskId = _taskId;
+            tableType = _tableType;
             formValidate.clearValidation();
             formValidate.registerFields(vData);
-            formValidate.disableField('optMteMainTask');
             formValidate.enableField('optMteStatus');
             $('#optMteFolder_, #optMteStatus_, #txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
             $('#optMteMainTask_').hide();
             mzDisableSelect('optMteSpace', true);
             mzDisableSelect('optMteFolder', true);
+            mzDisableSelect('optMteAssignee', true);
             mzDisableSelect('optMteMainTask', true);
+            self.disableRadIsMain();
             mzSetMinDate('txtMteDueDate', yesterdayDate);
             mzSetMinDate('txtMteStartDate', yesterdayDate);
-            //const task = mzAjax('task/'+taskId, 'GET');
-            // if main task, hide estimate amd start
-            mzSetValue('radMteIsMain', 'Normal', 'radio2');
-            self.disableRadIsMain('Normal');
+            const task = mzAjax('task/'+taskId, 'GET');
+            const folderId = task['folderId'];
+            const spaceId = refFolder[folderId]['spaceId'];
+            const isMain = task['isMain'];
+            mzOptionStop('optMteFolder', refFolder, 'folderName', {spaceId: spaceId, statusId: 1}, true);
+            mzSetValue('txtMteTaskName', task['taskName'], 'text');
+            mzSetValue('optMteSpace', spaceId, 'select');
+            mzSetValue('optMteFolder', folderId, 'select');
+            mzSetValue('optMteAssignee', task['taskAssignee'], 'select');
+            mzSetValue('chkMteTags', task['tags'], 'check');
+            mzSetValue('radMtePriority', task['taskPriority'], 'radio2');
+            mzSetValue('radMteIsMain', isMain, 'radio2');
+            mzSetValue('txtMteDueDate', task['taskDateDue'], 'date');
+            mzSetValue('txtMteAmount', task['taskAmount'], 'text');
+            mzSetValue('optMteStatus', task['statusId'], 'select');
+            mzSetValue('txaMteRemark', task['taskDescription'], 'textarea');
+            self.setTaskTypeHide(isMain, task['taskMainId']);
+            let refTimeEstimateClone = refTimeEstimate.map((x) => x);
+            if (isMain !== 'Main' && task['timeEstimateInList'] === false) {
+                refTimeEstimateClone.push();
+            }
+            $('#txtMteTimeEstimate').mdbAutocomplete({ data: refTimeEstimate });
+            if (isMain !== 'Main') {
+                mzSetValue('txtMteTimeEstimate', task['timeEstimate'], 'text');
+                mzSetValue('txtMteStartDate', task['startDate'], 'date');
+                mzSetValue('txtMteStartTime', task['startTime'], 'text');
+            }
             submitType = 'edit';
             $('#lblMteTitle').html('<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Task');
             $('#modalTaskEdit').modal({backdrop: 'static', keyboard: false}).scrollTop(0);
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
     };
+
+    this.setTaskTypeHide = function (isMain, taskMainId) {
+        try {
+            if (isMain === 'Sub') {
+                $('#optMteMainTask_').show();
+                $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
+                formValidate.enableField('optMteMainTask');
+                const folderId = parseInt($('#optMteFolder').val());
+                if (!isNaN(folderId)) {
+                    mzOptionStop('optMteMainTask', refMainTask, 'taskName', {folderId: folderId}, true);
+                    if (typeof taskMainId !== 'undefined') {
+                        mzSetValue('optMteMainTask', taskMainId, 'select');
+                        formValidate.disableField('optMteMainTask');
+                    }
+                } else {
+                    mzOptionStopClear('optMteMainTask', true);
+                }
+            } else if (isMain === 'Main') {
+                formValidate.disableField('optMteMainTask');
+                $('#optMteMainTask_').hide();
+                $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').hide();
+            } else {
+                formValidate.disableField('optMteMainTask');
+                $('#optMteMainTask_').hide();
+                $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
+            }
+        } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
+    }
 
     this.setOptionAssignee = function () {
         try {
@@ -323,21 +365,14 @@ function ModalTaskEdit () {
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
     }
 
-    this.disableRadIsMain = function (value) {
+    this.disableRadIsMain = function () {
         try {
             const selectorLbl1 = $('#lblMteIsMain1');
             const selectorLbl2 = $('#lblMteIsMain2');
             const selectorLbl3 = $('#lblMteIsMain3');
-            selectorLbl1.addClass('disabled');
-            selectorLbl2.addClass('disabled');
-            selectorLbl3.addClass('disabled');
-            if (value === 'Normal') {
-                selectorLbl1.addClass('md-disabled');
-            } else if (value === 'Main') {
-                selectorLbl2.addClass('md-disabled');
-            } else if (value === 'Sub') {
-                selectorLbl3.addClass('md-disabled');
-            }
+            selectorLbl1.addClass('disabled md-disabled');
+            selectorLbl2.addClass('disabled md-disabled');
+            selectorLbl3.addClass('disabled md-disabled');
         } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); }
     }
 

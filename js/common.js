@@ -1429,9 +1429,9 @@ function mzGetUserInfoByParam(parameter) {
 
 function mzDisableSelect(fieldId, disable) {
     let selector = $('#'+fieldId);
-    selector.removeClass('grey lighten-4');
+    selector.removeClass('rgba-green-slight');
     if (disable) {
-        selector.addClass('grey lighten-4');
+        selector.addClass('rgba-green-slight');
     }
     selector.materialSelect('destroy');
     selector.prop('disabled', disable);

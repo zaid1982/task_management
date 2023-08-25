@@ -32,6 +32,8 @@ try {
             $result = $fnMain->getListSummaryAll();
         } else if ($urlArr[1] === 'ref' && $urlArr[2] === 'mainTask') {
             $result = $fnMain->getRefMainTask();
+        } else if (is_numeric($urlArr[1]) && !isset($urlArr[2])) {
+            $result = $fnMain->getEdit(intval($urlArr[1]));
         } else {
             throw new Exception('[line: ' . __LINE__ . '] - Wrong GET Request');
         }
