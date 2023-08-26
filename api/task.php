@@ -47,10 +47,41 @@ try {
         $bodyParams = json_decode(file_get_contents("php://input"), true);
         DbMysql::beginTransaction();
         $isTransaction = true;
-        $taskId = $fnMain->insert($bodyParams);
-        $fnMain->saveAudit(3, 'taskId = '.$taskId);
+        $taskId = $fnMain->insertForm($bodyParams);
+        $fnMain->set($taskId);
+        $fnMain->saveAudit(3, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
         DbMysql::commit();
         $formData['errmsg'] = Constant::$task['create'];
+        $formData['success'] = true;
+    }
+    else if ('PUT' === $requestMethod) {
+        if (!isset($urlArr[1])  || !is_numeric($urlArr[1]) || isset($urlArr[2])) {
+            throw new Exception('[line: ' . __LINE__ . '] - Wrong PUT Request');
+        }
+        $taskId = intval($urlArr[1]);
+        $bodyParams = json_decode(file_get_contents("php://input"), true);
+        DbMysql::beginTransaction();
+        $isTransaction = true;
+        $fnMain->set($taskId);
+        $fnMain->updateForm($taskId, $bodyParams);
+        $isClosedBefore = $fnMain->tskTask['statusId'] === 4 || $fnMain->tskTask['statusId'] === 7;
+        $isClosedAfter = $bodyParams['statusId'] === 4 || $bodyParams['statusId'] === 7;
+        if (!$isClosedBefore && $isClosedAfter) {
+            // if done, update tsk_task_time now and if exist
+            // if done, update tsk_task_checklist to incomplete if exist
+            if ($fnMain->tskTask['taskIsMain'] === 1) {
+                $subTaskList = $fnMain->getSubTaskList($taskId);
+                foreach ($subTaskList as $subTaskId) {
+                    $fnMain->update($subTaskId, array('taskDateClose'=>'NOW()', 'statusId'=>7), array('statusId'=>'NOT IN|4,7'));
+                    // if done main task, update tsk_task_time now for all sub if exist
+                    // if done main task, update tsk_task_checklist to incomplete for all sub if exist
+                }
+                $fnMain->updateMainTaskDate($taskId);
+            }
+        }
+        $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
+        DbMysql::commit();
+        $formData['errmsg'] = Constant::$task['update'];
         $formData['success'] = true;
     } else {
         throw new Exception('[line: ' . __LINE__ . '] - Wrong Request Method');

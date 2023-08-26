@@ -13,10 +13,14 @@ function ListAll() {
     let refFolder;
     let dtDisplay;
     let modalTaskEdit;
+    let currentOpen = 1;
+    let isGetToday = true;
     let isGetOverdue = false;
     let isGetFuture = false;
     let isGetUnscheduled = false;
     let isGetDone = false;
+    const todayDate = moment().format('YYYY-MM-DD');
+    const yesterdayDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
     const divWidth = $('#divLllToday').width();
     const monthArr = mzGetMonthArray();
 
@@ -25,7 +29,18 @@ function ListAll() {
             modalTaskEdit.add();
         });
 
+        $('#divLllToday').on('shown.bs.collapse', function () {
+            currentOpen = 1;
+            if (!isGetToday) {
+                ShowLoader(); setTimeout(function () { try {
+                    self.genTableToday();
+                    isGetToday = true;
+                } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
+            }
+        });
+
         $('#divLllOverdue').on('shown.bs.collapse', function () {
+            currentOpen = 2;
             if (!isGetOverdue) {
                 ShowLoader(); setTimeout(function () { try {
                     self.genTableOverdue();
@@ -35,6 +50,7 @@ function ListAll() {
         });
 
         $('#divLllFuture').on('shown.bs.collapse', function () {
+            currentOpen = 3;
             if (!isGetFuture) {
                 ShowLoader(); setTimeout(function () { try {
                     self.genTableFuture();
@@ -44,6 +60,7 @@ function ListAll() {
         });
 
         $('#divLllUnscheduled').on('shown.bs.collapse', function () {
+            currentOpen = 4;
             if (!isGetUnscheduled) {
                 ShowLoader(); setTimeout(function () { try {
                     self.genTableUnscheduled();
@@ -53,6 +70,7 @@ function ListAll() {
         });
 
         $('#divLllDone').on('shown.bs.collapse', function () {
+            currentOpen = 5;
             if (!isGetDone) {
                 ShowLoader(); setTimeout(function () { try {
                     self.genTableDone();
@@ -102,13 +120,13 @@ function ListAll() {
                     if (linkIndex > 0) {
                         const rowId = linkId.substring(linkIndex+1);
                         const currentRow = dtLllToday.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId'], 1);
+                        modalTaskEdit.edit(currentRow['taskId']);
                     }
                 });
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -181,13 +199,13 @@ function ListAll() {
                     if (linkIndex > 0) {
                         const rowId = linkId.substring(linkIndex+1);
                         const currentRow = dtLllOverdue.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId'], 2);
+                        modalTaskEdit.edit(currentRow['taskId']);
                     }
                 });
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -260,13 +278,13 @@ function ListAll() {
                     if (linkIndex > 0) {
                         const rowId = linkId.substring(linkIndex+1);
                         const currentRow = dtLllFuture.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId'], 3);
+                        modalTaskEdit.edit(currentRow['taskId']);
                     }
                 });
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -337,13 +355,13 @@ function ListAll() {
                     if (linkIndex > 0) {
                         const rowId = linkId.substring(linkIndex+1);
                         const currentRow = dtLllUnscheduled.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId'], 4);
+                        modalTaskEdit.edit(currentRow['taskId']);
                     }
                 });
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -405,7 +423,7 @@ function ListAll() {
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -440,13 +458,17 @@ function ListAll() {
         if (divWidth < 644) { dtLllDone.column(16).visible(false); }
         if (divWidth < 576) { dtLllDone.column(17).visible(false); }
 
+        self.genTotalData();
+        self.genTableToday();
+    };
+
+    this.genTotalData = function () {
         const dataApi = mzAjax('task/summary/all', 'GET');
         $('#spanLllTodayTotal').text(dataApi['totalToday']);
         $('#spanLllTodayOverdue').text(dataApi['totalOverdue']);
         $('#spanLllTodayFuture').text(dataApi['totalFuture']);
         $('#spanLllTodayUnscheduled').text(dataApi['totalUnscheduled']);
         $('#spanLllTodayDone').text(dataApi['totalDone']);
-        self.genTableToday();
     };
 
     this.genTableToday = function () {
@@ -477,6 +499,85 @@ function ListAll() {
         const dataDb = mzAjax('task/list/done', 'GET');
         dtLllDone.clear().rows.add(dataDb).draw();
         $('#spanLllTodayDone').text(dataDb.length);
+    };
+
+    this.refreshAdd = function (dueDate) {
+        self.genTotalData();
+        if (dueDate === null) {
+            self.resetIsGetUnscheduled();
+        } else if (dueDate === todayDate) {
+            self.resetIsGetToday();
+        } else if (dueDate === yesterdayDate) {
+            self.resetIsGetOverdue();
+        } else {
+            self.resetIsGetFuture();
+        }
+    };
+
+    this.refreshEdit = function (dueBefore, dueAfter, isClosed) {
+        self.genTotalData();
+        if (currentOpen === 1) {
+            self.genTableToday();
+        } else if (currentOpen === 2) {
+            self.genTableOverdue();
+        } else if (currentOpen === 3) {
+            self.genTableFuture();
+        } else if (currentOpen === 4) {
+            self.genTableUnscheduled();
+        }
+        if (isClosed && isGetDone) {
+            isGetDone = false;
+        } else if (dueBefore !== dueAfter) {
+            if (dueAfter === null && currentOpen !== 4 && isGetUnscheduled) {
+                isGetUnscheduled = false;
+            } else if (dueAfter === todayDate && currentOpen !== 1 && isGetToday) {
+                isGetToday = false;
+            } else if (dueAfter === yesterdayDate && currentOpen !== 2 && isGetOverdue) {
+                isGetOverdue = false;
+            } else if (dueAfter > todayDate && currentOpen !== 3 && isGetFuture) {
+                isGetOverdue = false;
+            }
+        }
+    };
+
+    this.resetIsGetToday = function () {
+        if (currentOpen === 1) {
+            self.genTableToday();
+            isGetToday = true;
+        } else {
+            isGetToday = false;
+        }
+    };
+
+    this.resetIsGetOverdue = function () {
+        if (currentOpen === 2) {
+            self.genTableOverdue();
+            isGetOverdue = true;
+        } else {
+            isGetUnscheduled = false;
+        }
+    };
+
+    this.resetIsGetFuture = function () {
+        if (currentOpen === 3) {
+            self.genTableFuture();
+            isGetFuture = true;
+        } else {
+            isGetUnscheduled = false;
+        }
+    };
+
+    this.resetIsGetUnscheduled = function () {
+        if (currentOpen === 4) {
+            self.genTableUnscheduled();
+            isGetUnscheduled = true;
+        } else {
+            isGetUnscheduled = false;
+        }
+    };
+
+    this.getCurrentOpen = function () {
+        return currentOpen;
     };
 
     this.setRefStatus = function (_refStatus) {

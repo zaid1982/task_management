@@ -82,14 +82,17 @@ function DtTaskDisplay () {
         }
     }
 
-    this.getTaskName = function (taskName, taskMainId) {
+    this.getTaskName = function (taskName, taskIsMain, taskMainId) {
         if (taskName === '' ||  taskName === null) {
             return '';
         }
-        if (taskMainId === '' ||  taskMainId === null) {
-            return taskName;
+        if (taskIsMain === 1) {
+            return taskName + ' <i class="fa-regular fa-folder-open"></i>';
         }
-        return '<i class="fa-solid fa-folder-tree"></i> ' + taskName;
+        if (taskMainId !== '' &&  taskMainId !== null) {
+            return '<i class="fa-solid fa-folder-tree"></i> ' + taskName;
+        }
+        return taskName;
     }
 
     this.getRecordedTime = function (recordedTime, estimateTime) {

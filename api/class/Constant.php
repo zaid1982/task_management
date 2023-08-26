@@ -36,6 +36,7 @@ class Constant {
     );
 
     public static array $task = array(
-        'create' => 'Task successfully added!'
+        'create' => 'Task successfully added!',
+        'update' => 'Task successfully updated!'
     );
 }

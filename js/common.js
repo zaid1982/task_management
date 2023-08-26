@@ -4,6 +4,7 @@ const _ALERT_TITLE_ERROR = "ERROR";
 const _ALERT_MSG_ERROR_DEFAULT = "Error on system. Please contact administrator!";
 const _ALERT_TITLE_SUCCESS = "SUCCESS";
 const _ALERT_TITLE_INFO = "INFORMATION";
+const _ALERT_TITLE_WARNING = "WARNING";
 
 const _ALERT_TITLE_SUCCESS_LOGOUT = "SUCCESS SIGN OUT";
 const _ALERT_MSG_SUCCESS_LOGOUT = "You have successfully signed out";
@@ -19,7 +20,6 @@ const _ALERT_TITLE_ERROR_ACTIVATE = "ACTIVATION ERROR";
 const _ALERT_TITLE_SUCCESS_ACTIVATE = "ACTIVATION SUCCESS";
 const _ALERT_MSG_SUCCESS_ACTIVATE = "Your account has successfully activated. Please login with email as user ID and your registered password.";
 const _ALERT_MSG_SUCCESS_UPDATE_USER = "Your information successfully updated";
-const _ALERT_MSG_ERROR_SITE_NOCITY = "Please select city first";
 
 const _DATATABLE_LANGUAGE =  {
     info: "Papar muka _START_ hingga _END_ dari _TOTAL_ rekod",
@@ -61,6 +61,8 @@ const mzExportOpt = {
                 return data.replace('<span class="orange-text">', '').replace('</span>', '');
             } else if (data.toString().indexOf('green-text') > 0) {
                 return data.replace('<span class="green-text">', '').replace('</span>', '');
+            } else if (data.toString().indexOf('fa-folder-open') > 0) {
+                return data.replace(' <i class="fa-regular fa-folder-open"></i>', '');
             } else if (data.toString().indexOf('fa-folder-tree') > 0) {
                 return data.replace('<i class="fa-solid fa-folder-tree"></i> ', '');
             } else if (data.toString().indexOf('progress md-progress') > 0) {

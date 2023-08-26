@@ -4,7 +4,7 @@ class TskTask extends General {
 
     public int $taskId;
     public array $tskTask;
-    private static string $tableName = "tsk_task";
+    private static string $tableName = 'tsk_task';
     private static string $sqlInfo = /** @lang text */
         "SELECT
             tmn.task_name AS main_task_name,
@@ -194,7 +194,7 @@ class TskTask extends General {
      * @return int
      * @throws Exception
      */
-    public function insert (array $inputParams): int {
+    public function insertForm (array $inputParams): int {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
             parent::checkEmptyInteger($this->userId, 'userId');
@@ -208,24 +208,7 @@ class TskTask extends General {
                 if ($inputParams['isMain'] === 'Sub') {
                     parent::checkMandatoryArray($params, array('taskMainId'), true, array('Main Task'));
                 }
-                if ($inputParams['timeEstimate'] !== null) {
-                    $timeEstimate = $inputParams['timeEstimate'];
-                    if (substr($timeEstimate, 2) === ' minutes') {
-                        $params['taskTimeEstimate'] = '00:'.substr($timeEstimate, 0, 2).':00';
-                    } else if (substr($timeEstimate, 1) === ' hours') {
-                        $params['taskTimeEstimate'] = '0'.substr($timeEstimate, 0, 1).':00:00';
-                    } else if ($timeEstimate === '1 hour') {
-                        $params['taskTimeEstimate'] = '01:00:00';
-                    } else if ($timeEstimate === '1 hour 15 minutes') {
-                        $params['taskTimeEstimate'] = '01:15:00';
-                    } else if ($timeEstimate === '1 hour 30 minutes') {
-                        $params['taskTimeEstimate'] = '01:30:00';
-                    } else if ($timeEstimate === '1 hour 45 minutes') {
-                        $params['taskTimeEstimate'] = '01:45:00';
-                    } else if ($timeEstimate === '2 hours 30 minutes') {
-                        $params['taskTimeEstimate'] = '02:30:00';
-                    }
-                }
+                $params['taskTimeEstimate'] = $this->getTimeEstimateDb($inputParams['timeEstimate']);
                 if ($inputParams['startDate'] !== null) {
                     $params['taskDateStart'] = $inputParams['startDate'].($inputParams['startTime'] !== null ? ' '.$inputParams['startTime'].':00' : '');
                     if ($inputParams['timeEstimate'] !== null) {
@@ -237,6 +220,104 @@ class TskTask extends General {
                 }
             }
             return DbMysql::insert($this::$tableName, $params);
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @param array $inputParams
+     * @param array $whereParams
+     * @throws Exception
+     */
+    public function update (int $taskId, array $inputParams, array $whereParams=array()): void {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            parent::checkEmptyArray($inputParams, 'inputParams');
+            DbMysql::update($this::$tableName, $inputParams, array_merge(array('taskId'=>$taskId), $whereParams));
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @param array $inputParams
+     * @throws Exception
+     */
+    public function updateForm (int $taskId, array $inputParams): void {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            $params = parent::arraySpliceAssoc($inputParams, array('taskName', 'taskTags', 'taskPriority', 'taskDateDue', 'taskAmount', 'taskDescription', 'statusId'));
+            parent::checkMandatoryArray($params, array('taskName', 'taskTags', 'taskPriority', 'statusId'), true, array('Task Name', 'Tags', 'Priority', 'Status'));
+            $tskTask = $this->get($taskId);
+            if ($params['statusId'] === 4 || $params['statusId'] === 7) {
+                $params['taskDateClose'] = 'NOW()';
+            }
+            if ($tskTask['taskIsMain'] === 0) {
+                $params['taskTimeEstimate'] = $this->getTimeEstimateDb($inputParams['timeEstimate']);
+                $params['taskDateStart'] = null;
+                $params['taskDateEnd'] = null;
+                if ($inputParams['startDate'] !== null) {
+                    $params['taskDateStart'] = $inputParams['startDate'].($inputParams['startTime'] !== null ? ' '.$inputParams['startTime'].':00' : '');
+                    if ($inputParams['timeEstimate'] !== null) {
+                        $params['taskDateEnd'] = "|ADDTIME('".$params['taskDateStart']."', '".$params['taskTimeEstimate']."')";
+                    }
+                }
+                if ($tskTask['taskMainId'] !== null && $tskTask['taskTimeEstimate'] !== $params['taskTimeEstimate']) {
+                    if ($tskTask['taskTimeEstimate'] !== null) {
+                        DbMysql::update($this::$tableName, array('taskTimeEstimate'=>"|SUBTIME(task_time_estimate, '".$tskTask['taskTimeEstimate']."')"), array('taskId'=>$tskTask['taskMainId']));
+                    }
+                    if ($params['taskTimeEstimate'] !== null) {
+                        DbMysql::update($this::$tableName, array('taskTimeEstimate'=>"|IF(ISNULL(task_time_estimate), '".$params['taskTimeEstimate']."', ADDTIME(task_time_estimate, '".$params['taskTimeEstimate']."'))"), array('taskId'=>$tskTask['taskMainId']));
+                    }
+                }
+            }
+            DbMysql::update($this::$tableName, $params, array('taskId'=>$taskId));
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @return array
+     * @throws Exception
+     */
+    public function getSubTaskList (int $taskId): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            $returnArr = array();
+            $taskArr = DbMysql::selectAll($this::$tableName, array('taskMainId'=>$taskId));
+            foreach ($taskArr as $task) {
+                $returnArr[] = $task['taskId'];
+            }
+            return $returnArr;
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @throws Exception
+     */
+    public function updateMainTaskDate (int $taskId): void {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            $taskDates = DbMysql::selectSql(
+                    /** @lang text */
+                    "SELECT 
+                        DATE(MIN(task_date_start)) AS date_start,
+                        DATE(MAX(task_date_end)) AS date_end
+                    FROM tsk_task",
+                array('taskMainId'=>$taskId));
+            DbMysql::update($this::$tableName, array('taskDateStart'=>$taskDates['dateStart'], 'taskDateEnd'=>$taskDates['dateEnd']), array('taskId'=>$taskId));
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }
@@ -309,6 +390,37 @@ class TskTask extends General {
                 $returnArr[] = array_search($tag, $tagDisplayArr);
             }
             return $returnArr;
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param string|null $timeEstimate
+     * @return string|null
+     * @throws Exception
+     */
+    private function getTimeEstimateDb (string|null $timeEstimate): string|null {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyString($timeEstimate, 'timeEstimate');
+            $returnVal = null;
+            if (substr($timeEstimate, 2) === ' minutes') {
+                $returnVal = '00:'.substr($timeEstimate, 0, 2).':00';
+            } else if (substr($timeEstimate, 1) === ' hours') {
+                $returnVal = '0'.substr($timeEstimate, 0, 1).':00:00';
+            } else if ($timeEstimate === '1 hour') {
+                $returnVal = '01:00:00';
+            } else if ($timeEstimate === '1 hour 15 minutes') {
+                $returnVal = '01:15:00';
+            } else if ($timeEstimate === '1 hour 30 minutes') {
+                $returnVal = '01:30:00';
+            } else if ($timeEstimate === '1 hour 45 minutes') {
+                $returnVal = '01:45:00';
+            } else if ($timeEstimate === '2 hours 30 minutes') {
+                $returnVal = '02:30:00';
+            }
+            return $returnVal;
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }
