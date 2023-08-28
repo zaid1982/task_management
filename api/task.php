@@ -3,6 +3,8 @@ require_once 'class/Constant.php';
 require_once 'class/General.php';
 require_once 'class/DbMysql.php';
 require_once 'class/TskTask.php';
+require_once 'class/TskTaskTime.php';
+require_once 'class/TskTaskChecklist.php';
 
 $apiName = 'task';
 $isTransaction = false;
@@ -67,21 +69,30 @@ try {
         $isClosedBefore = $fnMain->tskTask['statusId'] === 4 || $fnMain->tskTask['statusId'] === 7;
         $isClosedAfter = $bodyParams['statusId'] === 4 || $bodyParams['statusId'] === 7;
         if (!$isClosedBefore && $isClosedAfter) {
-            // if done, update tsk_task_time now and if exist
-            // if done, update tsk_task_checklist to incomplete if exist
+            $fnTaskTime = new TskTaskTime($fnMain->userId, Constant::$isLogged);
+            $fnTaskChecklist = new TskTaskChecklist($fnMain->userId, Constant::$isLogged);
+            $fnTaskTime->updateByTask($taskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
+            $fnTaskChecklist->updateByTask($taskId, array('statusId'=>7), array('statusId'=>3));
             if ($fnMain->tskTask['taskIsMain'] === 1) {
                 $subTaskList = $fnMain->getSubTaskList($taskId);
                 foreach ($subTaskList as $subTaskId) {
                     $fnMain->update($subTaskId, array('taskDateClose'=>'NOW()', 'statusId'=>7), array('statusId'=>'NOT IN|4,7'));
-                    // if done main task, update tsk_task_time now for all sub if exist
-                    // if done main task, update tsk_task_checklist to incomplete for all sub if exist
+                    $fnTaskTime->updateByTask($subTaskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
+                    $fnTaskChecklist->updateByTask($subTaskId, array('statusId'=>7), array('statusId'=>3));
+                    $fnMain->saveAudit(5, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
                 }
                 $fnMain->updateMainTaskDate($taskId);
+                $fnMain->saveAudit(6, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
+            } else {
+                $fnMain->saveAudit(5, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             }
+            DbMysql::commit();
+            $formData['errmsg'] = Constant::$task['close'];
+        } else {
+            $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
+            DbMysql::commit();
+            $formData['errmsg'] = Constant::$task['update'];
         }
-        $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
-        DbMysql::commit();
-        $formData['errmsg'] = Constant::$task['update'];
         $formData['success'] = true;
     } else {
         throw new Exception('[line: ' . __LINE__ . '] - Wrong Request Method');
