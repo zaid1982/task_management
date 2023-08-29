@@ -232,7 +232,6 @@ function ModalTaskEdit () {
                         } else if (submitType === 'edit') {
                             const status = mzNullInt($('#optMteStatus').val());
                             data['statusId'] = status;
-                            console.log(data);
                             mzAjax('task/'+taskId, 'PUT', data);
                             classFrom.refreshEdit(task['taskDateDue'], dueDate, status === 4 || status === 7);
                         }
@@ -273,7 +272,6 @@ function ModalTaskEdit () {
 
     this.edit = function (_taskId) {
         try {
-            console.log(classFrom.getCurrentOpen());
             mzEmptyParams([_taskId]);
             taskId = _taskId;
             formValidate.clearValidation();

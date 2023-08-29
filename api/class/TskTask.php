@@ -338,9 +338,9 @@ class TskTask extends General {
             }
             $returnVal = '';
             if ($partials[0] === '01') {
-                $returnVal = '1 hour';
+                $returnVal = '1 hour ';
             } else if ($partials[0] !== '00') {
-                $returnVal = intval($partials[0]).' hours';
+                $returnVal = intval($partials[0]).' hours ';
             }
             if ($partials[1] !== '00') {
                 $returnVal .= $partials[1].' minutes';
