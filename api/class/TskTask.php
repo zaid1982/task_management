@@ -403,7 +403,6 @@ class TskTask extends General {
     private function getTimeEstimateDb (string|null $timeEstimate): string|null {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
-            parent::checkEmptyString($timeEstimate, 'timeEstimate');
             $returnVal = null;
             if (substr($timeEstimate, 2) === ' minutes') {
                 $returnVal = '00:'.substr($timeEstimate, 0, 2).':00';

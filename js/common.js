@@ -926,6 +926,8 @@ function mzSetMinDate(id, dateInput) {
     let picker_value = picker_input.pickadate('picker');
     if (dateInput === true) {
         picker_value.set('min', true);
+    } else if (dateInput === false) {
+        picker_value.set('min', false);
     } else {
         const dateSplit = dateInput.split('-');
         if (dateSplit.length === 3) {
@@ -942,6 +944,8 @@ function mzSetMaxDate(id, dateInput) {
     let picker_value = picker_input.pickadate('picker');
     if (dateInput === true) {
         picker_value.set('max', true);
+    } else if (dateInput === false) {
+        picker_value.set('max', false);
     } else {
         const dateSplit = dateInput.split('-');
         if (dateSplit.length === 3) {

@@ -181,6 +181,7 @@ function ModalTaskEdit () {
                     mzOptionStop('optMteFolder', refFolder, 'folderName', {spaceId: spaceId, statusId: 1}, true);
                     $('#optMteFolderErr').html('');
                     if ($("input[name='radMteIsMain']:checked").val() === 'Sub') {
+                        alert(0);
                         mzOptionStopClear('optMteMainTask', true);
                         $('#optMteMainTaskErr').html('');
                     }
@@ -191,6 +192,7 @@ function ModalTaskEdit () {
                 const folderId = parseInt($(this).val());
                 try {
                     if ($("input[name='radMteIsMain']:checked").val() === 'Sub') {
+                        alert(1);
                         mzOptionStop('optMteMainTask', refMainTask, 'taskName', {folderId: folderId}, true);
                         $('#optMteMainTaskErr').html('');
                     }
@@ -284,8 +286,8 @@ function ModalTaskEdit () {
             mzDisableSelect('optMteAssignee', true);
             mzDisableSelect('optMteMainTask', true);
             self.disableRadIsMain();
-            mzSetMinDate('txtMteDueDate', yesterdayDate);
-            mzSetMinDate('txtMteStartDate', yesterdayDate);
+            mzSetMinDate('txtMteDueDate', false);
+            mzSetMinDate('txtMteStartDate', false);
             task = mzAjax('task/'+taskId, 'GET');
             const folderId = task['folderId'];
             const spaceId = refFolder[folderId]['spaceId'];
@@ -305,7 +307,7 @@ function ModalTaskEdit () {
             self.setTaskTypeHide(isMain, task['taskMainId']);
             let refTimeEstimateClone = refTimeEstimate.map((x) => x);
             if (isMain !== 'Main' && task['timeEstimateInList'] === false) {
-                refTimeEstimateClone.push();
+                refTimeEstimateClone.push(task['timeEstimate']);
             }
             $('#txtMteTimeEstimate').mdbAutocomplete({ data: refTimeEstimate });
             if (isMain !== 'Main') {
@@ -321,9 +323,9 @@ function ModalTaskEdit () {
 
     this.setTaskTypeHide = function (isMain, taskMainId) {
         if (isMain === 'Sub') {
+            formValidate.enableField('optMteMainTask');
             $('#optMteMainTask_').show();
             $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
-            formValidate.enableField('optMteMainTask');
             const folderId = parseInt($('#optMteFolder').val());
             if (!isNaN(folderId)) {
                 mzOptionStop('optMteMainTask', refMainTask, 'taskName', {folderId: folderId}, true);
