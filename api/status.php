@@ -1,7 +1,8 @@
 <?php
-require_once 'class/Constant.php';
-require_once 'class/General.php';
-require_once 'class/DbMysql.php';
+require_once 'library/Constant.php';
+require_once 'library/Alert.php';
+require_once 'library/General.php';
+require_once 'library/DbMysql.php';
 require_once 'class/RefStatus.php';
 
 $apiName = 'status';
@@ -47,7 +48,7 @@ try {
         $fnMain->logError('API', $apiName, __LINE__, $e->getMessage());
     }
     $formData['error'] = strpos($e->getMessage(), '] -') ? substr($e->getMessage(), strpos($e->getMessage(), '] -') + 4) : substr($e->getMessage(), strripos($e->getMessage(), '] ') + 2);
-    $formData['errmsg'] = $e->getCode() === 31 ? $formData['error'] : Constant::$err['default'];
+    $formData['errmsg'] = $e->getCode() === 31 ? $formData['error'] : Alert::$err['default'];
     $fnMain->logError('API', $apiName, __LINE__, $e->getMessage());
 }
 

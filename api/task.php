@@ -1,7 +1,8 @@
 <?php
-require_once 'class/Constant.php';
-require_once 'class/General.php';
-require_once 'class/DbMysql.php';
+require_once 'library/Constant.php';
+require_once 'library/Alert.php';
+require_once 'library/General.php';
+require_once 'library/DbMysql.php';
 require_once 'class/TskTask.php';
 require_once 'class/TskTaskTime.php';
 require_once 'class/TskTaskChecklist.php';
@@ -53,7 +54,7 @@ try {
         $fnMain->set($taskId);
         $fnMain->saveAudit(3, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
         DbMysql::commit();
-        $formData['errmsg'] = Constant::$task['create'];
+        $formData['errmsg'] = Alert::$task['create'];
         $formData['success'] = true;
     }
     else if ('PUT' === $requestMethod) {
@@ -87,11 +88,11 @@ try {
                 $fnMain->saveAudit(5, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             }
             DbMysql::commit();
-            $formData['errmsg'] = Constant::$task['close'];
+            $formData['errmsg'] = Alert::$task['close'];
         } else {
             $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             DbMysql::commit();
-            $formData['errmsg'] = Constant::$task['update'];
+            $formData['errmsg'] = Alert::$task['update'];
         }
         $formData['success'] = true;
     } else {
@@ -108,7 +109,7 @@ try {
         $fnMain->logError('API', $apiName, __LINE__, $e->getMessage());
     }
     $formData['error'] = strpos($e->getMessage(), '] -') ? substr($e->getMessage(), strpos($e->getMessage(), '] -') + 4) : substr($e->getMessage(), strripos($e->getMessage(), '] ') + 2);
-    $formData['errmsg'] = $e->getCode() === 31 ? $formData['error'] : Constant::$err['default'];
+    $formData['errmsg'] = $e->getCode() === 31 ? $formData['error'] : Alert::$err['default'];
     $fnMain->logError('API', $apiName, __LINE__, $e->getMessage());
 }
 

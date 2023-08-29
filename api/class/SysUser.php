@@ -128,12 +128,12 @@ class SysUser extends General {
             parent::checkEmptyString($password, 'password');
             $user = DbMysql::select($this::$tableName, array('userName'=>$username));
             if (empty($user)) {
-                throw new Exception(Constant::$user['errNotExist'], 31);
+                throw new Exception(Alert::$user['errNotExist'], 31);
             }
             if ($user['userPassword'] !== md5($password)) {
                 DbMysql::update($this::$tableName, array('userFailAttempt'=>$user['userFailAttempt'] + 1), array('userId'=>$user['userId']));
                 DbMysql::commit();
-                throw new Exception(Constant::$user['errPassword'], 31);
+                throw new Exception(Alert::$user['errPassword'], 31);
             }
             unset($user['userPassword']);
             unset($user['userPasswordTemp']);

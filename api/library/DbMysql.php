@@ -3,8 +3,8 @@
 class DbMysql {
 
     public static $DBH;
-    public static $userId = 0;
-    public static $isLogged = false;
+    public static int $userId = 0;
+    public static bool $isLogged = false;
 
     /**
      * @param $class
@@ -12,7 +12,7 @@ class DbMysql {
      * @param $line
      * @param $msg
      */
-    public static function logDebug ($class, $function, $line, $msg) {
+    public static function logDebug ($class, $function, $line, $msg): void {
         if (self::$isLogged) {
             $debugMsg = date("Y/m/d h:i:sa") . " (" . self::$userId . ") [" . $class . ":" . $function . ":" . $line . "] - " . $msg . "\r\n";
             error_log($debugMsg, 3, Constant::$folderDebug . 'debug_' . date("Ymd") . '.log');
@@ -25,7 +25,7 @@ class DbMysql {
      * @param $line
      * @param $msg
      */
-    public static function logError ($class, $function, $line, $msg) {
+    public static function logError ($class, $function, $line, $msg): void {
         if (self::$isLogged) {
             $debugMsg = date("Y/m/d h:i:sa") . " (" . self::$userId . ") [" . $class . ":" . $function . ":" . $line . "] - (ERROR) " . $msg . "\r\n";
             error_log($debugMsg, 3, Constant::$folderDebug . 'debug_' . date("Ymd") . '.log');
@@ -37,7 +37,7 @@ class DbMysql {
     /**
      * @throws Exception
      */
-    public static function connect () {
+    public static function connect (): void {
         try {
             self::$DBH = new PDO("mysql:host=".Constant::$dbHost.";dbname=".Constant::$dbName.";charset=utf8", Constant::$dbUserName, Constant::$dbUserPassword);
             //self::$DBH = new PDO("mysql:host=".Constant::$dbHost.";port=3307;dbname=".Constant::$dbName.";charset=utf8", Constant::$dbUserName, Constant::$dbUserPassword);
@@ -53,14 +53,14 @@ class DbMysql {
     /**
      * @throws Exception
      */
-    public static function close () {
+    public static function close (): void {
         self::$DBH = null;
     }
 
     /**
      * @throws Exception
      */
-    public static function beginTransaction () {
+    public static function beginTransaction (): void {
         try {
             if (empty(self::$DBH)) {
                 throw new Exception('Connection lost');
@@ -75,7 +75,7 @@ class DbMysql {
     /**
      * @throws Exception
      */
-    public static function commit () {
+    public static function commit (): void {
         try {
             if (empty(self::$DBH)) {
                 throw new Exception('Connection lost');
@@ -90,7 +90,7 @@ class DbMysql {
     /**
      * @throws Exception
      */
-    public static function rollback () {
+    public static function rollback (): void {
         try {
             if (!empty(self::$DBH)) {
                 self::$DBH->rollBack();
@@ -179,7 +179,7 @@ class DbMysql {
                 }
             }
             return $newIndex;
-        } catch(Exception $ex) {
+        } catch (Exception|Throwable $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }
     }

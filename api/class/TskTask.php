@@ -338,14 +338,14 @@ class TskTask extends General {
             }
             $returnVal = '';
             if ($partials[0] === '01') {
-                $returnVal = '1 hour ';
+                $returnVal = '1 hour';
             } else if ($partials[0] !== '00') {
                 $returnVal = intval($partials[0]).' hours';
             }
             if ($partials[1] !== '00') {
                 $returnVal .= $partials[1].' minutes';
             }
-            return $returnVal;
+            return rtrim($returnVal);
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }

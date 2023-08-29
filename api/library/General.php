@@ -4,7 +4,7 @@ require_once 'src/ExpiredException.php';
 require_once 'src/SignatureInvalidException.php';
 require_once 'src/JWT.php';
 
-use \Firebase\JWT\JWT;
+use Firebase\JWT\JWT;
 
 class General {
 
