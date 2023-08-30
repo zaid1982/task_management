@@ -43,7 +43,7 @@
 }
 .modal-body-fade{
     max-height: calc(100vh - 120px) !important;
-    /*overflow-y: auto;*/
+    overflow-y: auto;
 }
 .cascading-admin-card {
     margin-top: 1.25rem; }

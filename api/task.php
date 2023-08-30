@@ -69,8 +69,8 @@ try {
         $fnMain->updateForm($taskId, $bodyParams);
         $isClosedBefore = $fnMain->tskTask['statusId'] === 4 || $fnMain->tskTask['statusId'] === 7;
         $isClosedAfter = $bodyParams['statusId'] === 4 || $bodyParams['statusId'] === 7;
+        $fnTaskTime = new TskTaskTime($fnMain->userId, Constant::$isLogged);
         if (!$isClosedBefore && $isClosedAfter) {
-            $fnTaskTime = new TskTaskTime($fnMain->userId, Constant::$isLogged);
             $fnTaskChecklist = new TskTaskChecklist($fnMain->userId, Constant::$isLogged);
             $fnTaskTime->updateByTask($taskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
             $fnTaskChecklist->updateByTask($taskId, array('statusId'=>7), array('statusId'=>3));
@@ -90,6 +90,9 @@ try {
             DbMysql::commit();
             $formData['errmsg'] = Alert::$task['close'];
         } else {
+            if ($fnMain->tskTask['statusId'] === 3 && $bodyParams['statusId'] === 5) {
+                $fnTaskTime->insert(array('taskId'=>$taskId, 'taskTimeStart'=>'NOW()'));
+            }
             $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             DbMysql::commit();
             $formData['errmsg'] = Alert::$task['update'];

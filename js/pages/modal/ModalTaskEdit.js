@@ -168,7 +168,6 @@ function ModalTaskEdit () {
     this.init = function () {
         try {
             mzOption('optMteSpace', refSpace, 'spaceName', {statusId: 1}, true);
-            mzOption('optMteStatus', refStatus, 'statusName', {id: '(3,4,5,7)'}, true);
             $('#txtMteStartTime').mdbAutocomplete({ data: refTime });
             self.setOptionAssignee();
             refMainTask = mzAjax('task/ref/mainTask', 'GET');
@@ -292,7 +291,9 @@ function ModalTaskEdit () {
             const folderId = task['folderId'];
             const spaceId = refFolder[folderId]['spaceId'];
             const isMain = task['isMain'];
+            const status = task['statusId'];
             mzOptionStop('optMteFolder', refFolder, 'folderName', {spaceId: spaceId, statusId: 1}, true);
+            mzOptionStop('optMteStatus', refStatus, 'statusName', {id: status===5?'(4,5,7)':'(3,4,5,7)'}, true);
             mzSetValue('txtMteTaskName', task['taskName'], 'text');
             mzSetValue('optMteSpace', spaceId, 'select');
             mzSetValue('optMteFolder', folderId, 'select');
@@ -302,7 +303,7 @@ function ModalTaskEdit () {
             mzSetValue('radMteIsMain', isMain, 'radio2');
             mzSetValue('txtMteDueDate', task['taskDateDue'], 'date');
             mzSetValue('txtMteAmount', task['taskAmount'], 'text');
-            mzSetValue('optMteStatus', task['statusId'], 'select');
+            mzSetValue('optMteStatus', status, 'select');
             mzSetValue('txaMteRemark', task['taskDescription'], 'textarea');
             self.setTaskTypeHide(isMain, task['taskMainId']);
             let refTimeEstimateClone = refTimeEstimate.map((x) => x);
