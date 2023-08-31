@@ -280,7 +280,6 @@ function ModalTaskEdit () {
             taskId = _taskId;
             formValidate.clearValidation();
             formValidate.registerFields(vData);
-            formValidate.enableField('optMteStatus');
             $('#optMteFolder_, #optMteStatus_, #txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
             $('#optMteMainTask_').hide();
             mzDisableSelect('optMteSpace', true);
@@ -312,8 +311,11 @@ function ModalTaskEdit () {
             let refTimeEstimateClone = refTimeEstimate.map((x) => x);
             if (isMain !== 'Main' && task['timeEstimateInList'] === false) {
                 refTimeEstimateClone.push(task['timeEstimate']);
+                vData[10]['validator']['inList'] = refTimeEstimateClone;
+                formValidate.registerFields(vData);
             }
-            $('#txtMteTimeEstimate').mdbAutocomplete({ data: refTimeEstimate });
+            $('#txtMteTimeEstimate').mdbAutocomplete({ data: refTimeEstimateClone });
+            formValidate.enableField('optMteStatus');
             if (isMain !== 'Main') {
                 mzSetValue('txtMteTimeEstimate', task['timeEstimate'], 'text');
                 mzSetValue('txtMteStartDate', task['startDate'], 'date');

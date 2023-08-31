@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header pb-2">
                 <h4 class="modal-title w-100 white-text"><i class="fa-solid fa-stopwatch mr-2"></i>Task Time Tracking</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnMttClose">
                     <span aria-hidden="true" class="white-text">&times;</span>
                 </button>
             </div>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-9">
+                        <div class="col-9 pr-2">
                             <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMttDescription" class="form-control">
                                 <label for="txtMttDescription" id="lblMttDescription">Description</label>
@@ -40,13 +40,14 @@
                             </div>
                         </div>
                         <div class="col-3 pl-0 pr-3">
-                            <button type="button" class="btn btn-sm btn-outline-danger waves-effect z-depth-1 col-12"><i class="fa-solid fa-play mr-2"></i>Start</button>
+                            <button type="button" class="btn btn-outline-danger waves-effect z-depth-1 col-12 px-2 py-2 mt-0" id="btnMttStart"><i class="fa-solid fa-play mr-2"></i>Start</button>
+                            <button type="button" class="btn btn-outline-danger waves-effect z-depth-1 col-12 px-2 py-2 mt-0" id="btnMttStop"><i class="fa-regular fa-circle-stop mr-2"></i>Stop</button>
                         </div>
                         <div class="col-12">
-                            <p class="font-small font-weight-500">Time Tracking List :</p>
+                            <p class="font-small font-weight-500 mb-0">Time Tracking List :</p>
                         </div>
                     </div>
-                    <div class="card z-depth-1 mb-4" id="divMttEdit">
+                    <div class="card z-depth-1 my-2" id="divMttEdit">
                         <div class="card-body grey lighten-5 px-3 py-2">
                             <button type="button" class="close float-right grey-text" aria-label="Close" id="btnMttCloseEdit">
                                 <span aria-hidden="true">&times;</span>
@@ -89,51 +90,28 @@
                                     </div>
                                 </div>
                                 <div class="col-12 text-right pr-2">
-                                    <button type="button" class="btn btn-sm btn-outline-danger waves-effect z-depth-1 mt-0"><i class="fa-regular fa-floppy-disk mr-2"></i>Save</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger waves-effect z-depth-1 mt-0" id="btnMttSave"><i class="fa-regular fa-floppy-disk mr-2"></i>Save</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 px-0">
-                        <div class="table-responsive">
-                            <table id="dtMttTime" class="table table-bordered table-tight table-hover table-sm mb-0 display responsive">
-                                <thead>
-                                <tr class="th-tight-bordered">
-                                    <th style="width: 25px"></th>
-                                    <th>Description</th>
-                                    <th style="width: 80px; min-width: 80px">Start</th>
-                                    <th style="width: 80px; min-width: 80px">End</th>
-                                    <th style="width: 80px; min-width: 80px">Time Spend</th>
-                                    <th style="width: 28px; min-width: 28px">&nbsp;</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Test</td>
-                                    <td>2023-08-14 23:10:33</td>
-                                    <td>2023-08-14 23:34:34</td>
-                                    <td>13:32:33</td>
-                                    <td><a><i class="fa-regular fa-pen-to-square fa-lg" data-toggle="tooltip" data-placement="top" title="Edit"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Test</td>
-                                    <td>2023-08-14 23:10:33</td>
-                                    <td>2023-08-14 23:34:34</td>
-                                    <td>13:32:33</td>
-                                    <td><a><i class="fa-regular fa-pen-to-square fa-lg" data-toggle="tooltip" data-placement="top" title="Edit"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Test</td>
-                                    <td>2023-08-14 23:10:33</td>
-                                    <td>2023-08-14 23:34:34</td>
-                                    <td>13:32:33</td>
-                                    <td><a><i class="fa-regular fa-pen-to-square fa-lg" data-toggle="tooltip" data-placement="top" title="Edit"></i></a></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                    <div class="row">
+                        <div class="col-12 px-0">
+                            <div class="table-responsive">
+                                <table id="dtMtt" class="table table-bordered table-tight table-hover table-sm mb-0 display responsive">
+                                    <thead>
+                                    <tr class="th-tight-bordered">
+                                        <th style="width: 18px"></th>
+                                        <th>Description</th>
+                                        <th style="width: 70px; min-width: 70px">Start</th>
+                                        <th style="width: 70px; min-width: 70px">End</th>
+                                        <th style="width: 66px; min-width: 66px">Time Spend</th>
+                                        <th style="width: 28px; min-width: 28px">&nbsp;</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </form>

@@ -29,6 +29,37 @@ class TskTaskTime extends General {
      * @return array
      * @throws Exception
      */
+    public function getList (int $taskId): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            return DbMysql::selectAll($this::$tableName, array('taskId'=>$taskId));
+        } catch (Exception|Throwable $ex) {
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @return array
+     * @throws Exception
+     */
+    public function getCurrent (int $taskId): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            return DbMysql::select($this::$tableName, array('taskId'=>$taskId, 'taskTimeEnd'=>'IS NULL'));
+        } catch (Exception|Throwable $ex) {
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @param string|null $estimateTime
+     * @return array
+     * @throws Exception
+     */
     public function getTotalSpent (int $taskId, string|null $estimateTime): array {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);

@@ -84,7 +84,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 50,
+            pageLength: 10,
             autoWidth: false,
             dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -131,7 +131,7 @@ function ListAll() {
                         const rowId = linkId.substring(linkIndex+1);
                         const currentRow = dtLllToday.row(parseInt(rowId)).data();
                         modalTaskTime.setClassFrom(self);
-                        modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate']);
+                        modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
                     }
                 });
             },
@@ -155,7 +155,7 @@ function ListAll() {
                 { mData: 'taskTimeEstimate'},
                 { mData: 'timeSpent', mRender: function (data, type, row) { return dtDisplay.getRecordedTime(data, row['taskTimeEstimate']); }},
                 { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }},
-                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(2, 'lnkLllToday', meta.row); }}
+                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(row['taskIsMain']===1?1:2, 'lnkLllToday', meta.row); }}
             ]
         });
 
@@ -175,7 +175,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 50,
+            pageLength: 10,
             autoWidth: false,
             dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -215,6 +215,16 @@ function ListAll() {
                         modalTaskEdit.edit(currentRow['taskId']);
                     }
                 });
+                $('.lnkLllOverdueTime').off('click').on('click', function () {
+                    const linkId = $(this).attr('id');
+                    const linkIndex = linkId.indexOf('_');
+                    if (linkIndex > 0) {
+                        const rowId = linkId.substring(linkIndex+1);
+                        const currentRow = dtLllOverdue.row(parseInt(rowId)).data();
+                        modalTaskTime.setClassFrom(self);
+                        modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
+                    }
+                });
             },
             aoColumns: [
                 { mData: null},
@@ -237,7 +247,7 @@ function ListAll() {
                 { mData: 'timeSpent', mRender: function (data, type, row) { return dtDisplay.getRecordedTime(data, row['taskTimeEstimate']); }},
                 { mData: 'lateness', mRender: function(data) { return dtDisplay.getLateness(data); }},
                 { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }},
-                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(2, 'lnkLllOverdue', meta.row); }} // 20
+                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(row['taskIsMain']===1?1:2, 'lnkLllOverdue', meta.row); }} // 20
             ]
         });
 
@@ -257,7 +267,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 50,
+            pageLength: 10,
             autoWidth: false,
             dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -297,6 +307,16 @@ function ListAll() {
                         modalTaskEdit.edit(currentRow['taskId']);
                     }
                 });
+                $('.lnkLllFutureTime').off('click').on('click', function () {
+                    const linkId = $(this).attr('id');
+                    const linkIndex = linkId.indexOf('_');
+                    if (linkIndex > 0) {
+                        const rowId = linkId.substring(linkIndex+1);
+                        const currentRow = dtLllFuture.row(parseInt(rowId)).data();
+                        modalTaskTime.setClassFrom(self);
+                        modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
+                    }
+                });
             },
             aoColumns: [
                 { mData: null},
@@ -318,7 +338,7 @@ function ListAll() {
                 { mData: 'taskTimeEstimate'},
                 { mData: 'timeSpent', mRender: function (data, type, row) { return dtDisplay.getRecordedTime(data, row['taskTimeEstimate']); }},
                 { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }},
-                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(2, 'lnkLllFuture', meta.row); }}
+                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(row['taskIsMain']===1?1:2, 'lnkLllFuture', meta.row); }}
             ]
         });
 
@@ -337,7 +357,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 50,
+            pageLength: 10,
             autoWidth: false,
             dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -411,7 +431,7 @@ function ListAll() {
             bLengthChange: false,
             bFilter: true,
             ordering: false,
-            pageLength: 50,
+            pageLength: 10,
             autoWidth: false,
             dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +

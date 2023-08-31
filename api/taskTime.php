@@ -29,6 +29,11 @@ try {
     if ('GET' === $requestMethod) {
         if (!isset($urlArr[1])) {
             throw new Exception('[line: ' . __LINE__ . '] - Wrong GET Request');
+        }
+        if ($urlArr[1] === 'list' && isset($urlArr[2]) && is_numeric($urlArr[2])) {
+            $result = $fnMain->getList(intval($urlArr[2]));
+        } else if ($urlArr[1] === 'current' && isset($urlArr[2]) && is_numeric($urlArr[2])) {
+            $result = $fnMain->getCurrent(intval($urlArr[2]));
         } else if ($urlArr[1] === 'totalSpent' && isset($urlArr[2]) && is_numeric($urlArr[2])) {
             $taskId = intval($urlArr[2]);
             $tskTask = $fnTask->get($taskId);
