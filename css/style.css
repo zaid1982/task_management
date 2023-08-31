@@ -34,15 +34,18 @@
 .th-strong th {
     font-weight: 900 !important;
 }
-.modal-dialog{
+.modal-dialog {
     overflow-y: initial !important
 }
-.modal-body-overflow{
+.modal-body-overflow {
     max-height: calc(100vh - 235px);
     /*overflow-y: auto;*/
 }
-.modal-body-fade{
+.modal-max-height {
     max-height: calc(100vh - 120px) !important;
+    overflow-y: auto!important;
+}
+.overflow-auto {
     overflow-y: auto;
 }
 .cascading-admin-card {

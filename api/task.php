@@ -67,12 +67,9 @@ try {
         $isTransaction = true;
         $fnMain->set($taskId);
         $fnMain->updateForm($taskId, $bodyParams);
-        $isClosedBefore = $fnMain->tskTask['statusId'] === 4 || $fnMain->tskTask['statusId'] === 7;
-        $isClosedAfter = $bodyParams['statusId'] === 4 || $bodyParams['statusId'] === 7;
         $fnTaskTime = new TskTaskTime($fnMain->userId, Constant::$isLogged);
-        if (!$isClosedBefore && $isClosedAfter) {
+        if (($fnMain->tskTask['statusId'] === 3 || $fnMain->tskTask['statusId'] === 5) && ($bodyParams['statusId'] === 4 || $bodyParams['statusId'] === 7)) {
             $fnTaskChecklist = new TskTaskChecklist($fnMain->userId, Constant::$isLogged);
-            $fnTaskTime->updateByTask($taskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
             $fnTaskChecklist->updateByTask($taskId, array('statusId'=>7), array('statusId'=>3));
             if ($fnMain->tskTask['taskIsMain'] === 1) {
                 $subTaskList = $fnMain->getSubTaskList($taskId);
@@ -85,18 +82,21 @@ try {
                 $fnMain->updateMainTaskDate($taskId);
                 $fnMain->saveAudit(6, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             } else {
+                if ($fnMain->tskTask['statusId'] === 5) {
+                    $fnTaskTime->updateByTask($taskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
+                }
                 $fnMain->saveAudit(5, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             }
-            DbMysql::commit();
-            $formData['errmsg'] = Alert::$task['close'];
+            $fnMain->errMsg = Alert::$task['close'];
         } else {
             if ($fnMain->tskTask['statusId'] === 3 && $bodyParams['statusId'] === 5) {
                 $fnTaskTime->insert(array('taskId'=>$taskId, 'taskTimeStart'=>'NOW()'));
             }
             $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
-            DbMysql::commit();
-            $formData['errmsg'] = Alert::$task['update'];
+            $fnMain->errMsg = Alert::$task['update'];
         }
+        DbMysql::commit();
+        $formData['errmsg'] = $fnMain->errMsg;
         $formData['success'] = true;
     } else {
         throw new Exception('[line: ' . __LINE__ . '] - Wrong Request Method');
