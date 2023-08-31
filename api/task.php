@@ -58,7 +58,7 @@ try {
         $formData['success'] = true;
     }
     else if ('PUT' === $requestMethod) {
-        if (!isset($urlArr[1])  || !is_numeric($urlArr[1]) || isset($urlArr[2])) {
+        if (!isset($urlArr[1]) || !is_numeric($urlArr[1]) || isset($urlArr[2])) {
             throw new Exception('[line: ' . __LINE__ . '] - Wrong PUT Request');
         }
         $taskId = intval($urlArr[1]);

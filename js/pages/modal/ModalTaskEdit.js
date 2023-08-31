@@ -240,7 +240,7 @@ function ModalTaskEdit () {
                             classFrom.refreshEdit(task['taskDateDue'], dueDate, status === 4 || status === 7);
                         }
                         $('#modalTaskEdit').modal('hide');
-                    } catch (e) { toastr['error'](!e.message ? e.message : _ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
+                    } catch (e) { toastr['error'](e.message !== '' ? e.message : _ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
                 } else {
                     toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);
                     $('#modalTaskEdit').modal('hide');

@@ -9,6 +9,28 @@
             </div>
             <div class="modal-body pt-4_5 pb-4">
                 <form id="formMtt" autocomplete="off">
+                    <div class="card z-depth-1 mb-4_5">
+                        <div class="card-body blue-grey lighten-5 pt-4 pb-0">
+                            <div class="row">
+                                <div class="col-6 pl-2">
+                                    <div class="md-form label-icon">
+                                        <i class="fa-solid fa-stopwatch-20 prefix text-danger"></i>
+                                        <label class="active ">Time Estimate</label>
+                                        <p id="pMttTimeEstimate"></p>
+                                        <hr class="grey lighten-1">
+                                    </div>
+                                </div>
+                                <div class="col-6 pr-2">
+                                    <div class="md-form label-icon">
+                                        <i class="fa-solid fa-hourglass-half prefix text-danger"></i>
+                                        <label class="active">Total Time Spent</label>
+                                        <p id="pMttTimeSpent"></p>
+                                        <hr class="grey lighten-1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-9">
                             <div class="md-form md-outline my-a">
@@ -18,15 +40,18 @@
                             </div>
                         </div>
                         <div class="col-3 pl-0 pr-3">
-                            <button type="button" class="btn btn-sm btn-outline-primary waves-effect z-depth-1 col-12"><i class="fa-solid fa-play mr-2"></i>Start</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger waves-effect z-depth-1 col-12"><i class="fa-solid fa-play mr-2"></i>Start</button>
+                        </div>
+                        <div class="col-12">
+                            <p class="font-small font-weight-500">Time Tracking List :</p>
                         </div>
                     </div>
-                    <div class="card z-depth-1 mb-4" id="divMfaValidationInfo">
+                    <div class="card z-depth-1 mb-4" id="divMttEdit">
                         <div class="card-body grey lighten-5 px-3 py-2">
-                            <button type="button" class="close float-right grey-text" aria-label="Close">
+                            <button type="button" class="close float-right grey-text" aria-label="Close" id="btnMttCloseEdit">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <p class="font-small font-weight-500">Edit Time Tracking</p>
+                            <p class="font-small font-weight-500 font-italic mt-1">Edit Time Tracking</p>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="md-form md-outline my-a">
@@ -64,7 +89,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 text-right pr-2">
-                                    <button type="button" class="btn btn-sm btn-outline-success waves-effect z-depth-1 mt-0"><i class="fa-regular fa-floppy-disk mr-2"></i>Save</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger waves-effect z-depth-1 mt-0"><i class="fa-regular fa-floppy-disk mr-2"></i>Save</button>
                                 </div>
                             </div>
                         </div>

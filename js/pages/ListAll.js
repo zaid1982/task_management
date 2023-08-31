@@ -86,7 +86,7 @@ function ListAll() {
             ordering: false,
             pageLength: 50,
             autoWidth: false,
-            dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
+            dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
@@ -131,7 +131,7 @@ function ListAll() {
                         const rowId = linkId.substring(linkIndex+1);
                         const currentRow = dtLllToday.row(parseInt(rowId)).data();
                         modalTaskTime.setClassFrom(self);
-                        modalTaskTime.open(currentRow['taskId']);
+                        modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate']);
                     }
                 });
             },
@@ -168,6 +168,8 @@ function ListAll() {
         if (divWidth < 682) { dtLllToday.column(3).visible(false); }
         if (divWidth < 621) { dtLllToday.column(4).visible(false); }
         if (divWidth < 576) { dtLllToday.column(18).visible(false); }
+        if (divWidth < 451) { dtLllToday.column(14).visible(false); }
+        if (divWidth < 370) { dtLllToday.column(13).visible(false); }
 
         dtLllOverdue = $('#dtLllOverdue').DataTable({
             bLengthChange: false,
@@ -175,7 +177,7 @@ function ListAll() {
             ordering: false,
             pageLength: 50,
             autoWidth: false,
-            dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
+            dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
@@ -247,6 +249,9 @@ function ListAll() {
         if (divWidth < 754) { dtLllOverdue.column(15).visible(false); }
         if (divWidth < 675) { dtLllOverdue.column(3).visible(false); }
         if (divWidth < 598) { dtLllOverdue.column(4).visible(false); }
+        if (divWidth < 500) { dtLllOverdue.column(19).visible(false); }
+        if (divWidth < 450) { dtLllOverdue.column(12).visible(false); }
+        if (divWidth < 370) { dtLllOverdue.column(6).visible(false); }
 
         dtLllFuture = $('#dtLllFuture').DataTable({
             bLengthChange: false,
@@ -254,7 +259,7 @@ function ListAll() {
             ordering: false,
             pageLength: 50,
             autoWidth: false,
-            dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
+            dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
@@ -324,6 +329,9 @@ function ListAll() {
         if (divWidth < 723) { dtLllFuture.column(7).visible(false); }
         if (divWidth < 664) { dtLllFuture.column(16).visible(false); }
         if (divWidth < 576) { dtLllFuture.column(3).visible(false); }
+        if (divWidth < 539) { dtLllFuture.column(18).visible(false); }
+        if (divWidth < 471) { dtLllFuture.column(4).visible(false); }
+        if (divWidth < 390) { dtLllFuture.column(6).visible(false); }
 
         dtLllUnscheduled = $('#dtLllUnscheduled').DataTable({
             bLengthChange: false,
@@ -331,7 +339,7 @@ function ListAll() {
             ordering: false,
             pageLength: 50,
             autoWidth: false,
-            dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
+            dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
@@ -395,6 +403,9 @@ function ListAll() {
         if (divWidth < 774) { dtLllUnscheduled.column(11).visible(false); }
         if (divWidth < 692) { dtLllUnscheduled.column(12).visible(false); }
         if (divWidth < 576) { dtLllUnscheduled.column(13).visible(false); }
+        if (divWidth < 482) { dtLllUnscheduled.column(7).visible(false); }
+        if (divWidth < 413) { dtLllUnscheduled.column(6).visible(false); }
+        if (divWidth < 345) { dtLllUnscheduled.column(3).visible(false); }
 
         dtLllDone = $('#dtLllDone').DataTable({
             bLengthChange: false,
@@ -402,7 +413,7 @@ function ListAll() {
             ordering: false,
             pageLength: 50,
             autoWidth: false,
-            dom: "<'row'<'col-5 px-0 pb-2'B><'col-7 pb-0'f>>" +
+            dom: "<'row'<'col-12 col-sm-6 px-0 pb-2'B><'col-sm-6 d-none d-sm-block pb-0'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
@@ -467,7 +478,10 @@ function ListAll() {
         if (divWidth < 821) { dtLllDone.column(6).visible(false); }
         if (divWidth < 729) { dtLllDone.column(11).visible(false); }
         if (divWidth < 644) { dtLllDone.column(16).visible(false); }
-        if (divWidth < 576) { dtLllDone.column(17).visible(false); }
+        if (divWidth < 631) { dtLllDone.column(17).visible(false); }
+        if (divWidth < 558) { dtLllDone.column(12).visible(false); }
+        if (divWidth < 492) { dtLllDone.column(13).visible(false); }
+        if (divWidth < 392) { dtLllDone.column(18).visible(false); }
 
         self.genTotalData();
         self.genTableToday();

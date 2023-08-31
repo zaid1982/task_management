@@ -10,6 +10,49 @@ class TskTaskTime extends General {
     }
 
     /**
+     * @param int $taskTimeId
+     * @return array
+     * @throws Exception
+     */
+    public function get (int $taskTimeId): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskTimeId, 'taskTimeId');
+            return DbMysql::select($this::$tableName, array('taskTimeId'=>$taskTimeId), true);
+        } catch (Exception|Throwable $ex) {
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @return array
+     * @throws Exception
+     */
+    public function getTotalSpent (int $taskId, string|null $estimateTime): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            parent::checkEmptyString($estimateTime, 'estimateTime');
+            $returnArr = array('totalSpent'=>'00:00:00', 'class'=>'text-danger');
+            $sqlResult = DbMysql::selectSql(
+                    /** @lang text */
+                    "SELECT 
+                            SEC_TO_TIME(SUM(TIME_TO_SEC(task_time_amount))) AS time_spent
+                        FROM tsk_task_time",
+                array('taskId'=>$taskId));
+            $timeSpent = $sqlResult['timeSpent'];
+            if ($timeSpent !== null) {
+                $returnArr['totalSpent'] = $timeSpent;
+                $returnArr['class'] = $timeSpent > $estimateTime ? 'text-danger' : 'text-success';
+            }
+            return $returnArr;
+        } catch (Exception|Throwable $ex) {
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
      * @param array $inputParams
      * @return int
      * @throws Exception

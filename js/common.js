@@ -1625,3 +1625,10 @@ function mzNullString (data) {
     }
     return data;
 }
+
+function mzSpaceString (data) {
+    if (data === '' || data === null) {
+        return '&nbsp;';
+    }
+    return data;
+}
