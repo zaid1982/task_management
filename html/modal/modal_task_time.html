@@ -1,0 +1,118 @@
+<div class="modal fade bottom" id="modalTaskTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notify modal-danger" role="document">
+        <div class="modal-content">
+            <div class="modal-header pb-2">
+                <h4 class="modal-title w-100 white-text"><i class="fa-solid fa-stopwatch mr-2"></i>Task Time Tracking</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-4_5 pb-4">
+                <form id="formMtt" autocomplete="off">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="md-form md-outline my-a">
+                                <input type="text" id="txtMttDescription" class="form-control">
+                                <label for="txtMttDescription" id="lblMttDescription">Description</label>
+                                <p class="font-small text-danger" id="txtMttDescriptionErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-3 pl-0 pr-3">
+                            <button type="button" class="btn btn-sm btn-outline-primary waves-effect z-depth-1 col-12"><i class="fa-solid fa-play mr-2"></i>Start</button>
+                        </div>
+                    </div>
+                    <div class="card z-depth-1 mb-4" id="divMfaValidationInfo">
+                        <div class="card-body grey lighten-5 px-3 py-2">
+                            <button type="button" class="close float-right grey-text" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <p class="font-small font-weight-500">Edit Time Tracking</p>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="md-form md-outline my-a">
+                                        <input type="text" id="txtMttDescriptionEdit" class="form-control">
+                                        <label for="txtMttDescriptionEdit" id="lblMttDescriptionEdit">Description</label>
+                                        <p class="font-small text-danger" id="txtMttDescriptionEditErr"></p>
+                                    </div>
+                                </div>
+                                <div class="col-6 pr-0">
+                                    <div class="md-form md-outline my-a">
+                                        <input type="text" id="txtMttStartDate" class="form-control datepicker" readonly>
+                                        <label for="txtMttStartDate" id="lblMttStartDate">Start Date</label>
+                                        <p class="font-small text-danger" id="txtMttStartDateErr"></p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="md-form md-outline my-a">
+                                        <input type="text" id="txtMttStartTime" class="form-control timepicker" readonly>
+                                        <label for="txtMttStartTime" id="lblMttStartTime">Start Time</label>
+                                        <p class="font-small text-danger" id="txtMttStartTimeErr"></p>
+                                    </div>
+                                </div>
+                                <div class="col-6 pr-0">
+                                    <div class="md-form md-outline my-0">
+                                        <input type="text" id="txtMttEndDate" class="form-control datepicker" readonly>
+                                        <label for="txtMttEndDate" id="lblMttEndDate">End Date</label>
+                                        <p class="font-small text-danger" id="txtMttEndDateErr"></p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="md-form md-outline my-0">
+                                        <input type="text" id="txtMttEndTime" class="form-control timepicker" readonly>
+                                        <label for="txtMttEndTime" id="lblMttEndTime">End Time</label>
+                                        <p class="font-small text-danger" id="txtMttEndTimeErr"></p>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-right pr-2">
+                                    <button type="button" class="btn btn-sm btn-outline-success waves-effect z-depth-1 mt-0"><i class="fa-regular fa-floppy-disk mr-2"></i>Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 px-0">
+                        <div class="table-responsive">
+                            <table id="dtMttTime" class="table table-bordered table-tight table-hover table-sm mb-0 display responsive">
+                                <thead>
+                                <tr class="th-tight-bordered">
+                                    <th style="width: 25px"></th>
+                                    <th>Description</th>
+                                    <th style="width: 80px; min-width: 80px">Start</th>
+                                    <th style="width: 80px; min-width: 80px">End</th>
+                                    <th style="width: 80px; min-width: 80px">Time Spend</th>
+                                    <th style="width: 28px; min-width: 28px">&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Test</td>
+                                    <td>2023-08-14 23:10:33</td>
+                                    <td>2023-08-14 23:34:34</td>
+                                    <td>13:32:33</td>
+                                    <td><a><i class="fa-regular fa-pen-to-square fa-lg" data-toggle="tooltip" data-placement="top" title="Edit"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Test</td>
+                                    <td>2023-08-14 23:10:33</td>
+                                    <td>2023-08-14 23:34:34</td>
+                                    <td>13:32:33</td>
+                                    <td><a><i class="fa-regular fa-pen-to-square fa-lg" data-toggle="tooltip" data-placement="top" title="Edit"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Test</td>
+                                    <td>2023-08-14 23:10:33</td>
+                                    <td>2023-08-14 23:34:34</td>
+                                    <td>13:32:33</td>
+                                    <td><a><i class="fa-regular fa-pen-to-square fa-lg" data-toggle="tooltip" data-placement="top" title="Edit"></i></a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

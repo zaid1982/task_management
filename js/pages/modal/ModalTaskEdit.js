@@ -164,9 +164,12 @@ function ModalTaskEdit () {
         }
     ];
 
-
     this.init = function () {
         try {
+            if (navigator.userAgent.toLowerCase().indexOf('safari')) {
+                $('#divMteModalBody').removeClass('modal-body-fade');
+            }
+
             mzOption('optMteSpace', refSpace, 'spaceName', {statusId: 1}, true);
             $('#txtMteStartTime').mdbAutocomplete({ data: refTime });
             self.setOptionAssignee();

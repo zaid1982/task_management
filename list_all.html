@@ -93,7 +93,7 @@
                                         <div class="table-responsive">
                                             <table id="dtLllToday" class="table table-hover table-tight mb-0 display responsive">
                                                 <thead>
-                                                <tr class="th-strong">
+                                                <tr class="th-tight-5">
                                                     <th>#</th>
                                                     <th>TASK NAME</th>
                                                     <th>MAIN TASK</th>
@@ -139,7 +139,7 @@
                                         <div class="table-responsive">
                                             <table id="dtLllOverdue" class="table table-hover table-tight mb-0 display responsive">
                                                 <thead>
-                                                <tr class="th-strong">
+                                                <tr class="th-tight-5">
                                                     <th>#</th>
                                                     <th>TASK NAME</th>
                                                     <th>MAIN TASK</th>
@@ -186,7 +186,7 @@
                                         <div class="table-responsive">
                                             <table id="dtLllFuture" class="table table-hover table-tight mb-0 display responsive">
                                                 <thead>
-                                                <tr class="th-strong">
+                                                <tr class="th-tight-5">
                                                     <th>#</th>
                                                     <th>TASK NAME</th>
                                                     <th>MAIN TASK</th>
@@ -232,7 +232,7 @@
                                         <div class="table-responsive">
                                             <table id="dtLllUnscheduled" class="table table-hover table-tight mb-0 display responsive">
                                                 <thead>
-                                                <tr class="th-strong">
+                                                <tr class="th-tight-5">
                                                     <th>#</th>
                                                     <th>TASK NAME</th>
                                                     <th>MAIN TASK</th>
@@ -273,7 +273,7 @@
                                         <div class="table-responsive">
                                             <table id="dtLllDone" class="table table-hover table-tight mb-0 display responsive">
                                                 <thead>
-                                                <tr class="th-strong">
+                                                <tr class="th-tight-5">
                                                     <th>#</th>
                                                     <th>TASK NAME</th>
                                                     <th>MAIN TASK</th>
@@ -311,6 +311,7 @@
         </section>
     </div>
     <div class="includeHtml" id="h-m-modal_task_edit"></div>
+    <div class="includeHtml" id="h-m-modal_task_time"></div>
 </main>
 
 <script type="text/javascript" src="js/include.js"></script>
@@ -334,6 +335,7 @@
 
     let dtTaskDisplay;
     let modalTaskEdit;
+    let modalTaskTime;
     let mainClass;
     document.addEventListener('DOMContentLoaded', function () {
         ShowLoader();
@@ -342,6 +344,7 @@
                 initiatePages();
                 dtTaskDisplay = new DtTaskDisplay();
                 modalTaskEdit = new ModalTaskEdit();
+                modalTaskTime = new ModalTaskTime();
                 mainClass = new ListAll();
 
                 const refStatus_ = mzGetRef('task_status', versionLocal_, 'status/ref');
@@ -356,12 +359,15 @@
                 modalTaskEdit.setClassFrom(mainClass);
                 modalTaskEdit.init();
 
+                modalTaskTime.init();
+
                 mainClass.setRefStatus(refStatus_);
                 mainClass.setRefUser(refUser_);
                 mainClass.setRefSpace(refSpace_);
                 mainClass.setRefFolder(refFolder_);
                 mainClass.setDtDisplay(dtTaskDisplay);
                 mainClass.setModalTaskEdit(modalTaskEdit);
+                mainClass.setModalTaskTime(modalTaskTime);
                 mainClass.init();
             } catch (e) {
                 toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);
@@ -371,6 +377,7 @@
     });
     document.write('<scr' + 'ipt src="js/global/DtTaskDisplay.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
     document.write('<scr' + 'ipt src="js/pages/modal/ModalTaskEdit.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
+    document.write('<scr' + 'ipt src="js/pages/modal/ModalTaskTime.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
     document.write('<scr' + 'ipt src="js/pages/ListAll.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
 </script>
 </body>

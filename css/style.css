@@ -1,27 +1,12 @@
 /* Your custom styles */
-.pl-4_1 {
-    padding-left: 2.1rem !important;
-}
 .pl-4_5 {
     padding-left: 2.5rem !important;
-}
-.pb-1_2 {
-    padding-bottom: 1px !important;
-}
-.pb-1_3 {
-    padding-bottom: 8px !important;
-}
-.pt-2-5 {
-    padding-top: 0.8rem !important;
 }
 .mb-4_5 {
     margin-bottom: 27px !important;
 }
-.mt-4_5 {
-    margin-top: 2.1rem !important;
-}
-.ml-4_5 {
-    margin-left: 40px !important;
+.pt-4_5 {
+    padding-top: 1.8rem !important;
 }
 .my-a {
     margin-top: 0 !important;
@@ -31,6 +16,14 @@
     margin-top: 0 !important;
     margin-bottom: 0.2rem !important;
 }
+.py-b {
+    padding-top: 0.7rem !important;
+    padding-bottom: 0.7rem !important;
+}
+.py-bo {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+}
 .th-strong th {
     font-weight: 900 !important;
 }
@@ -39,14 +32,11 @@
 }
 .modal-body-overflow {
     max-height: calc(100vh - 235px);
-    /*overflow-y: auto;*/
+    overflow-y: auto;
 }
-.modal-max-height {
+.modal-body-fade {
     max-height: calc(100vh - 120px) !important;
     overflow-y: auto!important;
-}
-.overflow-auto {
-    overflow-y: auto;
 }
 .cascading-admin-card {
     margin-top: 1.25rem; }
@@ -181,8 +171,15 @@ input:-webkit-autofill {
     font-size: 12px;
     font-weight: normal !important;
     text-align: center !important;
-    padding-top: 0px !important;
-    padding-bottom: 10px !important;
+    padding-top: 0;
+    padding-bottom: 10px;
+}
+.th-tight-bordered > th {
+    padding-top: 3px !important;
+    padding-bottom: 2px !important;
+}
+.th-tight-5 > th {
+    padding-bottom: 5px !important;
 }
 .table-tight > tbody > tr > td {
     font-size: 13px;

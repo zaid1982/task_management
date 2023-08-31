@@ -73,10 +73,10 @@ function DtTaskDisplay () {
 
     this.getAction = function (type, id, row) {
         if (type === 1) {
-            return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+'Edit" id="'+id+'Edit_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
+            return '<a><i class="fa-regular fa-pen-to-square fa-lg '+id+'Edit" id="'+id+'Edit_'+row+'" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
         } else if (type === 2) {
-            return '<a><i class="fa-regular fa-pen-to-square fa-fade fa-lg '+id+'Edit mr-1" id="'+id+'Edit_' + row + '" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>' +
-                '<a><i class="fa-regular fa-circle-play fa-fade fa-lg '+id+'Record" id="'+id+'Record_' + row + '" data-toggle="tooltip" data-placement="top" title="Start Record"></i></a>';
+            return '<a><i class="fa-solid fa-stopwatch fa-lg '+id+'Time" id="'+id+'Time_'+row+'" data-toggle="tooltip" data-placement="top" title="Time Track"></i></a>' +
+                '<a><i class="fa-regular fa-pen-to-square fa-lg '+id+'Edit ml-1" id="'+id+'Edit_'+row+'" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
         } else {
             return '';
         }

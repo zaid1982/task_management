@@ -13,6 +13,7 @@ function ListAll() {
     let refFolder;
     let dtDisplay;
     let modalTaskEdit;
+    let modalTaskTime;
     let currentOpen = 1;
     let isGetToday = true;
     let isGetOverdue = false;
@@ -121,6 +122,16 @@ function ListAll() {
                         const rowId = linkId.substring(linkIndex+1);
                         const currentRow = dtLllToday.row(parseInt(rowId)).data();
                         modalTaskEdit.edit(currentRow['taskId']);
+                    }
+                });
+                $('.lnkLllTodayTime').off('click').on('click', function () {
+                    const linkId = $(this).attr('id');
+                    const linkIndex = linkId.indexOf('_');
+                    if (linkIndex > 0) {
+                        const rowId = linkId.substring(linkIndex+1);
+                        const currentRow = dtLllToday.row(parseInt(rowId)).data();
+                        modalTaskTime.setClassFrom(self);
+                        modalTaskTime.open(currentRow['taskId']);
                     }
                 });
             },
@@ -602,5 +613,9 @@ function ListAll() {
 
     this.setModalTaskEdit = function (_modalTaskEdit) {
         modalTaskEdit = _modalTaskEdit;
+    };
+
+    this.setModalTaskTime = function (_modalTaskTime) {
+        modalTaskTime = _modalTaskTime;
     };
 }

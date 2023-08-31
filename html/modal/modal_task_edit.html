@@ -1,5 +1,5 @@
 <div class="modal fade right" id="modalTaskEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-danger" role="document">
         <div class="modal-content">
             <div class="modal-header pb-2">
                 <h4 class="modal-title w-100 white-text" id="lblMteTitle"></h4>
@@ -7,7 +7,7 @@
                     <span aria-hidden="true" class="white-text">&times;</span>
                 </button>
             </div>
-            <div class="modal-body pt-4 pb-0">
+            <div class="modal-body modal-body-fade pt-4 pb-0" id="divMteModalBody">
                 <form id="formMte" autocomplete="off">
                     <div class="row">
                         <div class="col-12">
@@ -152,14 +152,14 @@
                                 <p class="font-small text-danger" id="txtMteTimeEstimateErr"></p>
                             </div>
                         </div>
-                        <div class="col-md-6 pr-0" id="txtMteStartDate_">
+                        <div class="col-6 pr-0" id="txtMteStartDate_">
                             <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMteStartDate" class="form-control datepicker" readonly>
                                 <label for="txtMteStartDate" id="lblMteStartDate">Start Date</label>
                                 <p class="font-small text-danger" id="txtMteStartDateErr"></p>
                             </div>
                         </div>
-                        <div class="col-md-6" id="txtMteStartTime_">
+                        <div class="col-6" id="txtMteStartTime_">
                             <div class="md-form md-outline my-a">
                                 <input type="text" id="txtMteStartTime" class="form-control mdb-autocomplete">
                                 <label for="txtMteStartTime" id="lblMteStartTime">Start Time</label>
@@ -182,8 +182,8 @@
                 </form>
             </div>
             <div class="modal-footer p-0">
-                <button type="button" class="btn btn-outline-primary waves-effect z-depth-2" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary waves-effect z-depth-2" id="btnMteSave"><i class="fa-regular fa-floppy-disk mr-2"></i>Save</button>
+                <button type="button" class="btn btn-outline-danger waves-effect z-depth-2" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger waves-effect z-depth-2" id="btnMteSave"><i class="fa-regular fa-floppy-disk mr-2"></i>Save</button>
             </div>
         </div>
     </div>
