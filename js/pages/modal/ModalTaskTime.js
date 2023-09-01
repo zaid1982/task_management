@@ -5,11 +5,14 @@ function ModalTaskTime () {
     let classFrom;
     let formValidate;
     let formValidateEdit;
+    let taskTimeId;
     let taskId;
     let timeEstimate;
+    let taskTimeIdEdit;
     let dtMtt;
     let dtDisplay;
     let isEdit = false;
+    let isEditCurrent = false;
 
     this.init = function () {
         try {
@@ -51,38 +54,6 @@ function ModalTaskTime () {
                         notEmpty: true,
                         maxLength: 255
                     }
-                },
-                {
-                    field_id: 'txtMttStartDate',
-                    type: 'date',
-                    name: 'Start Date',
-                    validator: {
-                        notEmpty: true
-                    }
-                },
-                {
-                    field_id: 'txtMttStartTime',
-                    type: 'text',
-                    name: 'Start Time',
-                    validator: {
-                        notEmpty: true
-                    }
-                },
-                {
-                    field_id: 'txtMttEndDate',
-                    type: 'date',
-                    name: 'End Date',
-                    validator: {
-                        notEmpty: true
-                    }
-                },
-                {
-                    field_id: 'txtMttEndTime',
-                    type: 'text',
-                    name: 'End Time',
-                    validator: {
-                        notEmpty: true
-                    }
                 }
             ];
 
@@ -110,32 +81,14 @@ function ModalTaskTime () {
                         if (linkIndex > 0) {
                             const rowId = linkId.substring(linkIndex+1);
                             const currentRow = dtMtt.row(parseInt(rowId)).data();
-                            console.log(currentRow);
+                            taskTimeIdEdit = currentRow ['taskTimeId'];
                             formValidateEdit.clearValidation();
-                            const taskTimeStart = currentRow['taskTimeStart'];
-                            const startDate = taskTimeStart.substring(0, 10);
-                            const startTime = taskTimeStart.substring(11);
-                            const taskTimeEnd = currentRow['taskTimeEnd'];
-                            const endDate = taskTimeEnd !== null ? taskTimeStart.substring(0, 10) : null;
-                            const endTime = taskTimeEnd !== null ? taskTimeEnd.substring(11) : null;
-                            console.log(endDate);
-                            console.log(endTime);
                             mzSetValue('txtMttDescriptionEdit', currentRow['taskTimeDesc'], 'text');
-                            mzSetValue('txtMttStartDate', startDate, 'date');
-                            mzSetValue('txtMttStartTime', startTime, 'text');
-                            mzSetValue('txtMttEndDate', endDate, 'date');
-                            mzSetValue('txtMttEndTime', endTime, 'text');
-                            if (currentRow['taskTimeDesc'] !== null) {
-                                formValidateEdit.enableField('txtMttDescriptionEdit');
-                            } else {
+                            isEditCurrent = currentRow['taskTimeEnd'] === null;
+                            if (currentRow['taskTimeDesc'] === null && !isEditCurrent) {
                                 formValidateEdit.disableField('txtMttDescriptionEdit');
-                            }
-                            if (endDate !== null) {
-                                formValidateEdit.enableField('txtMttEndDate');
-                                formValidateEdit.enableField('txtMttEndTime');
                             } else {
-                                formValidateEdit.disableField('txtMttEndDate');
-                                formValidateEdit.disableField('txtMttEndTime');
+                                formValidateEdit.enableField('txtMttDescriptionEdit');
                             }
                             $('#divMttEdit').show();
                         }
@@ -156,7 +109,10 @@ function ModalTaskTime () {
                     toastr['error'](_ALERT_MSG_VALIDATION, _ALERT_TITLE_ERROR);
                 } else {
                     ShowLoader(); setTimeout(function () { try {
-
+                        const data = {
+                            taskTimeDesc: mzNullString($('#txtMttDescription').val())
+                        };
+                        mzAjax('taskTime/'+taskId, 'POST', data);
                         isEdit = true;
                         $('#btnMttStart').hide();
                         $('#btnMttStop').show();
@@ -171,7 +127,10 @@ function ModalTaskTime () {
                     toastr['error'](_ALERT_MSG_VALIDATION, _ALERT_TITLE_ERROR);
                 } else {
                     ShowLoader(); setTimeout(function () { try {
-
+                        const data = {
+                            taskTimeDesc: mzNullString($('#txtMttDescription').val())
+                        };
+                        mzAjax('taskTime/stop/'+taskTimeId, 'PUT', data);
                         isEdit = true;
                         formValidate.clearValidation();
                         $('#btnMttStop').hide();
@@ -188,10 +147,17 @@ function ModalTaskTime () {
                     toastr['error'](_ALERT_MSG_VALIDATION, _ALERT_TITLE_ERROR);
                 } else {
                     ShowLoader(); setTimeout(function () { try {
-
+                        const description = $('#txtMttDescriptionEdit').val();
+                        const data = {
+                            taskTimeDesc: mzNullString(description)
+                        };
+                        mzAjax('taskTime/'+taskTimeIdEdit, 'PUT', data);
                         isEdit = true;
                         self.genTotalSpent();
                         self.genTable();
+                        if (isEditCurrent) {
+                            mzSetValue('txtMttDescription', description, 'text');
+                        }
                         $('#divMttEdit').hide();
                     } catch (e) { toastr['error'](e.message !== '' ? e.message : _ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
                 }
@@ -215,6 +181,7 @@ function ModalTaskTime () {
             formValidate.clearValidation();
             $('#divMttEdit, #btnMttStart, #btnMttStop').hide();
             const taskTime = mzAjax('taskTime/current/'+taskId, 'GET');
+            taskTimeId = taskTime['taskTimeId'];
             if (taskTime.length === 0) {
                 $('#btnMttStart').show();
             } else {
@@ -224,7 +191,7 @@ function ModalTaskTime () {
             self.genTotalSpent();
             self.genTable();
             $('#modalTaskTime').modal({backdrop: 'static', keyboard: false}).scrollTop(0);
-        } catch (e) { console.log(e.message); toastr['error'](e.message !== '' ? e.message : _ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR); }
+        } catch (e) { toastr['error'](e.message !== '' ? e.message : _ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR); }
     };
 
     this.genTable = function () {

@@ -91,7 +91,7 @@ class TskTaskTime extends General {
     public function insert (array $inputParams): int {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
-            parent::checkMandatoryArray($inputParams, array('taskId'));
+            parent::checkMandatoryArray($inputParams, array('taskId', 'taskTimeStart'));
             return DbMysql::insert($this::$tableName, $inputParams);
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
@@ -141,7 +141,7 @@ class TskTaskTime extends General {
      * @param int $taskTimeId
      * @throws Exception
      */
-    private function updateTimeAmount (int $taskTimeId): void {
+    public function updateTimeAmount (int $taskTimeId): void {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
             parent::checkEmptyInteger($taskTimeId, 'taskTimeId');

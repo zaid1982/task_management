@@ -23,6 +23,17 @@ class Alert {
     public static array $task = array(
         'create' => 'Task successfully added!',
         'update' => 'Task successfully updated!',
-        'close' => 'Task successfully closed!'
+        'close' => 'Task successfully closed!',
+        'errStartDateInProgress' => 'Please insert Start Date to change status to In Progress!',
+        'errStartDateNoEstimate' => 'Please insert Time Estimate to plan Start Date!'
+    );
+
+    public static array $taskTime = array(
+        'update' => 'Task Time successfully updated!',
+        'start' => 'Time Track successfully started!',
+        'stop' => 'Time Track successfully stopped!',
+        'errIsMain' => 'Main Task is not allowed to use Time Track!',
+        'errNoStartDate' => 'Please plan the Start Date to use Time Track!',
+        'errIsClose' => 'Closed Task is not allowed to use Time Track!'
     );
 }

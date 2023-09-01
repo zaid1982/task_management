@@ -201,6 +201,9 @@ class TskTask extends General {
             $params = parent::arraySpliceAssoc($inputParams, array('taskName', 'folderId', 'taskAssignee', 'taskTags', 'taskPriority', 'taskMainId', 'taskDateDue', 'taskAmount', 'taskDescription'));
             parent::checkMandatoryArray($params, array('taskName', 'folderId', 'taskAssignee', 'taskTags', 'taskPriority'), true,
                 array('Task Name', 'Folder', 'Assignee', 'Tags', 'Priority'));
+            if ($inputParams['timeEstimate'] === null && $inputParams['startDate'] !== null) {
+                throw new Exception(Alert::$task['errStartDateNoEstimate'], 31);
+            }
             $params['taskCreatedBy'] = $this->userId;
             if ($inputParams['isMain'] === 'Main') {
                 $params['taskIsMain'] = 1;
@@ -209,11 +212,9 @@ class TskTask extends General {
                     parent::checkMandatoryArray($params, array('taskMainId'), true, array('Main Task'));
                 }
                 $params['taskTimeEstimate'] = $this->getTimeEstimateDb($inputParams['timeEstimate']);
-                if ($inputParams['startDate'] !== null) {
+                if ($inputParams['startDate'] !== null && $params['taskTimeEstimate'] !== null) {
                     $params['taskDateStart'] = $inputParams['startDate'].($inputParams['startTime'] !== null ? ' '.$inputParams['startTime'].':00' : '');
-                    if ($inputParams['timeEstimate'] !== null) {
-                        $params['taskDateEnd'] = "|ADDTIME('".$params['taskDateStart']."', '".$params['taskTimeEstimate']."')";
-                    }
+                    $params['taskDateEnd'] = "|ADDTIME('".$params['taskDateStart']."', '".$params['taskTimeEstimate']."')";
                 }
                 if ($inputParams['isMain'] === 'Sub' && isset($params['taskTimeEstimate'])) {
                     DbMysql::update($this::$tableName, array('taskTimeEstimate'=>"|IF(ISNULL(task_time_estimate), '".$params['taskTimeEstimate']."', ADDTIME(task_time_estimate, '".$params['taskTimeEstimate']."'))"), array('taskId'=>$params['taskMainId']));
@@ -253,7 +254,13 @@ class TskTask extends General {
             parent::checkEmptyInteger($taskId, 'taskId');
             $params = parent::arraySpliceAssoc($inputParams, array('taskName', 'taskTags', 'taskPriority', 'taskDateDue', 'taskAmount', 'taskDescription', 'statusId'));
             parent::checkMandatoryArray($params, array('taskName', 'taskTags', 'taskPriority', 'statusId'), true, array('Task Name', 'Tags', 'Priority', 'Status'));
+            if ($inputParams['timeEstimate'] === null && $inputParams['startDate'] !== null) {
+                throw new Exception(Alert::$task['errStartDateNoEstimate'], 31);
+            }
             $tskTask = $this->get($taskId);
+            if ($params['statusId'] === 5 && $inputParams['startDate'] === null && $tskTask['taskIsMain'] === 0) {
+                throw new Exception(Alert::$task['errStartDateInProgress'], 31);
+            }
             if ($params['statusId'] === 4 || $params['statusId'] === 7) {
                 $params['taskDateClose'] = 'NOW()';
             }
@@ -261,11 +268,9 @@ class TskTask extends General {
                 $params['taskTimeEstimate'] = $this->getTimeEstimateDb($inputParams['timeEstimate']);
                 $params['taskDateStart'] = null;
                 $params['taskDateEnd'] = null;
-                if ($inputParams['startDate'] !== null) {
+                if ($inputParams['startDate'] !== null && $params['taskTimeEstimate']) {
                     $params['taskDateStart'] = $inputParams['startDate'].($inputParams['startTime'] !== null ? ' '.$inputParams['startTime'].':00' : '');
-                    if ($inputParams['timeEstimate'] !== null) {
-                        $params['taskDateEnd'] = "|ADDTIME('".$params['taskDateStart']."', '".$params['taskTimeEstimate']."')";
-                    }
+                    $params['taskDateEnd'] = "|ADDTIME('".$params['taskDateStart']."', '".$params['taskTimeEstimate']."')";
                 }
                 if ($tskTask['taskMainId'] !== null && $tskTask['taskTimeEstimate'] !== $params['taskTimeEstimate']) {
                     if ($tskTask['taskTimeEstimate'] !== null) {
@@ -306,18 +311,17 @@ class TskTask extends General {
      * @param int $taskId
      * @throws Exception
      */
-    public function updateMainTaskDate (int $taskId): void {
+    public function updateMainTaskEndDate (int $taskId): void {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
             parent::checkEmptyInteger($taskId, 'taskId');
             $taskDates = DbMysql::selectSql(
                     /** @lang text */
                     "SELECT 
-                        DATE(MIN(task_date_start)) AS date_start,
                         DATE(MAX(task_date_end)) AS date_end
                     FROM tsk_task",
                 array('taskMainId'=>$taskId));
-            DbMysql::update($this::$tableName, array('taskDateStart'=>$taskDates['dateStart'], 'taskDateEnd'=>$taskDates['dateEnd']), array('taskId'=>$taskId));
+            DbMysql::update($this::$tableName, array('taskDateEnd'=>$taskDates['dateEnd']), array('taskId'=>$taskId));
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }
