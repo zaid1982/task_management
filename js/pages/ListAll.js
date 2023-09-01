@@ -14,6 +14,7 @@ function ListAll() {
     let dtDisplay;
     let modalTaskEdit;
     let modalTaskTime;
+    let modalTaskChecklist;
     let currentOpen = 1;
     let isGetToday = true;
     let isGetOverdue = false;
@@ -132,6 +133,16 @@ function ListAll() {
                         const currentRow = dtLllToday.row(parseInt(rowId)).data();
                         modalTaskTime.setClassFrom(self);
                         modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
+                    }
+                });
+                $('.lnkLllTodayCheck').off('click').on('click', function () {
+                    const linkId = $(this).attr('id');
+                    const linkIndex = linkId.indexOf('_');
+                    if (linkIndex > 0) {
+                        const rowId = linkId.substring(linkIndex+1);
+                        const currentRow = dtLllToday.row(parseInt(rowId)).data();
+                        modalTaskChecklist.setClassFrom(self);
+                        modalTaskChecklist.open(currentRow['taskId']);
                     }
                 });
             },
@@ -651,5 +662,9 @@ function ListAll() {
 
     this.setModalTaskTime = function (_modalTaskTime) {
         modalTaskTime = _modalTaskTime;
+    };
+
+    this.setModalTaskChecklist = function (_modalTaskChecklist) {
+        modalTaskChecklist = _modalTaskChecklist;
     };
 }

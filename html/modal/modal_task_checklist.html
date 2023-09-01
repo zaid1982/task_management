@@ -1,0 +1,105 @@
+<div class="modal fade bottom" id="modalTaskChecklist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notify modal-success" role="document">
+        <div class="modal-content">
+            <div class="modal-header pb-2">
+                <h4 class="modal-title w-100 white-text"><i class="fa-solid fa-list-check mr-2"></i>Task Checklist</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnMtcClose">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-4_5 pb-4">
+                <form id="formMtc" autocomplete="off">
+                    <div class="card z-depth-1 mb-4_5">
+                        <div class="card-body blue-grey lighten-5 pt-4 pb-0">
+                            <div class="row">
+                                <div class="col-6 pl-2">
+                                    <div class="md-form label-icon">
+                                        <i class="fa-regular fa-rectangle-list prefix text-success"></i>
+                                        <label class="active ">Total Checklist</label>
+                                        <p id="pMtcTotalChecklist">10</p>
+                                        <hr class="grey lighten-1">
+                                    </div>
+                                </div>
+                                <div class="col-6 pr-2">
+                                    <div class="md-form label-icon">
+                                        <i class="fa-solid fa-bars-progress prefix text-success"></i>
+                                        <label class="active">Completion</label>
+                                        <p id="pMtcCompletion">14 %</p>
+                                        <hr class="grey lighten-1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="md-form md-outline my-a">
+                                <input type="text" id="txtMtcDescription" class="form-control">
+                                <label for="txtMtcDescription" id="lblMtcDescription">Description</label>
+                                <p class="font-small text-danger" id="txtMtcDescriptionErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="md-form md-outline my-a">
+                                <input type="text" id="txtMtcWeightage" class="form-control">
+                                <label for="txtMtcWeightage" id="lblMtcWeightage">Weghtage (%)</label>
+                                <p class="font-small text-danger" id="txtMtcWeightageErr"></p>
+                            </div>
+                        </div>
+                        <div class="col-6 text-right pr-2">
+                            <button type="button" class="btn btn-outline-success waves-effect z-depth-1 py-2 mt-0" id="btnMtcStart"><i class="fa-solid fa-plus mr-2"></i>Add</button>
+                        </div>
+                        <div class="col-12">
+                            <p class="font-small font-weight-500 mb-0">Checklist Table :</p>
+                        </div>
+                    </div>
+                    <div class="card z-depth-1 my-2" id="divMtcEdit">
+                        <div class="card-body grey lighten-5 px-3 py-2">
+                            <button type="button" class="close float-right grey-text" aria-label="Close" id="btnMtcCloseEdit">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <p class="font-small font-weight-500 font-italic mt-1">Edit Checklist</p>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="md-form md-outline my-a">
+                                        <input type="text" id="txtMtcDescriptionEdit" class="form-control">
+                                        <label for="txtMtcDescriptionEdit" id="lblMtcDescriptionEdit">Description</label>
+                                        <p class="font-small text-danger" id="txtMtcDescriptionEditErr"></p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="md-form md-outline my-a">
+                                        <input type="text" id="txtMtcWeightageEdit" class="form-control">
+                                        <label for="txtMtcWeightageEdit" id="lblMtcWeightageEdit">Weightage (%)</label>
+                                        <p class="font-small text-danger" id="txtMtcWeightageEditErr"></p>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-right pr-2">
+                                    <button type="button" class="btn btn-sm btn-outline-success waves-effect z-depth-1 mt-0" id="btnMtcSave"><i class="fa-solid fa-floppy-disk mr-2"></i>Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 px-0">
+                            <div class="table-responsive">
+                                <table id="dtMtc" class="table table-bordered table-tight table-hover table-sm mb-0 display responsive">
+                                    <thead>
+                                    <tr class="th-tight-bordered">
+                                        <th style="width: 18px"></th>
+                                        <th>Description</th>
+                                        <th style="width: 20%">Weightage</th>
+                                        <th style="width: 20%">Status</th>
+                                        <th style="width: 30px; min-width: 30px">&nbsp;</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

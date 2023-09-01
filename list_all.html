@@ -113,7 +113,7 @@
                                                     <th>TIME ESTIMATE</th>
                                                     <th>TIME RECORDED</th>
                                                     <th>STATUS</th>
-                                                    <th style="width: 35px; min-width: 35px;">&nbsp;</th>
+                                                    <th style="width: 37px; min-width: 37px;">&nbsp;</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -160,7 +160,7 @@
                                                     <th>TIME RECORDED</th>
                                                     <th>LATENESS</th>
                                                     <th>STATUS</th>
-                                                    <th style="width: 35px; min-width: 35px;">&nbsp;</th>
+                                                    <th style="width: 37px; min-width: 37px;">&nbsp;</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -206,7 +206,7 @@
                                                     <th>TIME ESTIMATE</th>
                                                     <th>TIME RECORDED</th>
                                                     <th>STATUS</th>
-                                                    <th style="width: 35px; min-width: 35px;">&nbsp;</th>
+                                                    <th style="width: 37px; min-width: 37px;">&nbsp;</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -312,6 +312,7 @@
     </div>
     <div class="includeHtml" id="h-m-modal_task_edit"></div>
     <div class="includeHtml" id="h-m-modal_task_time"></div>
+    <div class="includeHtml" id="h-m-modal_task_checklist"></div>
 </main>
 
 <script type="text/javascript" src="js/include.js"></script>
@@ -336,7 +337,9 @@
     let dtTaskDisplay;
     let modalTaskEdit;
     let modalTaskTime;
+    let modalTaskChecklist;
     let mainClass;
+
     document.addEventListener('DOMContentLoaded', function () {
         ShowLoader();
         setTimeout(function () {
@@ -345,6 +348,7 @@
                 dtTaskDisplay = new DtTaskDisplay();
                 modalTaskEdit = new ModalTaskEdit();
                 modalTaskTime = new ModalTaskTime();
+                modalTaskChecklist = new ModalTaskChecklist();
                 mainClass = new ListAll();
 
                 const refStatus_ = mzGetRef('task_status', versionLocal_, 'status/ref');
@@ -362,6 +366,9 @@
                 modalTaskTime.setDtDisplay(dtTaskDisplay);
                 modalTaskTime.init();
 
+                modalTaskChecklist.setDtDisplay(dtTaskDisplay);
+                modalTaskChecklist.init();
+
                 mainClass.setRefStatus(refStatus_);
                 mainClass.setRefUser(refUser_);
                 mainClass.setRefSpace(refSpace_);
@@ -369,6 +376,7 @@
                 mainClass.setDtDisplay(dtTaskDisplay);
                 mainClass.setModalTaskEdit(modalTaskEdit);
                 mainClass.setModalTaskTime(modalTaskTime);
+                mainClass.setModalTaskChecklist(modalTaskChecklist);
                 mainClass.init();
             } catch (e) {
                 toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);
@@ -376,9 +384,11 @@
             HideLoader();
         }, 200);
     });
+
     document.write('<scr' + 'ipt src="js/global/DtTaskDisplay.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
     document.write('<scr' + 'ipt src="js/pages/modal/ModalTaskEdit.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
     document.write('<scr' + 'ipt src="js/pages/modal/ModalTaskTime.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
+    document.write('<scr' + 'ipt src="js/pages/modal/ModalTaskChecklist.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
     document.write('<scr' + 'ipt src="js/pages/ListAll.js?' + new Date().valueOf() + '" type="text/javascript"></scr' + 'ipt>');
 </script>
 </body>

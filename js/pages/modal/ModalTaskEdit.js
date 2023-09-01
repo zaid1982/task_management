@@ -183,7 +183,6 @@ function ModalTaskEdit () {
                     mzOptionStop('optMteFolder', refFolder, 'folderName', {spaceId: spaceId, statusId: 1}, true);
                     $('#optMteFolderErr').html('');
                     if ($("input[name='radMteIsMain']:checked").val() === 'Sub') {
-                        alert(0);
                         mzOptionStopClear('optMteMainTask', true);
                         $('#optMteMainTaskErr').html('');
                     }
@@ -194,7 +193,6 @@ function ModalTaskEdit () {
                 const folderId = parseInt($(this).val());
                 try {
                     if ($("input[name='radMteIsMain']:checked").val() === 'Sub') {
-                        alert(1);
                         mzOptionStop('optMteMainTask', refMainTask, 'taskName', {folderId: folderId}, true);
                         $('#optMteMainTaskErr').html('');
                     }
@@ -211,6 +209,7 @@ function ModalTaskEdit () {
                 } else if (submitType === 'add' || submitType === 'edit') {
                     ShowLoader(); setTimeout(function () { try {
                         const dueDate = mzConvertDate($('#txtMteDueDate').val());
+                        const isMain = $("input[name='radMteIsMain']:checked").val();
                         let data = {
                             taskName: $('#txtMteTaskName').val(),
                             taskTags: mzChkVal('chkMteTags'),
@@ -223,21 +222,20 @@ function ModalTaskEdit () {
                             taskDescription: mzNullString($('#txaMteRemark').val())
                         };
                         if (submitType === 'add') {
-                            const isMain = $("input[name='radMteIsMain']:checked").val();
                             data['folderId'] = mzNullInt($('#optMteFolder').val());
                             data['taskAssignee'] = mzNullInt($('#optMteAssignee').val());
                             data['isMain'] = isMain;
                             data['taskMainId'] = mzNullInt($('#optMteMainTask').val());
                             mzAjax('task', 'POST', data);
                             classFrom.refreshAdd(dueDate);
-                            if (isMain === 'Main') {
-                                refMainTask = mzAjax('task/ref/mainTask', 'GET');
-                            }
                         } else if (submitType === 'edit') {
                             const status = mzNullInt($('#optMteStatus').val());
                             data['statusId'] = status;
                             mzAjax('task/'+taskId, 'PUT', data);
                             classFrom.refreshEdit(task['taskDateDue'], dueDate, status === 4 || status === 7);
+                        }
+                        if (isMain === 'Main') {
+                            refMainTask = mzAjax('task/ref/mainTask', 'GET');
                         }
                         $('#modalTaskEdit').modal('hide');
                     } catch (e) { toastr['error'](e.message !== '' ? e.message : _ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);

@@ -100,7 +100,7 @@ function ModalTaskTime () {
                     { mData: 'taskTimeStart'},
                     { mData: 'taskTimeEnd'},
                     { mData: 'taskTimeAmount'},
-                    { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(1, 'lnkMtt', meta.row); }}
+                    { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(0, 'lnkMtt', meta.row); }}
                 ]
             });
 

@@ -26,7 +26,7 @@ class TskTask extends General {
             tsk.*
         FROM tsk_task tsk
         LEFT JOIN (SELECT task_id, SEC_TO_TIME(SUM(TIME_TO_SEC(task_time_amount))) AS time_spent FROM tsk_task_time GROUP BY task_id) ttm ON ttm.task_id = tsk.task_id
-        LEFT JOIN (SELECT task_id, SUM(task_checklist_weightage) AS percentage_done FROM tsk_task_checklist WHERE status_id = 6 GROUP BY task_id) tcl ON tcl.task_id = tsk.task_id
+        LEFT JOIN (SELECT task_id, SUM(IF(status_id=6,task_checklist_weightage,0))/SUM(task_checklist_weightage)*100 AS percentage_done FROM tsk_task_checklist GROUP BY task_id) tcl ON tcl.task_id = tsk.task_id
         LEFT JOIN tsk_task tmn ON tmn.task_id = tsk.task_main_id 
         LEFT JOIN (SELECT
                 task_main_id,

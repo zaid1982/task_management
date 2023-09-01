@@ -51,10 +51,11 @@ function DtTaskDisplay () {
         return '<a class="badge '+statusColor+' z-depth-2">'+statusName+'</a>';
     }
 
-    this.getProgress = function (progress) {
-        if (progress === '' ||  progress === null) {
+    this.getProgress = function (progress_) {
+        if (progress_ === '' ||  progress_ === null) {
             return '';
         }
+        const progress = parseInt(progress_);
         return '<div class="progress md-progress mb-0 grey lighten-2 z-depth-1" style="height: 18px">' +
             '<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: '+progress+'%; height: 18px" aria-valuenow="'+progress+'" aria-valuemin="0" aria-valuemax="100">'+progress+'%</div>' +
             '</div>';
@@ -72,11 +73,15 @@ function DtTaskDisplay () {
     }
 
     this.getAction = function (type, id, row) {
-        if (type === 1) {
-            return '<a><i class="fa-regular fa-pen-to-square fa-lg '+id+'Edit" id="'+id+'Edit_'+row+'" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
+        const htmlEdit = '<a><i class="fa-regular fa-pen-to-square fa-lg '+id+'Edit" id="'+id+'Edit_'+row+'" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
+        const htmlTime = '<a><i class="fa-solid fa-stopwatch fa-lg mr-1 '+id+'Time" id="'+id+'Time_'+row+'" data-toggle="tooltip" data-placement="top" title="Time Track"></i></a>';
+        const htmlList = '<a><i class="fa-solid fa-list-check fa-lg mr-1 '+id+'Check" id="'+id+'Check_'+row+'" data-toggle="tooltip" data-placement="top" title="Checklist"></i></a>';
+        if (type === 0) {
+            return htmlEdit;
+        } else if (type === 1) {
+            return htmlList + htmlEdit;
         } else if (type === 2) {
-            return '<a><i class="fa-solid fa-stopwatch fa-lg '+id+'Time" id="'+id+'Time_'+row+'" data-toggle="tooltip" data-placement="top" title="Time Track"></i></a>' +
-                '<a><i class="fa-regular fa-pen-to-square fa-lg '+id+'Edit ml-1" id="'+id+'Edit_'+row+'" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
+            return htmlTime + htmlList + htmlEdit;
         } else {
             return '';
         }

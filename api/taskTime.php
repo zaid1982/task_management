@@ -65,7 +65,7 @@ try {
         $fnMain->insert(array_merge(array('taskId'=>$taskId, 'taskTimeStart'=>'NOW()'), $bodyParams));
         if ($fnTask->tskTask['statusId'] === 3) {
             $fnTask->update($taskId, array('statusId'=>5));
-            $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->$fnTask['taskName']);
+            $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnTask->tskTask['taskName']);
         }
         if ($fnTask->tskTask['taskMainId'] !== null) {
             $taskMainId = $fnTask->tskTask['taskMainId'];
