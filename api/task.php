@@ -90,7 +90,7 @@ try {
                 $subTaskList = $fnMain->getSubTaskList($taskId);
                 foreach ($subTaskList as $subTaskId) {
                     $fnMain->update($subTaskId, array('taskDateClose'=>'NOW()', 'statusId'=>7), array('statusId'=>'NOT IN|4,7'));
-                    $fnTaskTime->updateByTask($subTaskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
+                    $fnTaskTime->closeByTask($subTaskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
                     $fnTaskChecklist->updateByTask($subTaskId, array('statusId'=>7), array('statusId'=>3));
                     $subTask = $fnMain->get($subTaskId);
                     $fnMain->saveAudit(5, 'taskId = '.$subTaskId.', task name = '.$subTask['taskName']);
@@ -99,7 +99,7 @@ try {
                 $fnMain->saveAudit(6, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             } else {
                 if ($fnMain->tskTask['statusId'] === 5) {
-                    $fnTaskTime->updateByTask($taskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
+                    $fnTaskTime->closeByTask($taskId, array('taskTimeEnd'=>'NOW()'), array('taskTimeEnd'=>'IS NULL'));
                 }
                 $fnMain->saveAudit(5, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             }

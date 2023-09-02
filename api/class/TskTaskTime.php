@@ -120,7 +120,7 @@ class TskTaskTime extends General {
      * @param array $whereParams
      * @throws Exception
      */
-    public function updateByTask (int $taskId, array $inputParams, array $whereParams=array()): void {
+    public function closeByTask (int $taskId, array $inputParams, array $whereParams=array()): void {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
             parent::checkEmptyInteger($taskId, 'taskId');
