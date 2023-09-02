@@ -358,10 +358,10 @@ function MzValidate(isEnglish) {
                             msg += isEnglish ? '<br>' + name + ' must not equal to the original value' : '<br>' + name + ' mesti berlainan dengan nilai asal';
                             break;
                         case 'max':
-                            msg += isEnglish ? '<br>' + name + ' must not greater than ' + u2 : '<br>' + name + ' mesti tidak melebihi ' + u2;
+                            msg += isEnglish ? '<br>' + name + ' must at most ' + u2 : '<br>' + name + ' mesti tidak melebihi ' + u2;
                             break;
                         case 'min':
-                            msg += isEnglish ? '<br>' + name + ' must not less than ' + u2 : '<br>' + name + ' mesti tidak kurang dari ' + u2;
+                            msg += isEnglish ? '<br>' + name + ' must at least ' + u2 : '<br>' + name + ' mesti tidak kurang dari ' + u2;
                             break;
                         case 'notEmptyArr':
                             msg += isEnglish ? '<br>Please choose ' + name : '<br>Sila pilih ' + name;
@@ -1631,4 +1631,19 @@ function mzSpaceString (data) {
         return '&nbsp;';
     }
     return data;
+}
+
+function mzGetLinkRow (selector, dtTable) {
+    if (typeof selector === 'undefined' ||typeof dtTable === 'undefined' ) {
+        return false;
+    }
+    const linkId = selector.attr('id');
+    const linkIndex = linkId.indexOf('_');
+    if (linkIndex > 0) {
+        const rowId = linkId.substring(linkIndex + 1);
+        return dtTable.row(parseInt(rowId)).data();
+    } else {
+        toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);
+    }
+    return false;
 }

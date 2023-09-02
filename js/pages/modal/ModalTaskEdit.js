@@ -244,6 +244,25 @@ function ModalTaskEdit () {
                     $('#modalTaskEdit').modal('hide');
                 }
             });
+
+            $('#btnMteDone').on('click', function () {
+                if (!formValidate.validateNow()) {
+                    toastr['error'](_ALERT_MSG_VALIDATION, _ALERT_TITLE_ERROR);
+                } else if (submitType === 'edit') {
+                    ShowLoader(); setTimeout(function () { try {
+                        const isMain = $("input[name='radMteIsMain']:checked").val();
+                        mzAjax('task/done/'+taskId, 'PUT');
+                        classFrom.refreshEdit(null, null, true);
+                        if (isMain === 'Main') {
+                            refMainTask = mzAjax('task/ref/mainTask', 'GET');
+                        }
+                        $('#modalTaskEdit').modal('hide');
+                    } catch (e) { toastr['error'](e.message !== '' ? e.message : _ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR); } HideLoader(); }, 200);
+                } else {
+                    toastr['error'](_ALERT_MSG_ERROR_DEFAULT, _ALERT_TITLE_ERROR);
+                    $('#modalTaskEdit').modal('hide');
+                }
+            });
         } catch (e) { throw new Error(); }
     };
 
@@ -253,7 +272,7 @@ function ModalTaskEdit () {
             formValidate.registerFields(vData);
             formValidate.disableField('optMteMainTask');
             formValidate.disableField('optMteStatus');
-            $('#optMteFolder_, #optMteMainTask_, #optMteStatus_').hide();
+            $('#optMteFolder_, #optMteMainTask_, #optMteStatus_, #btnMteDone').hide();
             $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
             mzDisableSelect('optMteSpace', false);
             mzDisableSelect('optMteFolder', false);
@@ -278,7 +297,7 @@ function ModalTaskEdit () {
             taskId = _taskId;
             formValidate.clearValidation();
             formValidate.registerFields(vData);
-            $('#optMteFolder_, #optMteStatus_, #txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
+            $('#optMteFolder_, #optMteStatus_, #txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_, #btnMteDone').show();
             $('#optMteMainTask_').hide();
             mzDisableSelect('optMteSpace', true);
             mzDisableSelect('optMteFolder', true);

@@ -72,16 +72,25 @@ function DtTaskDisplay () {
         return '<a class="badge badge-pill '+color+' z-depth-1-half">'+days+' '+dayTerm+'</a>';
     }
 
-    this.getAction = function (type, id, row) {
+    this.getAction = function (type, id, row, flag) {
         const htmlEdit = '<a><i class="fa-regular fa-pen-to-square fa-lg '+id+'Edit" id="'+id+'Edit_'+row+'" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>';
         const htmlTime = '<a><i class="fa-solid fa-stopwatch fa-lg mr-1 '+id+'Time" id="'+id+'Time_'+row+'" data-toggle="tooltip" data-placement="top" title="Time Track"></i></a>';
         const htmlList = '<a><i class="fa-solid fa-list-check fa-lg mr-1 '+id+'Check" id="'+id+'Check_'+row+'" data-toggle="tooltip" data-placement="top" title="Checklist"></i></a>';
+        const htmlDelete = '<a><i class="fa-regular fa-trash-can fa-lg mr-1 '+id+'Remove" id="'+id+'Remove_'+row+'" data-toggle="tooltip" data-placement="top" title="Remove"></i></a>';
         if (type === 0) {
             return htmlEdit;
         } else if (type === 1) {
             return htmlList + htmlEdit;
         } else if (type === 2) {
             return htmlTime + htmlList + htmlEdit;
+        } else if (type === 3 && typeof flag !== 'undefined') {
+            let htmlCheck;
+            if (flag === 3) {
+                htmlCheck = '<a><i class="fa-regular fa-square-check fa-lg mr-1 '+id+'Done" id="'+id+'Done_'+row+'" data-toggle="tooltip" data-placement="top" title="Done"></i></a>';
+            } else if (flag === 6) {
+                htmlCheck = '<a><i class="fa-regular fa-square fa-lg mr-1 '+id+'Open" id="'+id+'Open_'+row+'" data-toggle="tooltip" data-placement="top" title="Open"></i></a>';
+            }
+            return htmlCheck + htmlDelete + htmlEdit;
         } else {
             return '';
         }

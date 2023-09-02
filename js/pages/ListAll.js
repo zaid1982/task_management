@@ -117,33 +117,18 @@ function ListAll() {
                     } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
                 });
                 $('.lnkLllTodayEdit').off('click').on('click', function () {
-                    const linkId = $(this).attr('id');
-                    const linkIndex = linkId.indexOf('_');
-                    if (linkIndex > 0) {
-                        const rowId = linkId.substring(linkIndex+1);
-                        const currentRow = dtLllToday.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId']);
-                    }
+                    const currentRow = mzGetLinkRow($(this), dtLllToday);
+                    modalTaskEdit.edit(currentRow['taskId']);
                 });
                 $('.lnkLllTodayTime').off('click').on('click', function () {
-                    const linkId = $(this).attr('id');
-                    const linkIndex = linkId.indexOf('_');
-                    if (linkIndex > 0) {
-                        const rowId = linkId.substring(linkIndex+1);
-                        const currentRow = dtLllToday.row(parseInt(rowId)).data();
-                        modalTaskTime.setClassFrom(self);
-                        modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
-                    }
+                    const currentRow = mzGetLinkRow($(this), dtLllToday);
+                    modalTaskTime.setClassFrom(self);
+                    modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
                 });
                 $('.lnkLllTodayCheck').off('click').on('click', function () {
-                    const linkId = $(this).attr('id');
-                    const linkIndex = linkId.indexOf('_');
-                    if (linkIndex > 0) {
-                        const rowId = linkId.substring(linkIndex+1);
-                        const currentRow = dtLllToday.row(parseInt(rowId)).data();
-                        modalTaskChecklist.setClassFrom(self);
-                        modalTaskChecklist.open(currentRow['taskId']);
-                    }
+                    const currentRow = mzGetLinkRow($(this), dtLllToday);
+                    modalTaskChecklist.setClassFrom(self);
+                    modalTaskChecklist.open(currentRow['taskId']);
                 });
             },
             aoColumns: [
@@ -218,23 +203,18 @@ function ListAll() {
                     } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
                 });
                 $('.lnkLllOverdueEdit').off('click').on('click', function () {
-                    const linkId = $(this).attr('id');
-                    const linkIndex = linkId.indexOf('_');
-                    if (linkIndex > 0) {
-                        const rowId = linkId.substring(linkIndex+1);
-                        const currentRow = dtLllOverdue.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId']);
-                    }
+                    const currentRow = mzGetLinkRow($(this), dtLllOverdue);
+                    modalTaskEdit.edit(currentRow['taskId']);
                 });
                 $('.lnkLllOverdueTime').off('click').on('click', function () {
-                    const linkId = $(this).attr('id');
-                    const linkIndex = linkId.indexOf('_');
-                    if (linkIndex > 0) {
-                        const rowId = linkId.substring(linkIndex+1);
-                        const currentRow = dtLllOverdue.row(parseInt(rowId)).data();
-                        modalTaskTime.setClassFrom(self);
-                        modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
-                    }
+                    const currentRow = mzGetLinkRow($(this), dtLllOverdue);
+                    modalTaskTime.setClassFrom(self);
+                    modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
+                });
+                $('.lnkLllOverdueCheck').off('click').on('click', function () {
+                    const currentRow = mzGetLinkRow($(this), dtLllOverdue);
+                    modalTaskChecklist.setClassFrom(self);
+                    modalTaskChecklist.open(currentRow['taskId']);
                 });
             },
             aoColumns: [
@@ -310,23 +290,18 @@ function ListAll() {
                     } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
                 });
                 $('.lnkLllFutureEdit').off('click').on('click', function () {
-                    const linkId = $(this).attr('id');
-                    const linkIndex = linkId.indexOf('_');
-                    if (linkIndex > 0) {
-                        const rowId = linkId.substring(linkIndex+1);
-                        const currentRow = dtLllFuture.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId']);
-                    }
+                    const currentRow = mzGetLinkRow($(this), dtLllFuture);
+                    modalTaskEdit.edit(currentRow['taskId']);
                 });
                 $('.lnkLllFutureTime').off('click').on('click', function () {
-                    const linkId = $(this).attr('id');
-                    const linkIndex = linkId.indexOf('_');
-                    if (linkIndex > 0) {
-                        const rowId = linkId.substring(linkIndex+1);
-                        const currentRow = dtLllFuture.row(parseInt(rowId)).data();
-                        modalTaskTime.setClassFrom(self);
-                        modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
-                    }
+                    const currentRow = mzGetLinkRow($(this), dtLllFuture);
+                    modalTaskTime.setClassFrom(self);
+                    modalTaskTime.open(currentRow['taskId'], currentRow['taskTimeEstimate'], currentRow['taskDateStart']);
+                });
+                $('.lnkLllFutureCheck').off('click').on('click', function () {
+                    const currentRow = mzGetLinkRow($(this), dtLllFuture);
+                    modalTaskChecklist.setClassFrom(self);
+                    modalTaskChecklist.open(currentRow['taskId']);
                 });
             },
             aoColumns: [
@@ -400,13 +375,13 @@ function ListAll() {
                     } catch (e) { toastr['error'](e.message, _ALERT_TITLE_ERROR); } HideLoader(); }, 100);
                 });
                 $('.lnkLllUnscheduledEdit').off('click').on('click', function () {
-                    const linkId = $(this).attr('id');
-                    const linkIndex = linkId.indexOf('_');
-                    if (linkIndex > 0) {
-                        const rowId = linkId.substring(linkIndex+1);
-                        const currentRow = dtLllUnscheduled.row(parseInt(rowId)).data();
-                        modalTaskEdit.edit(currentRow['taskId']);
-                    }
+                    const currentRow = mzGetLinkRow($(this), dtLllUnscheduled);
+                    modalTaskEdit.edit(currentRow['taskId']);
+                });
+                $('.lnkLllUnscheduledCheck').off('click').on('click', function () {
+                    const currentRow = mzGetLinkRow($(this), dtLllUnscheduled);
+                    modalTaskChecklist.setClassFrom(self);
+                    modalTaskChecklist.open(currentRow['taskId']);
                 });
             },
             aoColumns: [

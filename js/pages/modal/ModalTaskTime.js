@@ -76,22 +76,17 @@ function ModalTaskTime () {
                 },
                 drawCallback: function () {
                     $('.lnkMttEdit').off('click').on('click', function () {
-                        const linkId = $(this).attr('id');
-                        const linkIndex = linkId.indexOf('_');
-                        if (linkIndex > 0) {
-                            const rowId = linkId.substring(linkIndex+1);
-                            const currentRow = dtMtt.row(parseInt(rowId)).data();
-                            taskTimeIdEdit = currentRow ['taskTimeId'];
-                            formValidateEdit.clearValidation();
-                            mzSetValue('txtMttDescriptionEdit', currentRow['taskTimeDesc'], 'text');
-                            isEditCurrent = currentRow['taskTimeEnd'] === null;
-                            if (currentRow['taskTimeDesc'] === null && !isEditCurrent) {
-                                formValidateEdit.disableField('txtMttDescriptionEdit');
-                            } else {
-                                formValidateEdit.enableField('txtMttDescriptionEdit');
-                            }
-                            $('#divMttEdit').show();
+                        const currentRow = mzGetLinkRow($(this), dtMtt);
+                        taskTimeIdEdit = currentRow ['taskTimeId'];
+                        formValidateEdit.clearValidation();
+                        mzSetValue('txtMttDescriptionEdit', currentRow['taskTimeDesc'], 'text');
+                        isEditCurrent = currentRow['taskTimeEnd'] === null;
+                        if (currentRow['taskTimeDesc'] === null && !isEditCurrent) {
+                            formValidateEdit.disableField('txtMttDescriptionEdit');
+                        } else {
+                            formValidateEdit.enableField('txtMttDescriptionEdit');
                         }
+                        $('#divMttEdit').show();
                     });
                 },
                 aoColumns: [

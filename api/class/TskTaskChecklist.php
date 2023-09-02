@@ -11,6 +11,54 @@ class TskTaskChecklist extends General {
 
     /**
      * @param int $taskChecklistId
+     * @return array
+     * @throws Exception
+     */
+    public function get (int $taskChecklistId): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskChecklistId, 'taskChecklistId');
+            return DbMysql::select($this::$tableName, array('taskChecklistId'=>$taskChecklistId), true);
+        } catch (Exception|Throwable $ex) {
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @return array
+     * @throws Exception
+     */
+    public function getList (int $taskId): array {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskId, 'taskId');
+            return DbMysql::selectAll($this::$tableName, array('taskId'=>$taskId));
+        } catch (Exception|Throwable $ex) {
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskId
+     * @param array $inputParams
+     * @return int
+     * @throws Exception
+     */
+    public function insertForm (int $taskId, array $inputParams): int {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($this->userId, 'userId');
+            parent::checkMandatoryArray($inputParams, array('taskChecklistName', 'taskChecklistWeightage'), true, array('Description', 'Weightage'));
+            $inputParams['taskId'] = $taskId;
+            return DbMysql::insert($this::$tableName, $inputParams);
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskChecklistId
      * @param array $inputParams
      * @throws Exception
      */
@@ -37,6 +85,20 @@ class TskTaskChecklist extends General {
             parent::checkEmptyInteger($taskId, 'taskId');
             parent::checkEmptyArray($inputParams, 'inputParams');
             DbMysql::update($this::$tableName, $inputParams, array_merge(array('taskId'=>$taskId), $whereParams));
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param int $taskChecklistId
+     * @throws Exception
+     */
+    public function delete (int $taskChecklistId): void {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($taskChecklistId, 'taskChecklistId');
+            DbMysql::delete($this::$tableName, array('taskChecklistId'=>$taskChecklistId));
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }

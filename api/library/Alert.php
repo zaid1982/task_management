@@ -21,7 +21,7 @@ class Alert {
     );
 
     public static array $task = array(
-        'create' => 'Task successfully added!',
+        'add' => 'Task successfully added!',
         'update' => 'Task successfully updated!',
         'close' => 'Task successfully closed!',
         'errStartDateInProgress' => 'Please insert Start Date to change status to In Progress!',
@@ -35,5 +35,14 @@ class Alert {
         'errIsMain' => 'Main Task is not allowed to use Time Track!',
         'errNoStartDate' => 'Please plan the Start Date to use Time Track!',
         'errIsClose' => 'Closed Task is not allowed to use Time Track!'
+    );
+
+    public static array $taskChecklist = array(
+        'add' => 'Time Track successfully created!',
+        'update' => 'Task Time successfully updated!',
+        'done' => 'Time Track successfully checked!',
+        'open' => 'Time Track successfully opened!',
+        'delete' => 'Time Track successfully opened!',
+        'errIsClose' => 'Closed Task is not allowed to use Task Checklist!'
     );
 }

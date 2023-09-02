@@ -23,7 +23,10 @@ try {
     $urlArr = $fnMain->getUrlArr($_SERVER['REQUEST_URI'], $apiName);
 
     if ('GET' === $requestMethod) {
+        DbMysql::beginTransaction();
+        $isTransaction = true;
         $formData['result'] = $fnMain->runDailyRecurring();
+        DbMysql::commit();
         $formData['success'] = true;
     } else {
         throw new Exception('[line: ' . __LINE__ . '] - Wrong Request Method');

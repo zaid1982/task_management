@@ -11,12 +11,12 @@ class TskRecurring extends General {
 
     /**
      * @param array $recurring
+     * @return int
      * @throws Exception
      */
-    public function runRecurring (array $recurring): void {
+    public function runRecurring (array $recurring): int {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
-            DbMysql::beginTransaction();
             $dueDate = new DateTime($recurring['recurringDue']);
             $taskName = $recurring['recurringName'];
             if ($recurring['recurringType'] === 'Monthly') {
@@ -51,9 +51,9 @@ class TskRecurring extends General {
                     'taskTimeEstimate'=>$recurring['recurringTimeEstimate'], 'taskAmount'=>$recurring['recurringAmount']));
                 DbMysql::update($this::$tableName, array('recurringYear'=>$recurringYear, 'recurringDue'=>$dueDate->format('Y-m-d'), 'recurringTimestamp'=>'NOW()'), array('recurringId'=>$recurring['recurringId']));
             }
-            DbMysql::commit();
+            return $taskId;
         } catch (Exception|Throwable $ex) {
-            DbMysql::rollback();
+            throw new Exception('[' . __CLASS__ . ':' . __FUNCTION__ . '] ' . $ex->getMessage(), $ex->getCode());
         }
     }
 

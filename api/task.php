@@ -54,21 +54,36 @@ try {
         $fnMain->set($taskId);
         $fnMain->saveAudit(3, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
         DbMysql::commit();
-        $formData['errmsg'] = Alert::$task['create'];
+        $formData['errmsg'] = Alert::$task['add'];
         $formData['success'] = true;
     }
     else if ('PUT' === $requestMethod) {
-        if (!isset($urlArr[1]) || !is_numeric($urlArr[1]) || isset($urlArr[2])) {
+        if (!isset($urlArr[1])) {
             throw new Exception('[line: ' . __LINE__ . '] - Wrong PUT Request');
         }
-        $taskId = intval($urlArr[1]);
-        $bodyParams = json_decode(file_get_contents("php://input"), true);
+        if ($urlArr[1] === 'done' && isset($urlArr[2]) && is_numeric($urlArr[2])) {
+            $isShortcut = true;
+        } else if (is_numeric($urlArr[1]) && !isset($urlArr[2])) {
+            $isShortcut = false;
+        } else {
+            throw new Exception('[line: ' . __LINE__ . '] - Wrong PUT Request');
+        }
         DbMysql::beginTransaction();
         $isTransaction = true;
-        $fnMain->set($taskId);
-        $fnMain->updateForm($taskId, $bodyParams);
+        if ($isShortcut) {
+            $taskId = intval($urlArr[2]);
+            $statusId = 4;
+            $fnMain->set($taskId);
+            $fnMain->update($taskId, array('taskDateClose'=>'NOW()', 'statusId'=>$statusId));
+        } else {
+            $taskId = intval($urlArr[1]);
+            $bodyParams = json_decode(file_get_contents("php://input"), true);
+            $statusId = $bodyParams['statusId'];
+            $fnMain->set($taskId);
+            $fnMain->updateForm($taskId, $bodyParams);
+        }
         $fnTaskTime = new TskTaskTime($fnMain->userId, Constant::$isLogged);
-        if (($fnMain->tskTask['statusId'] === 3 || $fnMain->tskTask['statusId'] === 5) && ($bodyParams['statusId'] === 4 || $bodyParams['statusId'] === 7)) {
+        if (($fnMain->tskTask['statusId'] === 3 || $fnMain->tskTask['statusId'] === 5) && ($statusId === 4 || $statusId === 7)) {
             $fnTaskChecklist = new TskTaskChecklist($fnMain->userId, Constant::$isLogged);
             $fnTaskChecklist->updateByTask($taskId, array('statusId'=>7), array('statusId'=>3));
             if ($fnMain->tskTask['taskIsMain'] === 1) {
@@ -90,7 +105,7 @@ try {
             }
             $fnMain->errMsg = Alert::$task['close'];
         } else {
-            if ($fnMain->tskTask['statusId'] === 3 && $bodyParams['statusId'] === 5) {
+            if ($fnMain->tskTask['statusId'] === 3 && $statusId === 5) {
                 $fnTaskTime->insert(array('taskId'=>$taskId, 'taskTimeStart'=>'NOW()'));
             }
             $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);

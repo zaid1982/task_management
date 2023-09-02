@@ -50,8 +50,6 @@ try {
         }
         $taskId = intval($urlArr[1]);
         $bodyParams = json_decode(file_get_contents("php://input"), true);
-        DbMysql::beginTransaction();
-        $isTransaction = true;
         $fnTask->set($taskId);
         if ($fnTask->tskTask['taskIsMain'] === 1) {
             throw new Exception(Alert::$taskTime['errIsMain'], 31);
@@ -62,6 +60,8 @@ try {
         if ($fnTask->tskTask['statusId'] === 4 || $fnTask->tskTask['statusId'] === 7) {
             throw new Exception(Alert::$taskTime['errIsClose'], 31);
         }
+        DbMysql::beginTransaction();
+        $isTransaction = true;
         $fnMain->insert(array_merge(array('taskId'=>$taskId, 'taskTimeStart'=>'NOW()'), $bodyParams));
         if ($fnTask->tskTask['statusId'] === 3) {
             $fnTask->update($taskId, array('statusId'=>5));
@@ -87,7 +87,7 @@ try {
         $bodyParams = json_decode(file_get_contents("php://input"), true);
         DbMysql::beginTransaction();
         $isTransaction = true;
-        if ($urlArr[1] === 'stop' && isset($urlArr[2]) || is_numeric($urlArr[2])) {
+        if ($urlArr[1] === 'stop' && isset($urlArr[2]) && is_numeric($urlArr[2])) {
             $taskTimeId = intval($urlArr[2]);
             $taskTime = $fnMain->get($taskTimeId);
             $fnTask->set($taskTime['taskId']);
