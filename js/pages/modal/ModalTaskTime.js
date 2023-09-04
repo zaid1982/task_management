@@ -107,7 +107,7 @@ function ModalTaskTime () {
                         const data = {
                             taskTimeDesc: mzNullString($('#txtMttDescription').val())
                         };
-                        mzAjax('taskTime/'+taskId, 'POST', data);
+                        taskTimeId = mzAjax('taskTime/'+taskId, 'POST', data);
                         isEdit = true;
                         $('#btnMttStart').hide();
                         $('#btnMttStop').show();
