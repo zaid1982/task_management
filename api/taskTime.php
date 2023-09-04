@@ -77,6 +77,7 @@ try {
         }
         $fnMain->saveAudit(8, 'taskId = '.$taskId.', task name = '.$fnTask->tskTask['taskName']);
         DbMysql::commit();
+        $formData['result'] = $result;
         $formData['errmsg'] = Alert::$taskTime['start'];
         $formData['success'] = true;
     }
