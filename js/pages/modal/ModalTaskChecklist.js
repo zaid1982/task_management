@@ -98,7 +98,7 @@ function ModalTaskChecklist () {
                 drawCallback: function () {
                     $('.lnkMtcEdit').off('click').on('click', function () {
                         const currentRow = mzGetLinkRow($(this), dtMtc);
-                        $taskChecklist['taskId'] = currentRow ['taskChecklistId'];
+                        taskChecklistId = currentRow ['taskChecklistId'];
                         formValidateEdit.clearValidation();
                         mzSetValue('txtMtcDescriptionEdit', currentRow['taskChecklistName'], 'text');
                         mzSetValue('txtMtcWeightageEdit', currentRow['taskChecklistWeightage'], 'text');
