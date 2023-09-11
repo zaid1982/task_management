@@ -99,6 +99,7 @@
                                                     <th>MAIN TASK</th>
                                                     <th>SPACE</th>
                                                     <th>FOLDER</th>
+                                                    <th>MODULE</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
                                                     <th>TAGS</th>
@@ -145,6 +146,7 @@
                                                     <th>MAIN TASK</th>
                                                     <th>SPACE</th>
                                                     <th>FOLDER</th>
+                                                    <th>MODULE</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
                                                     <th>TAGS</th>
@@ -192,6 +194,7 @@
                                                     <th>MAIN TASK</th>
                                                     <th>SPACE</th>
                                                     <th>FOLDER</th>
+                                                    <th>MODULE</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: 75px; min-width: 75px;">ASSIGNEE</th>
                                                     <th>TAGS</th>
@@ -238,6 +241,7 @@
                                                     <th>MAIN TASK</th>
                                                     <th>SPACE</th>
                                                     <th>FOLDER</th>
+                                                    <th>MODULE</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: 75px; min-width: 75px;">ASSIGNEE</th>
                                                     <th>TAGS</th>
@@ -279,6 +283,7 @@
                                                     <th>MAIN TASK</th>
                                                     <th>SPACE</th>
                                                     <th>FOLDER</th>
+                                                    <th>MODULE</th>
                                                     <th>DESCRIPTION</th>
                                                     <th style="width: auto; min-width: 75px;">ASSIGNEE</th>
                                                     <th>TAGS</th>
@@ -355,11 +360,13 @@
                 const refUser_ = mzGetRef('task_user', versionLocal_, 'user/refWithImage');
                 const refSpace_ = mzGetRef('task_space', versionLocal_, 'space/ref');
                 const refFolder_ = mzGetRef('task_folder', versionLocal_, 'folder/ref');
+                const refModule_ = mzGetRef('task_module', versionLocal_, 'module/ref');
 
                 modalTaskEdit.setRefStatus(refStatus_);
                 modalTaskEdit.setRefUser(refUser_);
                 modalTaskEdit.setRefSpace(refSpace_);
                 modalTaskEdit.setRefFolder(refFolder_);
+                modalTaskEdit.setRefModule(refModule_);
                 modalTaskEdit.setClassFrom(mainClass);
                 modalTaskEdit.init();
 
@@ -374,6 +381,7 @@
                 mainClass.setRefUser(refUser_);
                 mainClass.setRefSpace(refSpace_);
                 mainClass.setRefFolder(refFolder_);
+                mainClass.setRefModule(refModule_);
                 mainClass.setDtDisplay(dtTaskDisplay);
                 mainClass.setModalTaskEdit(modalTaskEdit);
                 mainClass.setModalTaskTime(modalTaskTime);

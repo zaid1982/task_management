@@ -10,6 +10,7 @@ function ModalTaskEdit () {
     let refUser;
     let refSpace;
     let refFolder;
+    let refModule;
     let refMainTask = [];
     let submitType = '';
     const yesterdayDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
@@ -415,5 +416,9 @@ function ModalTaskEdit () {
 
     this.setRefFolder = function (_refFolder) {
         refFolder = _refFolder;
+    };
+
+    this.setRefModule = function (_refModule) {
+        refModule = _refModule;
     };
 }

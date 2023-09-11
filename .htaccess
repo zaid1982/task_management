@@ -11,6 +11,8 @@ RewriteRule ^p_list_all?$ list_all.html
 RewriteRule ^login/?$ api/login.php
 RewriteRule ^folder/?$ api/folder.php
 RewriteRule ^folder/(.+)/?$ api/folder.php
+RewriteRule ^module/?$ api/module.php
+RewriteRule ^module/(.+)/?$ api/module.php
 RewriteRule ^recurring/?$ api/recurring.php
 RewriteRule ^recurring/(.+)/?$ api/recurring.php
 RewriteRule ^space/?$ api/space.php

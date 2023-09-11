@@ -11,6 +11,7 @@ function ListAll() {
     let refUser;
     let refSpace;
     let refFolder;
+    let refModule;
     let dtDisplay;
     let modalTaskEdit;
     let modalTaskTime;
@@ -91,10 +92,10 @@ function ListAll() {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
-                { className: 'text-center', targets: [0, 6, 8, 9, 11, 12, 13 ,14, 15, 16, 17, 18, 19] },
-                { className: 'text-right', targets: [10] },
-                { className: 'noVis', targets: [0, 19] },
-                { visible: false, targets: [2, 5, 8, 9, 17] }
+                { className: 'text-center', targets: [0, 7, 9, 10, 12, 13 ,14, 15, 16, 17, 18, 19, 20] },
+                { className: 'text-right', targets: [11] },
+                { className: 'noVis', targets: [0, 20] },
+                { visible: false, targets: [2, 5, 6, 9, 10, 18] }
             ],
             buttons: [
                 { extend: 'colvis', columns: ':not(.noVis)', fade: 400, collectionLayout: 'four-column', text:'<i class="fas fa-columns"></i>', className: 'btn btn-outline-grey btn-sm px-2 ml-0 z-depth-2', titleAttr: 'Column'},
@@ -130,6 +131,25 @@ function ListAll() {
                     modalTaskChecklist.setClassFrom(self);
                     modalTaskChecklist.open(currentRow['taskId']);
                 });
+                /*var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+                var numCols = api.columns(':visible').count();
+                api.column(4, { page: 'current' })
+                    .data()
+                    .each(function (group, i) {
+                        if (last !== group) {
+                            $(rows)
+                                .eq(i)
+                                .before(
+                                    '<tr class="group"><td colspan="'+numCols+'" class="font-weight-bold">' +
+                                    refFolder[group]['folderName'] +
+                                    '</td></tr>'
+                                );
+
+                            last = group;
+                        }
+                    });*/
             },
             aoColumns: [
                 { mData: null},
@@ -137,17 +157,18 @@ function ListAll() {
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
-                { mData: 'taskDescription'}, // 5
+                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
+                { mData: 'taskDescription'},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }},
-                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }}, // 10
+                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }}, // 10
+                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskDateDue', mRender: function (data) { return mzDateDisplay(data); }},
                 { mData: 'taskDateStart'},
-                { mData: 'taskDateEnd'},
-                { mData: 'progress', mRender: function (data) { return dtDisplay.getProgress(data); }}, // 15
+                { mData: 'taskDateEnd'}, // 15
+                { mData: 'progress', mRender: function (data) { return dtDisplay.getProgress(data); }},
                 { mData: 'taskTimeEstimate'},
                 { mData: 'timeSpent', mRender: function (data, type, row) { return dtDisplay.getRecordedTime(data, row['taskTimeEstimate']); }},
                 { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }},
@@ -155,17 +176,17 @@ function ListAll() {
             ]
         });
 
-        if (divWidth < 1164) { dtLllToday.column(10).visible(false); }
-        if (divWidth < 1082) { dtLllToday.column(12).visible(false); }
-        if (divWidth < 995) { dtLllToday.column(11).visible(false); }
-        if (divWidth < 935) { dtLllToday.column(7).visible(false); }
-        if (divWidth < 871) { dtLllToday.column(16).visible(false); }
-        if (divWidth < 773) { dtLllToday.column(15).visible(false); }
+        if (divWidth < 1164) { dtLllToday.column(11).visible(false); }
+        if (divWidth < 1082) { dtLllToday.column(13).visible(false); }
+        if (divWidth < 995) { dtLllToday.column(12).visible(false); }
+        if (divWidth < 935) { dtLllToday.column(8).visible(false); }
+        if (divWidth < 871) { dtLllToday.column(17).visible(false); }
+        if (divWidth < 773) { dtLllToday.column(16).visible(false); }
         if (divWidth < 682) { dtLllToday.column(3).visible(false); }
         if (divWidth < 621) { dtLllToday.column(4).visible(false); }
-        if (divWidth < 576) { dtLllToday.column(18).visible(false); }
-        if (divWidth < 451) { dtLllToday.column(14).visible(false); }
-        if (divWidth < 370) { dtLllToday.column(13).visible(false); }
+        if (divWidth < 576) { dtLllToday.column(19).visible(false); }
+        if (divWidth < 451) { dtLllToday.column(15).visible(false); }
+        if (divWidth < 370) { dtLllToday.column(14).visible(false); }
 
         dtLllOverdue = $('#dtLllOverdue').DataTable({
             bLengthChange: false,
@@ -177,10 +198,10 @@ function ListAll() {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
-                { className: 'text-center', targets: [0, 6, 8, 9, 11, 12, 13 ,14, 15, 16, 17, 18, 19, 20] },
-                { className: 'text-right', targets: [10] },
-                { className: 'noVis', targets: [0, 20] },
-                { visible: false, targets: [2, 5, 8, 9, 17] },
+                { className: 'text-center', targets: [0, 7, 9, 10, 12, 13 ,14, 15, 16, 17, 18, 19, 20, 21] },
+                { className: 'text-right', targets: [11] },
+                { className: 'noVis', targets: [0, 21] },
+                { visible: false, targets: [2, 5, 6, 9, 10, 18] },
             ],
             buttons: [
                 { extend: 'colvis', columns: ':not(.noVis)', fade: 400, collectionLayout: 'four-column', text:'<i class="fas fa-columns"></i>', className: 'btn btn-outline-grey btn-sm px-2 ml-0 z-depth-2', titleAttr: 'Column'},
@@ -223,36 +244,37 @@ function ListAll() {
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
-                { mData: 'taskDescription'}, // 5
+                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
+                { mData: 'taskDescription'},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }},
-                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2);}}, // 10
+                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }}, // 10
+                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2);}},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskDateDue', mRender: function (data) { return mzDateDisplay(data); }},
                 { mData: 'taskDateStart'},
-                { mData: 'taskDateEnd'},
-                { mData: 'progress', mRender: function (data) { return dtDisplay.getProgress(data); }}, // 15
+                { mData: 'taskDateEnd'}, // 15
+                { mData: 'progress', mRender: function (data) { return dtDisplay.getProgress(data); }},
                 { mData: 'taskTimeEstimate'},
                 { mData: 'timeSpent', mRender: function (data, type, row) { return dtDisplay.getRecordedTime(data, row['taskTimeEstimate']); }},
                 { mData: 'lateness', mRender: function(data) { return dtDisplay.getLateness(data); }},
-                { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }},
-                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(row['taskIsMain']===1?1:2, 'lnkLllOverdue', meta.row); }} // 20
+                { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }}, // 20
+                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(row['taskIsMain']===1?1:2, 'lnkLllOverdue', meta.row); }}
             ]
         });
 
-        if (divWidth < 1232) { dtLllOverdue.column(13).visible(false); dtLllOverdue.column(14).visible(false); }
-        if (divWidth < 1096) { dtLllOverdue.column(10).visible(false); }
-        if (divWidth < 1009) { dtLllOverdue.column(11).visible(false); }
-        if (divWidth < 925) { dtLllOverdue.column(7).visible(false); }
-        if (divWidth < 842) { dtLllOverdue.column(16).visible(false); }
-        if (divWidth < 754) { dtLllOverdue.column(15).visible(false); }
-        if (divWidth < 675) { dtLllOverdue.column(3).visible(false); }
-        if (divWidth < 598) { dtLllOverdue.column(4).visible(false); }
-        if (divWidth < 500) { dtLllOverdue.column(19).visible(false); }
-        if (divWidth < 450) { dtLllOverdue.column(12).visible(false); }
-        if (divWidth < 370) { dtLllOverdue.column(6).visible(false); }
+        if (divWidth < 1232) { dtLllOverdue.column(14).visible(false); dtLllOverdue.column(15).visible(false); }
+        if (divWidth < 1096) { dtLllOverdue.column(11).visible(false); }
+        if (divWidth < 1009) { dtLllOverdue.column(12).visible(false); }
+        if (divWidth < 925) { dtLllOverdue.column(8).visible(false); }
+        if (divWidth < 842) { dtLllOverdue.column(17).visible(false); }
+        if (divWidth < 754) { dtLllOverdue.column(16).visible(false); }
+        if (divWidth < 675) { dtLllOverdue.column(4).visible(false); }
+        if (divWidth < 598) { dtLllOverdue.column(5).visible(false); }
+        if (divWidth < 500) { dtLllOverdue.column(20).visible(false); }
+        if (divWidth < 450) { dtLllOverdue.column(13).visible(false); }
+        if (divWidth < 370) { dtLllOverdue.column(7).visible(false); }
 
         dtLllFuture = $('#dtLllFuture').DataTable({
             bLengthChange: false,
@@ -310,6 +332,7 @@ function ListAll() {
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
+                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }},
                 { mData: 'taskDescription'}, // 5
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
@@ -390,6 +413,7 @@ function ListAll() {
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
+                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }},
                 { mData: 'taskDescription'}, // 5
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
@@ -455,6 +479,7 @@ function ListAll() {
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
+                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }},
                 { mData: 'taskDescription'}, // 5
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
@@ -566,7 +591,7 @@ function ListAll() {
             } else if (dueAfter === yesterdayDate && currentOpen !== 2 && isGetOverdue) {
                 isGetOverdue = false;
             } else if (dueAfter > todayDate && currentOpen !== 3 && isGetFuture) {
-                isGetOverdue = false;
+                isGetFuture = false;
             }
         }
     };
@@ -585,7 +610,7 @@ function ListAll() {
             self.genTableOverdue();
             isGetOverdue = true;
         } else {
-            isGetUnscheduled = false;
+            isGetOverdue = false;
         }
     };
 
@@ -594,7 +619,7 @@ function ListAll() {
             self.genTableFuture();
             isGetFuture = true;
         } else {
-            isGetUnscheduled = false;
+            isGetFuture = false;
         }
     };
 
@@ -625,6 +650,10 @@ function ListAll() {
 
     this.setRefFolder = function (_refFolder) {
         refFolder = _refFolder;
+    };
+
+    this.setRefModule = function (_refModule) {
+        refModule = _refModule;
     };
 
     this.setDtDisplay = function (_dtDisplay) {
