@@ -270,8 +270,8 @@ function ListAll() {
         if (divWidth < 925) { dtLllOverdue.column(8).visible(false); }
         if (divWidth < 842) { dtLllOverdue.column(17).visible(false); }
         if (divWidth < 754) { dtLllOverdue.column(16).visible(false); }
-        if (divWidth < 675) { dtLllOverdue.column(4).visible(false); }
-        if (divWidth < 598) { dtLllOverdue.column(5).visible(false); }
+        if (divWidth < 675) { dtLllOverdue.column(3).visible(false); }
+        if (divWidth < 598) { dtLllOverdue.column(4).visible(false); }
         if (divWidth < 500) { dtLllOverdue.column(20).visible(false); }
         if (divWidth < 450) { dtLllOverdue.column(13).visible(false); }
         if (divWidth < 370) { dtLllOverdue.column(7).visible(false); }
@@ -286,10 +286,10 @@ function ListAll() {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
-                { className: 'text-center', targets: [0, 6, 8, 9, 11, 12, 13 ,14, 15, 16, 17, 18, 19] },
-                { className: 'text-right', targets: [10] },
-                { className: 'noVis', targets: [0, 19] },
-                { visible: false, targets: [2, 5, 8, 9, 17] }
+                { className: 'text-center', targets: [0, 7, 9, 10, 12, 13 ,14, 15, 16, 17, 18, 19, 20] },
+                { className: 'text-right', targets: [11] },
+                { className: 'noVis', targets: [0, 20] },
+                { visible: false, targets: [2, 5, 6, 9, 10, 18] }
             ],
             buttons: [
                 { extend: 'colvis', columns: ':not(.noVis)', fade: 400, collectionLayout: 'four-column', text:'<i class="fas fa-columns"></i>', className: 'btn btn-outline-grey btn-sm px-2 ml-0 z-depth-2', titleAttr: 'Column'},
@@ -332,22 +332,22 @@ function ListAll() {
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
-                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }},
-                { mData: 'taskDescription'}, // 5
+                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
+                { mData: 'taskDescription'},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }},
-                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }}, // 10
+                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }}, // 10
+                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskDateDue', mRender: function (data) { return mzDateDisplay(data); }},
                 { mData: 'taskDateStart'},
-                { mData: 'taskDateEnd'},
-                { mData: 'progress', mRender: function (data) { return dtDisplay.getProgress(data); }}, // 15
+                { mData: 'taskDateEnd'}, // 15
+                { mData: 'progress', mRender: function (data) { return dtDisplay.getProgress(data); }},
                 { mData: 'taskTimeEstimate'},
                 { mData: 'timeSpent', mRender: function (data, type, row) { return dtDisplay.getRecordedTime(data, row['taskTimeEstimate']); }},
                 { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }},
-                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(row['taskIsMain']===1?1:2, 'lnkLllFuture', meta.row); }}
+                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(row['taskIsMain']===1?1:2, 'lnkLllFuture', meta.row); }} // 20
             ]
         });
 
@@ -372,10 +372,10 @@ function ListAll() {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
-                { className: 'text-center', targets: [0, 6, 8, 9, 11, 12, 13, 14] },
-                { className: 'text-right', targets: [10] },
-                { className: 'noVis', targets: [0, 14] },
-                { visible: false, targets: [8, 9] }
+                { className: 'text-center', targets: [0, 7, 9, 10, 12, 13, 14, 15] },
+                { className: 'text-right', targets: [11] },
+                { className: 'noVis', targets: [0, 15] },
+                { visible: false, targets: [9, 10, 11] }
             ],
             buttons: [
                 { extend: 'colvis', columns: ':not(.noVis)', fade: 400, collectionLayout: 'four-column', text:'<i class="fas fa-columns"></i>', className: 'btn btn-outline-grey btn-sm px-2 ml-0 z-depth-2', titleAttr: 'Column'},
@@ -413,28 +413,28 @@ function ListAll() {
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
-                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }},
-                { mData: 'taskDescription'}, // 5
+                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
+                { mData: 'taskDescription', mRender: function (data) { return data !== null ? data.replaceAll('\n', '<br>') : null; }},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth'},
-                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }}, // 10
+                { mData: 'taskMonth'}, // 10
+                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskTimeEstimate'},
                 { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }},
-                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(1, 'lnkLllUnscheduled', meta.row); }}
+                { mData: null, mRender: function (data, type, row, meta) { return dtDisplay.getAction(1, 'lnkLllUnscheduled', meta.row); }} // 15
             ]
         });
 
-        if (divWidth < 1081) { dtLllUnscheduled.column(10).visible(false); }
-        if (divWidth < 1005) { dtLllUnscheduled.column(5).visible(false); }
+        if (divWidth < 1081) { dtLllUnscheduled.column(5).visible(false); }
+        if (divWidth < 1005) { dtLllUnscheduled.column(6).visible(false); }
         if (divWidth < 857) { dtLllUnscheduled.column(2).visible(false); }
-        if (divWidth < 774) { dtLllUnscheduled.column(11).visible(false); }
-        if (divWidth < 692) { dtLllUnscheduled.column(12).visible(false); }
-        if (divWidth < 576) { dtLllUnscheduled.column(13).visible(false); }
-        if (divWidth < 482) { dtLllUnscheduled.column(7).visible(false); }
-        if (divWidth < 413) { dtLllUnscheduled.column(6).visible(false); }
+        if (divWidth < 774) { dtLllUnscheduled.column(12).visible(false); }
+        if (divWidth < 692) { dtLllUnscheduled.column(13).visible(false); }
+        if (divWidth < 576) { dtLllUnscheduled.column(14).visible(false); }
+        if (divWidth < 482) { dtLllUnscheduled.column(8).visible(false); }
+        if (divWidth < 413) { dtLllUnscheduled.column(7).visible(false); }
         if (divWidth < 345) { dtLllUnscheduled.column(3).visible(false); }
 
         dtLllDone = $('#dtLllDone').DataTable({
@@ -447,10 +447,10 @@ function ListAll() {
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-6 col-md-5 d-none d-sm-block'i><'col-sm-6 col-md-7'p>>",
             columnDefs: [
-                { className: 'text-center', targets: [0, 6, 8, 9, 11, 12, 13 ,14, 15, 16, 17, 18, 19, 20, 21] },
-                { className: 'text-right', targets: [10] },
+                { className: 'text-center', targets: [0, 7, 9, 10, 12, 13 ,14, 15, 16, 17, 18, 19, 20, 21, 22] },
+                { className: 'text-right', targets: [11] },
                 { className: 'noVis', targets: [0] },
-                { visible: false, targets: [2, 5, 14, 15, 16, 21] }
+                { visible: false, targets: [2, 5, 6, 15, 16, 17, 22] }
             ],
             buttons: [
                 { extend: 'colvis', columns: ':not(.noVis)', fade: 400, collectionLayout: 'four-column', text:'<i class="fas fa-columns"></i>', className: 'btn btn-outline-grey btn-sm px-2 ml-0 z-depth-2', titleAttr: 'Column'},
@@ -479,40 +479,40 @@ function ListAll() {
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
-                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }},
-                { mData: 'taskDescription'}, // 5
+                { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
+                { mData: 'taskDescription'},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth', mRender: function (data) { return data !== null && data >= 1 && data <= 12 ? monthArr[data-1]['monthName'] : ''; }},
-                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2);}}, // 10
+                { mData: 'taskMonth', mRender: function (data) { return data !== null && data >= 1 && data <= 12 ? monthArr[data-1]['monthName'] : ''; }}, // 10
+                { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2);}},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskDateDue', mRender: function (data) { return mzDateDisplay(data); }},
                 { mData: 'taskDateClose', mRender: function (data) { return mzDateDisplay(data); }},
-                { mData: 'taskDateStart'},
-                { mData: 'taskDateEnd'}, // 15
+                { mData: 'taskDateStart'}, // 15
+                { mData: 'taskDateEnd'},
                 { mData: 'progress', mRender: function (data) { return dtDisplay.getProgress(data); }},
                 { mData: 'taskTimeEstimate'},
                 { mData: 'timeSpent', mRender: function (data, type, row) { return dtDisplay.getRecordedTime(data, row['taskTimeEstimate']); }},
-                { mData: 'efficiency', mRender: function (data) { return dtDisplay.getEfficiency(data); }},
-                { mData: 'lateness', mRender: function(data) { return dtDisplay.getLateness(data); }}, // 20
+                { mData: 'efficiency', mRender: function (data) { return dtDisplay.getEfficiency(data); }}, // 20
+                { mData: 'lateness', mRender: function(data) { return dtDisplay.getLateness(data); }},
                 { mData: 'statusId', mRender: function (data) { return dtDisplay.getStatus(refStatus[data]['statusName'], refStatus[data]['statusColor']); }}
             ]
         });
 
-        if (divWidth < 1327) { dtLllDone.column(8).visible(false); dtLllDone.column(9).visible(false); }
-        if (divWidth < 1209) { dtLllDone.column(11).visible(false); }
-        if (divWidth < 1143) { dtLllDone.column(10).visible(false); }
-        if (divWidth < 1061) { dtLllDone.column(7).visible(false); }
+        if (divWidth < 1327) { dtLllDone.column(9).visible(false); dtLllDone.column(10).visible(false); }
+        if (divWidth < 1209) { dtLllDone.column(12).visible(false); }
+        if (divWidth < 1143) { dtLllDone.column(11).visible(false); }
+        if (divWidth < 1061) { dtLllDone.column(8).visible(false); }
         if (divWidth < 1014) { dtLllDone.column(3).visible(false); }
         if (divWidth < 931) { dtLllDone.column(4).visible(false); }
-        if (divWidth < 821) { dtLllDone.column(6).visible(false); }
-        if (divWidth < 729) { dtLllDone.column(11).visible(false); }
-        if (divWidth < 644) { dtLllDone.column(16).visible(false); }
-        if (divWidth < 631) { dtLllDone.column(17).visible(false); }
-        if (divWidth < 558) { dtLllDone.column(12).visible(false); }
-        if (divWidth < 492) { dtLllDone.column(13).visible(false); }
-        if (divWidth < 392) { dtLllDone.column(18).visible(false); }
+        if (divWidth < 821) { dtLllDone.column(7).visible(false); }
+        if (divWidth < 729) { dtLllDone.column(12).visible(false); }
+        if (divWidth < 644) { dtLllDone.column(17).visible(false); }
+        if (divWidth < 631) { dtLllDone.column(18).visible(false); }
+        if (divWidth < 558) { dtLllDone.column(13).visible(false); }
+        if (divWidth < 492) { dtLllDone.column(14).visible(false); }
+        if (divWidth < 392) { dtLllDone.column(19).visible(false); }
 
         self.genTotalData();
         self.genTableToday();

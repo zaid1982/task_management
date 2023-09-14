@@ -1183,7 +1183,7 @@ function mzOption(name, data, valIndex, filters, required, defaultText, isSort, 
     if (name === '') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
     }
-    if (typeof defaultText === 'undefined') {
+    if (typeof defaultText === 'undefined' || defaultText === null) {
         defaultText = 'Choose option';
     }
     if (typeof isSort === 'undefined') {

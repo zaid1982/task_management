@@ -61,6 +61,14 @@ function ModalTaskEdit () {
             }
         },
         {
+            field_id: 'optMteModule',
+            type: 'select',
+            name: 'Module',
+            validator: {
+                notEmpty: true
+            }
+        },
+        {
             field_id: 'optMteAssignee',
             type: 'select',
             name: 'Assignee',
@@ -180,9 +188,10 @@ function ModalTaskEdit () {
             $('#optMteSpace').on('change', function () {
                 const spaceId = parseInt($(this).val());
                 try {
-                    $('#optMteFolder_').show();
+                    $('#optMteFolder_, #optMteModule_').show();
                     mzOptionStop('optMteFolder', refFolder, 'folderName', {spaceId: spaceId, statusId: 1}, true);
-                    $('#optMteFolderErr').html('');
+                    mzOptionStop('optMteModule', refModule, 'moduleName', {spaceId: spaceId, statusId: 1}, false,null, false);
+                    $('#optMteFolderErr, #optMteModuleErr').html('');
                     if ($("input[name='radMteIsMain']:checked").val() === 'Sub') {
                         mzOptionStopClear('optMteMainTask', true);
                         $('#optMteMainTaskErr').html('');
@@ -224,6 +233,7 @@ function ModalTaskEdit () {
                         };
                         if (submitType === 'add') {
                             data['folderId'] = mzNullInt($('#optMteFolder').val());
+                            data['moduleId'] = mzNullInt($('#optMteModule').val());
                             data['taskAssignee'] = mzNullInt($('#optMteAssignee').val());
                             data['isMain'] = isMain;
                             data['taskMainId'] = mzNullInt($('#optMteMainTask').val());
@@ -273,7 +283,7 @@ function ModalTaskEdit () {
             formValidate.registerFields(vData);
             formValidate.disableField('optMteMainTask');
             formValidate.disableField('optMteStatus');
-            $('#optMteFolder_, #optMteMainTask_, #optMteStatus_, #btnMteDone').hide();
+            $('#optMteFolder_, #optMteModule_, #optMteMainTask_, #optMteStatus_, #btnMteDone').hide();
             $('#txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_').show();
             mzDisableSelect('optMteSpace', false);
             mzDisableSelect('optMteFolder', false);
@@ -298,7 +308,7 @@ function ModalTaskEdit () {
             taskId = _taskId;
             formValidate.clearValidation();
             formValidate.registerFields(vData);
-            $('#optMteFolder_, #optMteStatus_, #txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_, #btnMteDone').show();
+            $('#optMteFolder_, #optMteModule_, #optMteStatus_, #txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_, #btnMteDone').show();
             $('#optMteMainTask_').hide();
             mzDisableSelect('optMteSpace', true);
             mzDisableSelect('optMteFolder', true);
@@ -314,6 +324,7 @@ function ModalTaskEdit () {
             const status = task['statusId'];
             mzOptionStop('optMteFolder', refFolder, 'folderName', {spaceId: spaceId, statusId: 1}, true);
             mzOptionStop('optMteStatus', refStatus, 'statusName', {id: status===5?'(4,5,7)':'(3,4,5,7)'}, true);
+            mzOptionStop('optMteModule', refModule, 'moduleName', {spaceId: spaceId, statusId: 1});
             mzSetValue('txtMteTaskName', task['taskName'], 'text');
             mzSetValue('optMteSpace', spaceId, 'select');
             mzSetValue('optMteFolder', folderId, 'select');

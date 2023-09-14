@@ -198,7 +198,7 @@ class TskTask extends General {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
             parent::checkEmptyInteger($this->userId, 'userId');
-            $params = parent::arraySpliceAssoc($inputParams, array('taskName', 'folderId', 'taskAssignee', 'taskTags', 'taskPriority', 'taskMainId', 'taskDateDue', 'taskAmount', 'taskDescription'));
+            $params = parent::arraySpliceAssoc($inputParams, array('taskName', 'folderId', 'moduleId', 'taskAssignee', 'taskTags', 'taskPriority', 'taskMainId', 'taskDateDue', 'taskAmount', 'taskDescription'));
             parent::checkMandatoryArray($params, array('taskName', 'folderId', 'taskAssignee', 'taskTags', 'taskPriority'), true,
                 array('Task Name', 'Folder', 'Assignee', 'Tags', 'Priority'));
             if ($inputParams['timeEstimate'] === null && $inputParams['startDate'] !== null) {
