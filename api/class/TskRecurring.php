@@ -69,7 +69,7 @@ class TskRecurring extends General {
             $today = new DateTime();
             $fnRecurringChecklist = new TskRecurringChecklist($this->userId, true);
             $fnTaskChecklist = new TskTaskChecklist($this->userId, true);
-            $recurringArr = DbMysql::selectAll($this::$tableName, array('recurringDue'=>'<|'.$today->format('Y-m-d'), 'recurringTimestamp'=>'<|'.$today->format('Y-m-d').' 00:00:00'));
+            $recurringArr = DbMysql::selectAll($this::$tableName, array('statusId'=>1, 'recurringDue'=>'<|'.$today->format('Y-m-d'), 'recurringTimestamp'=>'<|'.$today->format('Y-m-d').' 00:00:00'));
             foreach ($recurringArr as $recurring) {
                 $taskId = $this->runRecurring($recurring);
                 $recurringChecklistArr = $fnRecurringChecklist->getList($recurring['recurringId']);
