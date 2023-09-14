@@ -194,6 +194,32 @@ class TskTask extends General {
      * @return int
      * @throws Exception
      */
+    public function insert (array $inputParams): int {
+        try {
+            parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
+            parent::checkEmptyInteger($this->userId, 'userId');
+            parent::checkMandatoryArray($inputParams, array('taskName', 'folderId', 'taskAssignee', 'taskTags', 'taskPriority'));
+            if ($inputParams['timeEstimate'] === null && $inputParams['startDate'] !== null) {
+                throw new Exception(Alert::$task['errStartDateNoEstimate'], 31);
+            }
+            if ($inputParams['isMain'] === 'Sub') {
+                parent::checkMandatoryArray($inputParams, array('taskMainId'));
+            }
+            $inputParams['taskCreatedBy'] = $this->userId;
+            if ($inputParams['isMain'] === 'Sub' && isset($inputParams['taskTimeEstimate'])) {
+                DbMysql::update($this::$tableName, array('taskTimeEstimate'=>"|IF(ISNULL(task_time_estimate), '".$inputParams['taskTimeEstimate']."', ADDTIME(task_time_estimate, '".$inputParams['taskTimeEstimate']."'))"), array('taskId'=>$inputParams['taskMainId']));
+            }
+            return DbMysql::insert($this::$tableName, $inputParams);
+        } catch (Exception $ex) {
+            throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
+        }
+    }
+
+    /**
+     * @param array $inputParams
+     * @return int
+     * @throws Exception
+     */
     public function insertForm (array $inputParams): int {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);

@@ -4,6 +4,9 @@ require_once 'library/Alert.php';
 require_once 'library/General.php';
 require_once 'library/DbMysql.php';
 require_once 'class/TskRecurring.php';
+require_once 'class/TskTask.php';
+require_once 'class/TskRecurringChecklist.php';
+require_once 'class/TskTaskChecklist.php';
 
 $apiName = 'recurring';
 $isTransaction = false;
@@ -23,6 +26,7 @@ try {
     $urlArr = $fnMain->getUrlArr($_SERVER['REQUEST_URI'], $apiName);
 
     if ('GET' === $requestMethod) {
+        $fnMain->userId = 1;
         DbMysql::beginTransaction();
         $isTransaction = true;
         $formData['result'] = $fnMain->runDailyRecurring();

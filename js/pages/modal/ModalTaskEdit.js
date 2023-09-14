@@ -65,7 +65,7 @@ function ModalTaskEdit () {
             type: 'select',
             name: 'Module',
             validator: {
-                notEmpty: true
+                notEmpty: false
             }
         },
         {

@@ -51,18 +51,10 @@ try {
         $taskId = intval($urlArr[1]);
         $bodyParams = json_decode(file_get_contents("php://input"), true);
         $fnTask->set($taskId);
-        if ($fnTask->tskTask['taskIsMain'] === 1) {
-            throw new Exception(Alert::$taskTime['errIsMain'], 31);
-        }
-        if ($fnTask->tskTask['taskDateStart'] === null || $fnTask->tskTask['taskTimeEstimate'] === null) {
-            throw new Exception(Alert::$taskTime['errNoStartDate'], 31);
-        }
-        if ($fnTask->tskTask['statusId'] === 4 || $fnTask->tskTask['statusId'] === 7) {
-            throw new Exception(Alert::$taskTime['errIsClose'], 31);
-        }
+        $fnMain->setTskTask($fnTask->tskTask);
         DbMysql::beginTransaction();
         $isTransaction = true;
-        $result = $fnMain->insert(array_merge(array('taskId'=>$taskId, 'taskTimeStart'=>'NOW()'), $bodyParams));
+        $result = $fnMain->insert($taskId, $bodyParams);
         if ($fnTask->tskTask['statusId'] === 3) {
             $fnTask->update($taskId, array('statusId'=>5));
             $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnTask->tskTask['taskName']);

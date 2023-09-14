@@ -4,9 +4,18 @@ class TskTaskTime extends General {
 
     public int $taskTimeId;
     private static string $tableName = 'tsk_task_time';
+    public array $tskTask = array();
+
     function __construct (int $userId=0, bool $isLogged=false) {
         $this->userId = $userId;
         $this->isLogged = $isLogged;
+    }
+
+    /**
+     * @param array $tskTask
+     */
+    public function setTskTask(array $tskTask): void {
+        $this->tskTask = $tskTask;
     }
 
     /**
@@ -88,11 +97,21 @@ class TskTaskTime extends General {
      * @return int
      * @throws Exception
      */
-    public function insert (array $inputParams): int {
+    public function insert (int $taskId, array $inputParams = array()): int {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
-            parent::checkMandatoryArray($inputParams, array('taskId', 'taskTimeStart'));
-            return DbMysql::insert($this::$tableName, $inputParams);
+            parent::checkEmptyArray($this->tskTask, 'tskTask');
+            if ($this->tskTask['taskIsMain'] === 1) {
+                throw new Exception(Alert::$taskTime['errIsMain'], 31);
+            }
+            if ($this->tskTask['taskDateStart'] === null || $this->tskTask['taskTimeEstimate'] === null) {
+                throw new Exception(Alert::$taskTime['errNoStartDate'], 31);
+            }
+            if ($this->tskTask['statusId'] === 4 || $this->tskTask['statusId'] === 7) {
+                throw new Exception(Alert::$taskTime['errIsClose'], 31);
+            }
+            $params = array('taskId'=>$taskId, 'taskTimeStart'=>'NOW()');
+            return DbMysql::insert($this::$tableName, array_merge($params, $inputParams));
         } catch (Exception $ex) {
             throw new Exception('['.__CLASS__.':'.__FUNCTION__.'] '.$ex->getMessage(), $ex->getCode());
         }

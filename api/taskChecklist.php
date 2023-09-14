@@ -50,7 +50,7 @@ try {
         }
         DbMysql::beginTransaction();
         $isTransaction = true;
-        $fnMain->insertForm($taskId, $bodyParams);
+        $fnMain->insert($taskId, $bodyParams, true);
         $fnMain->saveAudit(10, 'taskId = '.$taskId.', task name = '.$fnTask->tskTask['taskName'].', checklist name = '.$bodyParams['taskChecklistName']);
         DbMysql::commit();
         $formData['errmsg'] = Alert::$taskChecklist['add'];

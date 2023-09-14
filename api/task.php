@@ -106,7 +106,8 @@ try {
             $fnMain->errMsg = Alert::$task['close'];
         } else {
             if ($fnMain->tskTask['statusId'] === 3 && $statusId === 5) {
-                $fnTaskTime->insert(array('taskId'=>$taskId, 'taskTimeStart'=>'NOW()'));
+                $fnTaskTime->setTskTask($fnMain->get($taskId));
+                $fnTaskTime->insert($taskId);
             }
             $fnMain->saveAudit(4, 'taskId = '.$taskId.', task name = '.$fnMain->tskTask['taskName']);
             $fnMain->errMsg = Alert::$task['update'];

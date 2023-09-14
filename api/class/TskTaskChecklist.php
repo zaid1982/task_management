@@ -42,14 +42,15 @@ class TskTaskChecklist extends General {
     /**
      * @param int $taskId
      * @param array $inputParams
+     * @param bool $isAlert
      * @return int
      * @throws Exception
      */
-    public function insertForm (int $taskId, array $inputParams): int {
+    public function insert (int $taskId, array $inputParams, bool $isAlert = false): int {
         try {
             parent::logDebug(__CLASS__, __FUNCTION__, __LINE__, 'Entering ' . __FUNCTION__);
             parent::checkEmptyInteger($this->userId, 'userId');
-            parent::checkMandatoryArray($inputParams, array('taskChecklistName', 'taskChecklistWeightage'), true, array('Description', 'Weightage'));
+            parent::checkMandatoryArray($inputParams, array('taskChecklistName', 'taskChecklistWeightage'), $isAlert, array('Description', 'Weightage'));
             $inputParams['taskId'] = $taskId;
             return DbMysql::insert($this::$tableName, $inputParams);
         } catch (Exception $ex) {
