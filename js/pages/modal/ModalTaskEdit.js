@@ -307,14 +307,8 @@ function ModalTaskEdit () {
             mzEmptyParams([_taskId]);
             taskId = _taskId;
             formValidate.clearValidation();
-            formValidate.registerFields(vData);
             $('#optMteFolder_, #optMteModule_, #optMteStatus_, #txtMteTimeEstimate_, #txtMteStartDate_, #txtMteStartTime_, #btnMteDone').show();
             $('#optMteMainTask_').hide();
-            mzDisableSelect('optMteSpace', true);
-            mzDisableSelect('optMteFolder', true);
-            mzDisableSelect('optMteAssignee', true);
-            mzDisableSelect('optMteMainTask', true);
-            self.disableRadIsMain();
             mzSetMinDate('txtMteDueDate', false);
             mzSetMinDate('txtMteStartDate', false);
             task = mzAjax('task/'+taskId, 'GET');
@@ -322,6 +316,16 @@ function ModalTaskEdit () {
             const spaceId = refFolder[folderId]['spaceId'];
             const isMain = task['isMain'];
             const status = task['statusId'];
+            let refTimeEstimateClone = refTimeEstimate.map((x) => x);
+            if (isMain !== 'Main' && task['timeEstimateInList'] === false) {
+                refTimeEstimateClone.push(task['timeEstimate']);
+                vData[11]['validator']['inList'] = refTimeEstimateClone;
+            }
+            formValidate.registerFields(vData);
+            mzDisableSelect('optMteSpace', true);
+            mzDisableSelect('optMteFolder', true);
+            mzDisableSelect('optMteAssignee', true);
+            mzDisableSelect('optMteMainTask', true);
             mzOptionStop('optMteFolder', refFolder, 'folderName', {spaceId: spaceId, statusId: 1}, true);
             mzOptionStop('optMteStatus', refStatus, 'statusName', {id: status===5?'(4,5,7)':'(3,4,5,7)'}, true);
             mzOptionStop('optMteModule', refModule, 'moduleName', {spaceId: spaceId, statusId: 1});
@@ -336,15 +340,10 @@ function ModalTaskEdit () {
             mzSetValue('txtMteAmount', task['taskAmount'], 'text');
             mzSetValue('optMteStatus', status, 'select');
             mzSetValue('txaMteRemark', task['taskDescription'], 'textarea');
-            self.setTaskTypeHide(isMain, task['taskMainId']);
-            let refTimeEstimateClone = refTimeEstimate.map((x) => x);
-            if (isMain !== 'Main' && task['timeEstimateInList'] === false) {
-                refTimeEstimateClone.push(task['timeEstimate']);
-                vData[10]['validator']['inList'] = refTimeEstimateClone;
-                formValidate.registerFields(vData);
-            }
             $('#txtMteTimeEstimate').mdbAutocomplete({ data: refTimeEstimateClone });
+            self.setTaskTypeHide(isMain, task['taskMainId']);
             formValidate.enableField('optMteStatus');
+            self.disableRadIsMain();
             if (isMain !== 'Main') {
                 mzSetValue('txtMteTimeEstimate', task['timeEstimate'], 'text');
                 mzSetValue('txtMteStartDate', task['startDate'], 'date');

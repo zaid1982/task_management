@@ -488,6 +488,7 @@ function MzValidate(isEnglish) {
         let result = true;
         $.each(this.fields, function (n, u) {
             if (u.enabled && !validateFields(u.field_id, u.validator, u.name, u.type)) {
+                console.log(u.field_id);
                 result = false;
             }
         });
