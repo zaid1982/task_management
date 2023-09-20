@@ -56,7 +56,7 @@ function DtTaskDisplay () {
             return '';
         }
         const progress = parseInt(progress_);
-        return '<div class="progress md-progress mb-0 grey lighten-2 z-depth-1" style="height: 18px">' +
+        return '<div class="progress md-progress mb-0 grey lighten-1 z-depth-1" style="height: 18px">' +
             '<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: '+progress+'%; height: 18px" aria-valuenow="'+progress+'" aria-valuemin="0" aria-valuemax="100">'+progress+'%</div>' +
             '</div>';
     }

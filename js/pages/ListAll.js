@@ -158,7 +158,7 @@ function ListAll() {
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
                 { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
-                { mData: 'taskDescription'},
+                { mData: 'taskDescription', mRender: function (data) { return data !== null ? data.replaceAll('\n', '<br>') : null; }},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
@@ -245,7 +245,7 @@ function ListAll() {
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
                 { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
-                { mData: 'taskDescription'},
+                { mData: 'taskDescription', mRender: function (data) { return data !== null ? data.replaceAll('\n', '<br>') : null; }},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
@@ -333,7 +333,7 @@ function ListAll() {
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
                 { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
-                { mData: 'taskDescription'},
+                { mData: 'taskDescription', mRender: function (data) { return data !== null ? data.replaceAll('\n', '<br>') : null; }},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
@@ -480,7 +480,7 @@ function ListAll() {
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
                 { mData: 'moduleId', mRender: function (data) { return data !== null ? refModule[data]['moduleName'] : null; }}, // 5
-                { mData: 'taskDescription'},
+                { mData: 'taskDescription', mRender: function (data) { return data !== null ? data.replaceAll('\n', '<br>') : null; }},
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
