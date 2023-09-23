@@ -96,15 +96,18 @@ function DtTaskDisplay () {
         }
     }
 
-    this.getTaskName = function (taskName, taskIsMain, taskMainId) {
-        if (taskName === '' ||  taskName === null) {
+    this.getTaskName = function (taskName, taskIsMain, taskMainId, isChecklist) {
+        if (taskName === '' || taskName === null) {
             return '';
         }
-        if (taskIsMain === 1) {
-            return taskName + ' <i class="fa-regular fa-folder-open"></i>';
+        if (taskMainId !== null) {
+            taskName = '<i class="fa-solid fa-folder-tree blue-grey-text"></i> ' + taskName;
         }
-        if (taskMainId !== '' &&  taskMainId !== null) {
-            return '<i class="fa-solid fa-folder-tree"></i> ' + taskName;
+        if (taskIsMain === 1) {
+            taskName = taskName + ' <i class="fa-regular fa-folder-open blue-grey-text"></i>';
+        }
+        if (isChecklist === 1) {
+            taskName = taskName + ' <i class="fa-regular fa-list-check blue-grey-text"></i>';
         }
         return taskName;
     }

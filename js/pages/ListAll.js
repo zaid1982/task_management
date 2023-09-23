@@ -153,7 +153,7 @@ function ListAll() {
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId'], row['isChecklist']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -240,7 +240,7 @@ function ListAll() {
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId'], row['isChecklist']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -328,7 +328,7 @@ function ListAll() {
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId'], row['isChecklist']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -409,7 +409,7 @@ function ListAll() {
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId'], row['isChecklist']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},
@@ -475,7 +475,7 @@ function ListAll() {
             },
             aoColumns: [
                 { mData: null},
-                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId']); }},
+                { mData: 'taskName', mRender: function (data, type, row) { return dtDisplay.getTaskName(data, row['taskIsMain'], row['taskMainId'], row['isChecklist']); }},
                 { mData: 'mainTaskName'},
                 { mData: null, mRender: function (data, type, row) { return refSpace[refFolder[row['folderId']]['spaceId']]['spaceName']; }},
                 { mData: 'folderId', mRender: function (data) { return refFolder[data]['folderName']; }},

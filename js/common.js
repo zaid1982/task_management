@@ -40,7 +40,6 @@ const _DATATABLE_LANGUAGE =  {
 
 let versionLocal_;
 const mzUrlDownload = '//localhost/api/';
-//const mzUrlDownload = '//localhost:8081/spdp_new/api/';
 let mzCnt;
 const mzExportOpt = {
     columns: ':visible',
@@ -51,38 +50,53 @@ const mzExportOpt = {
             }
             if (column === 0 && typeof data === 'object') {
                 return mzCnt++;
-            } else if (data.length > 3 && data.substring(0, 3) === '<a>') {
+            }
+            if (data.length > 3 && data.substring(0, 3) === '<a>') {
                 return '';
-            } else if (data.toString().indexOf('red-text') > 0) {
-                return data.replace('<span class="red-text">', '').replace('</span>', '');
-            } else if (data.toString().indexOf('blue-text') > 0) {
-                return data.replace('<span class="blue-text">', '').replace('</span>', '');
-            } else if (data.toString().indexOf('orange-text') > 0) {
-                return data.replace('<span class="orange-text">', '').replace('</span>', '');
-            } else if (data.toString().indexOf('green-text') > 0) {
-                return data.replace('<span class="green-text">', '').replace('</span>', '');
-            } else if (data.toString().indexOf('fa-folder-open') > 0) {
-                return data.replace(' <i class="fa-regular fa-folder-open"></i>', '');
-            } else if (data.toString().indexOf('fa-folder-tree') > 0) {
-                return data.replace('<i class="fa-solid fa-folder-tree"></i> ', '');
-            } else if (data.toString().indexOf('progress md-progress') > 0) {
+            }
+            if (data.toString().indexOf('progress md-progress') > 0) {
                 const start = data.toString().indexOf('aria-valuemax="100">') + 20;
                 const end = data.toString().indexOf('</div></div>');
                 return data.substring(start, end);
-            } else if (data.toString().indexOf('badge badge-pill') > 0) {
+            }
+            if (data.toString().indexOf('badge badge-pill') > 0) {
                 const start = data.toString().indexOf('z-depth-1-half">') + 16;
                 const end = data.toString().indexOf('</a>');
                 return data.substring(start, end);
-            } else if (data.toString().indexOf('badge') > 0) {
+            }
+            if (data.toString().indexOf('badge') > 0) {
                 const start = data.toString().indexOf('z-depth-2">') + 11;
                 const end = data.toString().indexOf('</a>');
                 return data.substring(start, end);
-            } else if (data.toString().indexOf('chip chip-sm') > 0) {
+            }
+            if (data.toString().indexOf('chip chip-sm') > 0) {
                 const start = data.toString().indexOf('png">') + 5;
                 const end = data.toString().indexOf('</div>');
                 return data.substring(start, end);
-            } else if (data.toString().indexOf('ul style') > 0) {
+            }
+            if (data.toString().indexOf('ul style') > 0) {
                 return data.replace('<ul style="padding-left: 20px; margin-bottom: 0 !important;"><li>', '').replaceAll('</li><li>', ', ').replace('</li></ul>', '');
+            }
+            if (data.toString().indexOf('red-text') > 0) {
+                return data.replace('<span class="red-text">', '').replace('</span>', '');
+            }
+            if (data.toString().indexOf('blue-text') > 0) {
+                return data.replace('<span class="blue-text">', '').replace('</span>', '');
+            }
+            if (data.toString().indexOf('orange-text') > 0) {
+                return data.replace('<span class="orange-text">', '').replace('</span>', '');
+            }
+            if (data.toString().indexOf('green-text') > 0) {
+                return data.replace('<span class="green-text">', '').replace('</span>', '');
+            }
+            if (data.toString().indexOf('fa-solid fa-folder-tree blue-grey-text') > 0) {
+                data = data.replace('<i class="fa-solid fa-folder-tree blue-grey-text"></i> ', '');
+            }
+            if (data.toString().indexOf('fa-regular fa-folder-open blue-grey-text') > 0) {
+                data = data.replace(' <i class="fa-regular fa-folder-open blue-grey-text"></i>', '');
+            }
+            if (data.toString().indexOf('fa-regular fa-list-check blue-grey-text') > 0) {
+                data = data.replace(' <i class="fa-regular fa-list-check blue-grey-text"></i>', '');
             }
             return data;
         }

@@ -8,6 +8,7 @@ class TskTask extends General {
     private static string $sqlInfo = /** @lang text */
         "SELECT
             tmn.task_name AS main_task_name,
+            IF (tcl.task_id IS NOT NULL, 1, 0) AS is_checklist,
             IF (
                 tcl.task_id IS NULL, 
                 CASE 
