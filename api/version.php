@@ -16,7 +16,7 @@ $fnMain = new SysVersion();
 try {
     DbMysql::connect();
     $urlArr = $fnMain->getUrlArr($_SERVER['REQUEST_URI'], $apiName);
-    if (isset($urlArr[1]) && $urlArr[1] !== 'external') {
+    if (!isset($urlArr[1]) || $urlArr[1] !== 'external') {
         $fnMain->checkJwt(apache_request_headers());
     }
     $fnMain->isLogged = Constant::$isLogged;

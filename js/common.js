@@ -70,9 +70,24 @@ const mzExportOpt = {
                 return data.substring(start, end);
             }
             if (data.toString().indexOf('chip chip-sm') > 0) {
-                const start = data.toString().indexOf('png">') + 5;
+                const start = data.toString().indexOf('image">') + 7;
                 const end = data.toString().indexOf('</div>');
                 return data.substring(start, end);
+            }
+            if (data.toString().indexOf('chip chip-tag') > 0) {
+                let result = '';
+                const strArr = data.split('><div');
+                for (let i = 0; i < strArr.length; i++) {
+                    const str = strArr[i];
+                    const start = str.toString().indexOf('white-text">') + 12;
+                    const end = str.toString().indexOf('</div');
+                    if (i === 0) {
+                        result = str.substring(start, end);
+                    } else {
+                        result += ', '+str.substring(start, end);
+                    }
+                }
+                return result;
             }
             if (data.toString().indexOf('ul style') > 0) {
                 return data.replace('<ul style="padding-left: 20px; margin-bottom: 0 !important;"><li>', '').replaceAll('</li><li>', ', ').replace('</li></ul>', '');
@@ -772,7 +787,7 @@ function initiatePages() {
             }
             $.each(navSeconds, function (n2, nav2nd) {
                 const strHighlight = navSecondId === nav2nd['navSecondId'] ? 'font-weight-bold' : '';
-                menuHtml += '<li><a href="' + nav2nd['navSecondPage'] + '" class="waves-effect ' + strHighlight + '" onclick="mzGoToMenu(\'' + nav['navPage'] + '\', \'' + nav['navId'] + '\', \'' + nav2nd['navSecondId'] + '\');">' + nav2nd['navSecondName'] + '</a></li>';
+                menuHtml += '<li><a href="#" class="waves-effect ' + strHighlight + '" onclick="mzGoToMenu(\'' + nav2nd['navSecondPage'] + '\', \'' + nav['navId'] + '\', \'' + nav2nd['navSecondId'] + '\');">' + nav2nd['navSecondName'] + '</a></li>';
                 if (navSecondId === nav2nd['navSecondId']) {
                     titleHtml += '<span class="font-small"> / ' + nav2nd['navSecondName'] + '</span>';
                 }

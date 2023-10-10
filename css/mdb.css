@@ -6829,7 +6829,7 @@ table.table a.btn.btn-black {
   transition: all 0.2s linear;
   -webkit-border-radius: 0.125rem;
   border-radius: 0.125rem;
-  background-color: #4285f4;
+  background-color: #4285f4 !important;
   color: #fff; }
   .pagination .page-item.active .page-link:hover {
     background-color: #4285f4; }
