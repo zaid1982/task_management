@@ -394,7 +394,7 @@ class TskTask extends General {
                 return false;
             }
             parent::checkEmptyString($timeEstimateDisplay, 'timeEstimate');
-            $timeDisplayArr = array('10 minutes', '15 minutes', '20 minutes', '30 minutes', '40 minutes', '50 minutes',
+            $timeDisplayArr = array('10 minutes', '15 minutes', '20 minutes', '30 minutes', '40 minutes', '45 minutes', '50 minutes',
                 '1 hour', '1 hour 15 minutes', '1 hour 30 minutes', '1 hour 45 minutes', '2 hours', '2 hours 30 minutes', '3 hours', '4 hours', '5 hours', '6 hours');
             if (in_array($timeEstimateDisplay, $timeDisplayArr)) {
                 return true;

@@ -162,7 +162,7 @@ function ListAll() {
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }}, // 10
+                { mData: 'taskMonth', mRender: function (data) { return data !== null && data >= 1 && data <= 12 ? monthArr[data-1]['monthName'] : ''; }}, // 10
                 { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskDateDue', mRender: function (data) { return mzDateDisplay(data); }},
@@ -249,7 +249,7 @@ function ListAll() {
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }}, // 10
+                { mData: 'taskMonth', mRender: function (data) { return data !== null && data >= 1 && data <= 12 ? monthArr[data-1]['monthName'] : ''; }}, // 10
                 { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2);}},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskDateDue', mRender: function (data) { return mzDateDisplay(data); }},
@@ -337,7 +337,7 @@ function ListAll() {
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth', mRender: function (data) { return data >= 1 && data <= 12 ? monthArr[data]['monthName'] : ''; }}, // 10
+                { mData: 'taskMonth', mRender: function (data) { return data !== null && data >= 1 && data <= 12 ? monthArr[data-1]['monthName'] : ''; }}, // 10
                 { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskDateDue', mRender: function (data) { return mzDateDisplay(data); }},
@@ -418,7 +418,7 @@ function ListAll() {
                 { mData: 'taskAssignee', mRender: function(data) { return dtDisplay.getAssignee(refUser[data]['userShortName'], refUser[data]['profileImage']); }},
                 { mData: 'taskTags', mRender: function (data) { return dtDisplay.getTags(data); }},
                 { mData: 'taskYear'},
-                { mData: 'taskMonth'}, // 10
+                { mData: 'taskMonth', mRender: function (data) { return data !== null && data >= 1 && data <= 12 ? monthArr[data-1]['monthName'] : ''; }},  // 10
                 { mData: 'taskAmount', mRender: function (data) { return mzFormatNumber(data, 2); }},
                 { mData: 'taskPriority', mRender: function (data) { return dtDisplay.getPriority(data); }},
                 { mData: 'taskTimeEstimate'},
@@ -529,13 +529,13 @@ function ListAll() {
 
     this.genTableToday = function () {
         const dataDb = mzAjax('task/list/today', 'GET');
-        dtLllToday.clear().rows.add(dataDb).draw();
+        dtLllToday.clear().rows.add(dataDb).draw(false);
         $('#spanLllTodayTotal').text(dataDb.length);
     };
 
     this.genTableOverdue = function () {
         const dataDb = mzAjax('task/list/overdue', 'GET');
-        dtLllOverdue.clear().rows.add(dataDb).draw();
+        dtLllOverdue.clear().rows.add(dataDb).draw(false);
         $('#spanLllTodayOverdue').text(dataDb.length);
     };
 

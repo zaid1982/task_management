@@ -1207,10 +1207,7 @@ function mzOptionStop(name, data, valIndex, filters, required, defaultText, isSo
 }
 
 function mzOption(name, data, valIndex, filters, required, defaultText, isSort, sortIndex) {
-    if (typeof name === 'undefined' || typeof data === 'undefined') {
-        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
-    }
-    if (name === '') {
+    if (typeof name === 'undefined' || typeof data === 'undefined' || name === '') {
         throw new Error(_ALERT_MSG_ERROR_DEFAULT);
     }
     if (typeof defaultText === 'undefined' || defaultText === null) {
@@ -1295,10 +1292,41 @@ function mzOption(name, data, valIndex, filters, required, defaultText, isSort, 
     //$('#lbl' + name.substring(3)).addClass('active');
 }
 
+function mzOptionSimple(name, data, required, defaultText, isSort) {
+    if (typeof name === 'undefined' || typeof data === 'undefined' || name === '') {
+        throw new Error(_ALERT_MSG_ERROR_DEFAULT);
+    }
+    if (typeof defaultText === 'undefined' || defaultText === null) {
+        defaultText = 'Choose option';
+    }
+    if (typeof isSort === 'undefined') {
+        isSort = true;
+    }
+
+    let optionIndex = 0;
+    removeOptions(document.getElementById(name));
+    document.getElementById(name).options[optionIndex++] = new Option(defaultText, "", true, true);
+
+    if (typeof required !== 'undefined' && required === true) {
+        document.getElementById(name).options[0].disabled = true;
+    }
+
+    if (isSort) {
+        data.sort(function(a, b){
+            return a.localeCompare(b);
+        });
+    }
+
+    $.each(data, function (n, u) {
+        document.getElementById(name).options[optionIndex++] = new Option(u, u);
+    });
+
+    $('#' + name).val(null);
+}
+
 function removeOptions(selectBox) {
     let i;
-    for(i = selectBox.options.length - 1 ; i >= 0 ; i--)
-    {
+    for(i = selectBox.options.length - 1 ; i >= 0 ; i--) {
         selectBox.remove(i);
     }
 }
